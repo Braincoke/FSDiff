@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import gui.comparison.ExplorerTabController?>
+<?import gui.components.buttons.IconButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.MasterDetailPane?>
+<Tab xmlns:fx="http://javafx.com/fxml/1" id="explorerTab" closable="false" xmlns="http://javafx.com/javafx/8" fx:controller="gui.comparison.ExplorerTabController">
+<content>
+    <AnchorPane>
+        <VBox prefHeight="200.0" prefWidth="100.0"
+              AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox minHeight="25.0" maxHeight="25.0">
+                    <children>
+                        <Pane prefHeight="25.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                        <HBox fx:id="explorerTabToolbar" alignment="CENTER_RIGHT" minHeight="25.0" maxHeight="25.0" prefWidth="200.0">
+                            <children>
+                                <IconButton fx:id="filterButton" mnemonicParsing="false" onAction="#toggleFilterPanel" icon="FILTER">
+                                    <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>
+                                    <tooltip><Tooltip text="Filter results" /></tooltip>
+                                </IconButton>
+                                <IconButton fx:id="collapseExplorerTreeButton" mnemonicParsing="false" onMouseClicked="#collapseDirectoryTree" icon="COMPRESS">
+                                    <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>
+                                    <tooltip><Tooltip text="Collapse all" /></tooltip>
+                                </IconButton>
+                                <IconButton fx:id="collapseLeftMenuButton" mnemonicParsing="false" onAction="#collapseLeftMenuTab" minWidth="20" icon="CARET_LEFT">
+                                    <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>
+                                    <tooltip><Tooltip text="Hide" /></tooltip>
+                                </IconButton>
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+                <AnchorPane VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                    <children>
+                        <MasterDetailPane detailSide="TOP"
+                                          showDetailNode="false"
+                                          animated="true"
+                                          dividerPosition="0.4"
+                                          fx:id="explorerFilterPane"
+                                          VBox.vgrow="ALWAYS"
+                                          HBox.hgrow="ALWAYS"
+                                          AnchorPane.bottomAnchor="0.0"
+                                          AnchorPane.leftAnchor="0.0"
+                                          AnchorPane.rightAnchor="0.0"
+                                          AnchorPane.topAnchor="0.0">
+                            <detailNode>
+                                <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/8">
+                                    <children>
+                                        <VBox layoutY="5.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <GridPane vgap="10.0">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="536.0" minWidth="4.0" prefWidth="199.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="576.0" minWidth="10.0" prefWidth="381.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                                                            <children>
+                                                                <Label text="Show" />
+                                                            </children>
+                                                        </HBox>
+                                                        <CheckBox fx:id="showMatched" mnemonicParsing="false" text="Matched files" GridPane.columnIndex="1" GridPane.rowIndex="1" selected="false" />
+                                                        <CheckBox fx:id="showModified" layoutY="5.0" mnemonicParsing="false" text="Modified files" GridPane.columnIndex="1" GridPane.rowIndex="2" selected="true" />
+                                                        <CheckBox fx:id="showCreated" layoutY="35.0" mnemonicParsing="false" text="Created files" GridPane.columnIndex="1" GridPane.rowIndex="3" selected="true" />
+                                                        <CheckBox fx:id="showDeleted" mnemonicParsing="false" text="Deleted files" GridPane.columnIndex="1" GridPane.rowIndex="4" selected="true"/>
+                                                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" text="Cancel" fx:id="cancel" />
+                                                                <Button mnemonicParsing="false" text="Apply" fx:id="apply" onAction="#filterDirectoryTree"/>
+                                                            </children>
+                                                            <GridPane.margin>
+                                                                <Insets top="20.0" />
+                                                            </GridPane.margin>
+                                                        </HBox>
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                            </padding>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                            </detailNode>
+                            <masterNode>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" HBox.hgrow="ALWAYS">
+                                    <children>
+
+                                        <TreeView fx:id="comparisonTreeView"
+                                                  VBox.vgrow="ALWAYS"
+                                                  HBox.hgrow="ALWAYS"
+                                                  AnchorPane.bottomAnchor="0.0"
+                                                  AnchorPane.leftAnchor="0.0"
+                                                  AnchorPane.rightAnchor="0.0"
+                                                  AnchorPane.topAnchor="0.0"/>
+
+                                    </children>
+                                </AnchorPane>
+                            </masterNode>
+                        </MasterDetailPane>
+                    </children>
+                </AnchorPane>
+            </children>
+        </VBox>
+    </AnchorPane>
+</content>
+</Tab>

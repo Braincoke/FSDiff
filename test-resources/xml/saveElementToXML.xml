@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rootElement>
+  <level1_a>
+    <level2_a>This is a test</level2_a>
+  </level1_a>
+  <level1_b>This is another test</level1_b>
+</rootElement>

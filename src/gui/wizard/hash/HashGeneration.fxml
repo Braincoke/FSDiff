@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="gui.wizard.hash.HashGenerationController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="500.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox fx:id="titleVbox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="100.0" spacing="15.0" VBox.vgrow="NEVER">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hashing process">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Computing hashes of every file" />
+               </children>
+            </VBox>
+            <VBox fx:id="infoHbox" alignment="CENTER" maxWidth="700.0" prefHeight="400.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox>
+                     <children>
+                        <Label fx:id="fileSystemHashedLabel" minWidth="150.0" text="File system hashed :" />
+                        <Label fx:id="fileSystemHashedName" text="unknown" GridPane.columnIndex="1" />
+                     </children>
+                  </HBox>
+                  <HBox minHeight="150.0">
+                     <children>
+                        <Label minWidth="150.0" text="File visited : " GridPane.rowIndex="1" />
+                        <Text fx:id="fileVisitedText" strokeType="OUTSIDE" strokeWidth="0.0" text="unknown" wrappingWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label minWidth="150.0" text="Elapsed time : ">
+                           <padding>
+                              <Insets bottom="20.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="elapsedTimeLabel" text="0h 0min 0s" />
+                     </children>
+                  </HBox>
+                  <StackPane maxWidth="800.0" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ProgressBar fx:id="progressBar" maxWidth="800.0" prefWidth="600.0" progress="0.0" StackPane.alignment="CENTER" />
+                        <HBox fx:id="percentageHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" StackPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="percentageLabel" text="0" />
+                              <Label text="\%" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </StackPane>
+                  <HBox fx:id="hashCountHbox" alignment="CENTER" prefHeight="100.0" prefWidth="20.0" spacing="20.0">
+                     <children>
+                        <Label text="Hashed : " />
+                        <VBox maxWidth="200.0" spacing="10.0" HBox.hgrow="SOMETIMES">
+                           <children>
+                              <HBox alignment="CENTER" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="hashedFileCountLabel" text="0" />
+                                    <Label text="/" />
+                                    <Label fx:id="fileCountLabel" text="0" />
+                                    <Label text="files" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="hashedByteCountLabel" text="0" />
+                                    <Label fx:id="hashedByteCountUnit" text="KB" />
+                                    <Label text="/" />
+                                    <Label fx:id="byteCountLabel" text="0" />
+                                    <Label fx:id="byteCountUnit" text="KB" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="80.0" right="80.0" top="20.0" />
+               </padding>
+            </VBox>
+            <HBox fx:id="cancelHbox" alignment="BOTTOM_RIGHT" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="cancel" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</AnchorPane>
