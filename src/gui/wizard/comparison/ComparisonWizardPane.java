@@ -3,7 +3,7 @@ package gui.wizard.comparison;
 import gui.Controller;
 
 /**
- * Created by Erwan Dano on 24/07/2015.
+ * A pane of the comparison wizard
  */
 public class ComparisonWizardPane extends Controller {
 

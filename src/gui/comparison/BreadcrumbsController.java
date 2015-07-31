@@ -1,13 +1,13 @@
 package gui.comparison;
 
 import core.PathComparison;
+import gui.Controller;
 import impl.org.controlsfx.skin.BreadCrumbBarSkin;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * Breadcrumbs for the selected file or directory
  */
-public class BreadcrumbsController extends HBox implements Initializable{
+public class BreadcrumbsController extends Controller{
 
     private ComparisonWindowController windowController;
     private BreadCrumbBar<PathComparison> breadCrumbBar;

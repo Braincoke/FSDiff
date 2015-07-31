@@ -50,22 +50,27 @@ public class HashGenerationController extends HashWizardPane {
     private Label elapsedTimeLabel;
     @FXML
     private Button cancel;
+
     /**
      * The output of the hash generation
      */
     private FileSystemHash fsh;
+
     /**
      * The total number of files
      */
     private long fileCount;
+
     /**
      * The sum of file size of visited files, in bytes
      */
     private double fileByteCount;
+
     /**
      * The hash crawler currently crawling
      */
     private HashCrawler crawler;
+
     /**
      * Formatter to display only to decimals
      */

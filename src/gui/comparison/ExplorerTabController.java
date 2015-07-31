@@ -2,23 +2,20 @@ package gui.comparison;
 
 import core.ComparisonStatus;
 import core.PathComparison;
+import gui.Controller;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.HBox;
 import org.controlsfx.control.MasterDetailPane;
 
-import java.net.URL;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 
 
 /**
  */
-public class ExplorerTabController extends Tab implements Initializable {
+public class ExplorerTabController extends Controller {
 
     public static final double TOOLBAR_ICON_SIZE = 18;
     @FXML
@@ -49,10 +46,6 @@ public class ExplorerTabController extends Tab implements Initializable {
     private LeftMenuController leftMenuController;
     private boolean filterPaneHidden = true;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 
     @FXML
     public void collapseLeftMenuTab() {

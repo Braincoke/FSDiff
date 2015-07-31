@@ -16,9 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-/**
- * Created by Erwan Dano on 10/07/2015.
- */
 public class ToolbarController extends Controller {
 
     public static final double TOOLBAR_HEIGHT = 28;

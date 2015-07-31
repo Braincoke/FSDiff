@@ -4,7 +4,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * Created by Erwan Dano on 24/07/2015.
+ * A stage controller
  */
 public abstract class StageController extends Controller {
 

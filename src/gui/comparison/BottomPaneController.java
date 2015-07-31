@@ -1,10 +1,9 @@
 package gui.comparison;
 
 import core.FileSystemComparison;
+import gui.Controller;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -14,7 +13,7 @@ import java.util.ResourceBundle;
 /**
  * Controls the bottom side bar
  */
-public class BottomPaneController extends HBox implements Initializable{
+public class BottomPaneController extends Controller{
 
 
     //Circles

@@ -17,47 +17,9 @@ import java.util.logging.Logger;
 public class FileSystemHashMetadata {
     protected static final Logger log = Logger.getLogger("cliLogger");
 
-    /**
-     * The name of the hash project
-     */
-    protected String name;
-    /**
-     * The date the file system hash was generated
-     */
-    protected Date datetime;
-    /**
-     * The duration of the hash generation
-     */
-    protected Duration duration;
-    /**
-     * The file system
-     */
-    protected String fileSystem;
-    /**
-     * The operating system used to compute the hashes
-     * This might be important for conversion between path formats
-     */
-    protected String OS;
-    /**
-     * The input that was used to generate the file system hash
-     */
-    protected FileSystemInput fileSystemInput;
-    /**
-     * The number of files hashed
-     */
-    protected int fileCount;
-    /**
-     * The number of bytes hashed
-     */
-    protected long byteCount;
-    /**
-     * The number of errors encountered
-     */
-    protected int errorCount;
-
     /*******************************************************************************************************************
      *                                                                                                                 *
-     *  CONSTRUCTORS                                                                                         *
+     *  CONSTRUCTORS                                                                                                   *
      *                                                                                                                 *
      ******************************************************************************************************************/
 
@@ -96,25 +58,61 @@ public class FileSystemHashMetadata {
     public FileSystemHashMetadata() {
     }
 
+    /*******************************************************************************************************************
+     *                                                                                                                 *
+     *  ATTRIBUTES                                                                                                     *
+     *                                                                                                                 *
+     ******************************************************************************************************************/
+
+    /**
+     * The name of the hash project
+     */
+    protected String name;
+
     public String getName() {
         return name;
     }
+
+    /**
+     * The date the file system hash was generated
+     */
+    protected Date datetime;
 
     public Date getDatetime() {
         return datetime;
     }
 
+    /**
+     * The duration of the hash generation
+     */
+    protected Duration duration;
+
     public Duration getDuration() {
         return duration;
     }
+    /**
+     * The file system
+     */
+    protected String fileSystem;
 
     public String getFileSystem() {
         return fileSystem;
     }
 
+    /**
+     * The operating system used to compute the hashes
+     * This might be important for conversion between path formats
+     */
+    protected String OS;
+
     public String getOS() {
         return OS;
     }
+
+    /**
+     * The input that was used to generate the file system hash
+     */
+    protected FileSystemInput fileSystemInput;
 
     public FileSystemInput getFileSystemInput() {
         return fileSystemInput;
@@ -128,13 +126,28 @@ public class FileSystemHashMetadata {
         return fileSystemInput.getInputType();
     }
 
+    /**
+     * The number of files hashed
+     */
+    protected int fileCount;
+
     public int getFileCount() {
         return fileCount;
     }
 
+    /**
+     * The number of bytes hashed
+     */
+    protected long byteCount;
+
     public long getByteCount() {
         return byteCount;
     }
+
+    /**
+     * The number of errors encountered
+     */
+    protected int errorCount;
 
     public int getErrorCount() {
         return errorCount;

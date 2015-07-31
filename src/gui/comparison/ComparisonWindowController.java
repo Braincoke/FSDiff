@@ -53,6 +53,7 @@ public class ComparisonWindowController extends Controller {
      */
     @FXML
     private SplitPane splitPane;
+
     /*******************************************************************************************************************
      *                                                                                                                 *
      * TOP PANE                                                                                                        *
@@ -86,6 +87,7 @@ public class ComparisonWindowController extends Controller {
     @FXML
     private AnchorPane leftMenu;
     private ComparisonTreeItem rootTreeItem;
+
     /*******************************************************************************************************************
      *                                                                                                                 *
      * CENTER PANE                                                                                                     *
@@ -97,6 +99,7 @@ public class ComparisonWindowController extends Controller {
     private AnchorPane dataPane;
     @FXML
     private DataPaneController dataPaneController;
+
     /*******************************************************************************************************************
      *                                                                                                                 *
      * BOTTOM PANE                                                                                                     *
@@ -142,7 +145,7 @@ public class ComparisonWindowController extends Controller {
 
     /*******************************************************************************************************************
      *                                                                                                                 *
-     * INITIALIZATION                                                                                                     *
+     * INITIALIZATION                                                                                                  *
      *                                                                                                                 *
      ******************************************************************************************************************/
 
@@ -248,9 +251,9 @@ public class ComparisonWindowController extends Controller {
 
 
     /*******************************************************************************************************************
-     * *
+     *                                                                                                                 *
      * FILE IO                                                                                                         *
-     * *
+     *                                                                                                                 *
      ******************************************************************************************************************/
 
     public void openFSC() {

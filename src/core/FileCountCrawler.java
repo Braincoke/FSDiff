@@ -22,40 +22,6 @@ import static java.nio.file.FileVisitResult.TERMINATE;
  */
 public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>{
 
-    /**
-     * The list of root directory to crawl
-     */
-    private Path rootList[];
-    /**
-     * The total number of bytes visited
-     */
-    private LongProperty byteCountProperty;
-    /**
-     * The total number of files visited
-     */
-    private IntegerProperty fileCountProperty;
-    /**
-     * The file currently visited
-     * Useful to show progress to UI
-     */
-    private StringProperty visitedFileProperty;
-    /**
-     * The total number of file visited
-     */
-    private int fileCount;
-    /**
-     * The total number of bytes visited = sum( filesize )
-     */
-    private long byteCount;
-    /**
-     * The task that crawls the directories and counts the number of files
-     */
-    private CountFilesTask task;
-    /**
-     * Indicates that the user wish to cancel the files
-     */
-    private boolean cancelled;
-
     public FileCountCrawler(List<FileSystemInput> list) {
         this.rootList = new Path[list.size()];
         for (int i = 0; i < list.size(); i++) {
@@ -74,13 +40,28 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
         });
     }
 
+    /**
+     * The list of root directory to crawl
+     */
+    private Path rootList[];
+
     public Path[] getRootList() {
         return rootList;
     }
 
+    /**
+     * The total number of bytes visited
+     */
+    private LongProperty byteCountProperty;
+
     public LongProperty getByteCountProperty(){
         return byteCountProperty;
     }
+    /**
+     * The total number of files visited
+     */
+    private IntegerProperty fileCountProperty;
+
 
     public IntegerProperty fileCountProperty() {
         return fileCountProperty;
@@ -90,6 +71,12 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
         return fileCount;
     }
 
+    /**
+     * The file currently visited
+     * Useful to show progress to UI
+     */
+    private StringProperty visitedFileProperty;
+
     public String getVisitedFile() {
         return visitedFileProperty.get();
     }
@@ -97,6 +84,15 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
     public StringProperty visitedFileProperty() {
         return visitedFileProperty;
     }
+
+    /**
+     * The total number of file visited
+     */
+    private int fileCount;
+    /**
+     * The total number of bytes visited = sum( filesize )
+     */
+    private long byteCount;
 
     public long getByteCount(){
         return byteCount;
@@ -106,13 +102,20 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
         this.byteCount = byteCount;
     }
 
-    public void addByteCount(Long add){
-        this.byteCount += add;
-    }
+    /**
+     * The task that crawls the directories and counts the number of files
+     */
+    private CountFilesTask task;
 
     public CountFilesTask getTask(){
         return task;
     }
+    /**
+     * Indicates that the user wish to cancel the files
+     */
+    private boolean cancelled;
+
+
 
     @Override
     protected Task<Void> createTask() {

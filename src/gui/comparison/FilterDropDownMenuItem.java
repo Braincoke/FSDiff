@@ -15,18 +15,10 @@ import javafx.scene.layout.HBox;
  */
 public class FilterDropDownMenuItem extends CustomMenuItem{
 
+    /**
+     * Comparison status that can be selected
+     */
     private StringProperty status;
-    private BooleanProperty checked;
-    private FilterDropDownCell cell;
-    private CheckBox checkBox;
-    private ComparisonStatus comparisonStatus;
-
-    public FilterDropDownMenuItem(){
-        super();
-        this.setHideOnClick(false);
-        this.checked = new SimpleBooleanProperty();
-        this.status = new SimpleStringProperty();
-    }
 
     public String getStatus(){
         return this.status.getValue();
@@ -34,10 +26,16 @@ public class FilterDropDownMenuItem extends CustomMenuItem{
 
     public void setStatus(String status){
         this.status.setValue(status);
-        cell = new FilterDropDownCell(status);
+        FilterDropDownCell cell = new FilterDropDownCell(status);
         checked.bindBidirectional(checkBox.selectedProperty());
         this.setContent(cell);
     }
+
+    /**
+     * Indicates if the comparison status is selected to be filtered
+     */
+    private BooleanProperty checked;
+
 
     public BooleanProperty selectedProperty(){
         return checkBox==null ? null : checkBox.selectedProperty();
@@ -61,6 +59,23 @@ public class FilterDropDownMenuItem extends CustomMenuItem{
 
     public void setChecked(Boolean selected){
         this.checked.setValue(selected);
+    }
+
+    /**
+     * Checkbox to select the comparison status as a filter option
+     */
+    private CheckBox checkBox;
+
+    /**
+     * The comparison status that can be used as a filter option
+     */
+    private ComparisonStatus comparisonStatus;
+
+    public FilterDropDownMenuItem(){
+        super();
+        this.setHideOnClick(false);
+        this.checked = new SimpleBooleanProperty();
+        this.status = new SimpleStringProperty();
     }
 
     class FilterDropDownCell extends HBox {

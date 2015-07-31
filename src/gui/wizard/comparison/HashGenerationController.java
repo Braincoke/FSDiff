@@ -173,7 +173,7 @@ public class HashGenerationController extends ComparisonWizardPane {
                 if (newValue == Worker.State.SUCCEEDED) {
                     //Add the corresponding FS to the wizard TODO
                     timer.cancel();
-                    wizard.goToComparisonProgress();
+                    wizard.chooseComparisonPreparation();
                 }
             });
         }

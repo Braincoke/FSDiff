@@ -4,7 +4,7 @@ import com.sun.javafx.scene.control.skin.MenuButtonSkin;
 import javafx.scene.control.MenuButton;
 
 /**
- * Created by Erwan Dano on 21/07/2015.
+ * A skin to hide the arrow in the MenuButton
  */
 public class NoDropDownArrowSkin extends MenuButtonSkin {
     /**

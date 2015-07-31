@@ -16,43 +16,24 @@ public class HashWizard extends Wizard {
     private HashPreparationController hashPreparationController;
     private HashGenerationController hashGenerationController;
     private RecapController recapController;
-    /**
-     * The name given to the hashed file system
-     */
-    private String name;
-    /**
-     * The output directory
-     */
-    private Path outputDirectory;
-    /**
-     * The file system input
-     */
-    private FileSystemInput fileSystemInput;
+
+
+    public HashWizard(Main application){
+        this.application = application;
+        gotoFileSystemChoice();
+    }
+
 
     /*******************************************************************************************************************
      *                                                                                                                 *
      *  PROJECT SETTINGS                                                                                               *
      *                                                                                                                 *
      *******************************************************************************************************************/
-    /**
-     * The result of the hash generation
-     */
-    private FileSystemHash fileSystemHash;
-    /**
-     * The total number of byte to hash
-     * This is used to have the max value of the progress bar
-     */
-    private long byteCount;
-    /**
-     * The total number of files to hash
-     * This is used to have the max value of the progress bar
-     */
-    private long fileCount;
 
-    public HashWizard(Main application){
-        this.application = application;
-        gotoFileSystemChoice();
-    }
+    /**
+     * The name given to the hashed file system
+     */
+    private String name;
 
     public String getName() {
         return name;
@@ -61,6 +42,11 @@ public class HashWizard extends Wizard {
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * The output directory
+     */
+    private Path outputDirectory;
 
     public Path getOutputDirectory() {
         return outputDirectory;
@@ -80,6 +66,11 @@ public class HashWizard extends Wizard {
             return outputDirectory.resolve(name.concat(".fshx"));
     }
 
+    /**
+     * The file system input
+     */
+    private FileSystemInput fileSystemInput;
+
     public FileSystemInput getFileSystemInput() {
         return fileSystemInput;
     }
@@ -87,6 +78,11 @@ public class HashWizard extends Wizard {
     public void setFileSystemInput(FileSystemInput fileSystemInput) {
         this.fileSystemInput = fileSystemInput;
     }
+
+    /**
+     * The result of the hash generation
+     */
+    private FileSystemHash fileSystemHash;
 
     public FileSystemHash getFileSystemHash() {
         return fileSystemHash;
@@ -96,6 +92,12 @@ public class HashWizard extends Wizard {
         this.fileSystemHash = fileSystemHash;
     }
 
+    /**
+     * The total number of byte to hash
+     * This is used to have the max value of the progress bar
+     */
+    private long byteCount;
+
     public long getByteCount() {
         return byteCount;
     }
@@ -104,6 +106,12 @@ public class HashWizard extends Wizard {
         this.byteCount = byteCount;
     }
 
+    /**
+     * The total number of files to hash
+     * This is used to have the max value of the progress bar
+     */
+    private long fileCount;
+
     public long getFileCount() {
         return fileCount;
     }
@@ -111,7 +119,6 @@ public class HashWizard extends Wizard {
     public void setFileCount(long fileCount) {
         this.fileCount = fileCount;
     }
-
 
     /*******************************************************************************************************************
      *                                                                                                                 *

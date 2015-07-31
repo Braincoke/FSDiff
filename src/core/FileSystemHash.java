@@ -14,14 +14,11 @@ public class FileSystemHash extends FileSystemHashMetadata {
 
     private Logger log = Logger.getGlobal();
 
-    /**
-     * The set of file hashes
-     */
-    private TreeMap<Path, HashedFile> fileHashes;
-    /**
-     * The service responsible for finding and hashing the files
-     */
-    private HashCrawler hashCrawler;
+    /*******************************************************************************************************************
+     *                                                                                                                 *
+     *  CONSTRUCTORS                                                                                                   *
+     *                                                                                                                 *
+     ******************************************************************************************************************/
 
     /**
      * Init a file system hash from the given information
@@ -46,6 +43,17 @@ public class FileSystemHash extends FileSystemHashMetadata {
         hashCrawler = new HashCrawler(fileSystemInput.getPath());
     }
 
+    /*******************************************************************************************************************
+     *                                                                                                                 *
+     *  ATTRIBUTES                                                                                                     *
+     *                                                                                                                 *
+     ******************************************************************************************************************/
+
+    /**
+     * The set of file hashes
+     */
+    private TreeMap<Path, HashedFile> fileHashes;
+
     public TreeMap<Path, HashedFile> getFileHashes() {
         TreeMap<Path, HashedFile> copy = new TreeMap<>();
         for (Map.Entry<Path, HashedFile> entry : fileHashes.entrySet()) {
@@ -54,9 +62,16 @@ public class FileSystemHash extends FileSystemHashMetadata {
         return copy;
     }
 
+    /**
+     * The service responsible for finding and hashing the files
+     */
+    private HashCrawler hashCrawler;
+
     public HashCrawler getHashCrawler(){
         return hashCrawler;
     }
+
+
 
     /**
      * Compute the hashes of every file in the file system

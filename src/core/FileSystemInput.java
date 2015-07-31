@@ -4,18 +4,6 @@ import java.nio.file.Path;
 
 public class FileSystemInput {
 
-    /**
-     * The input type of the file system
-     */
-    private InputType inputType;
-    /**
-     * The path to the input
-     */
-    private Path path;
-    /**
-     * Indicates if it is a reference file system (true) or a compared file system (false)
-     */
-    private Boolean reference;
 
     public FileSystemInput(InputType inputType, Path path, Boolean reference) {
         this.inputType = inputType;
@@ -33,15 +21,33 @@ public class FileSystemInput {
         this.reference = reference;
     }
 
+
+    /**
+     * The input type of the file system
+     */
+    private InputType inputType;
+
     public InputType getInputType() {
         return inputType;
     }
+
+    /**
+     * The path to the input
+     */
+    private Path path;
 
     public Path getPath() {
         return path;
     }
 
+    /**
+     * Indicates if it is a reference file system (true) or a compared file system (false)
+     */
+    private Boolean reference;
+
     public Boolean getReference() {
         return reference;
     }
+
+
 }

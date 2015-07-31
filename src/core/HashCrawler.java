@@ -28,10 +28,24 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
      * The path from where to crawl
      */
     private Path rootPath;
+
+    public Path getRootPath(){
+        return rootPath;
+    }
+
+    public void setRootPath(Path rootPath){
+        this.rootPath = rootPath;
+    }
+
     /**
      * The number of files hashed so far
      */
     private int hashedFileCount;
+
+    public int getHashedFileCount() {
+        return hashedFileCount;
+    }
+
     /**
      * The number of errors encountered
      */
@@ -44,44 +58,87 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
      * The number of bytes hashed so far
      */
     private long hashedByteCount;
+
+    public long getHashedByteCount() {
+        return hashedByteCount;
+    }
+
     /**
      * Property : number of files hashed so far
      * Useful to indicate progress to a UI
      */
     private IntegerProperty hashedFileCountProperty;
+
+    public IntegerProperty getHashedFileCountProperty(){
+        return hashedFileCountProperty;
+    }
+
     /**
      * Property : number of errors encountered so far
      * Useful to indicate progress to a UI
      */
     private IntegerProperty errorCountProperty;
+
+    public IntegerProperty getErrorCountProperty(){
+        return errorCountProperty;
+    }
+
     /**
      * Property : number of files visited so far
      * Useful to indicate progress to a UI
      */
     private IntegerProperty visitedCountProperty;
+
+    public IntegerProperty getVisitedCountProperty(){
+        return visitedCountProperty;
+    }
+
     /**
      * Property : the file currently visited
      * Useful to indicate progress to a UI
      */
     private StringProperty visitedFileProperty;
+
+    public StringProperty getVisitedFileProperty(){
+        return visitedFileProperty;
+    }
+
     /**
      * Property : number of bytes hashed so far
      * Useful to indicate progress to a UI
      */
     private LongProperty hashedByteCountProperty;
+
+    public LongProperty getHashedByteCountProperty(){
+        return hashedByteCountProperty;
+    }
+
     /**
      * The time it took to generate the hashes in seconds
      */
     private Duration duration;
+
+    public Duration getDuration(){
+        return duration;
+    }
+
     /**
      * The task that generate the hashes
      */
     private HashFilesTask task;
+
+    public HashFilesTask getTask(){
+        return task;
+    }
+
     /**
      * Set of hashed files
      */
     private TreeMap<Path, HashedFile> fileHashes;
 
+    public TreeMap<Path, HashedFile> getFileHashes() {
+        return fileHashes;
+    }
     public HashCrawler(Path rootPath){
         this.rootPath=rootPath;
         this.hashedFileCount = 0;
@@ -94,54 +151,6 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
         this.visitedFileProperty = new SimpleStringProperty("");
         this.hashedByteCountProperty = new SimpleLongProperty();
         this.fileHashes = new TreeMap<>();
-    }
-
-    public Path getRootPath(){
-        return rootPath;
-    }
-
-    public void setRootPath(Path rootPath){
-        this.rootPath = rootPath;
-    }
-
-    public int getHashedFileCount() {
-        return hashedFileCount;
-    }
-
-    public long getHashedByteCount() {
-        return hashedByteCount;
-    }
-
-    public IntegerProperty getHashedFileCountProperty(){
-        return hashedFileCountProperty;
-    }
-
-    public IntegerProperty getErrorCountProperty(){
-        return errorCountProperty;
-    }
-
-    public IntegerProperty getVisitedCountProperty(){
-        return visitedCountProperty;
-    }
-
-    public StringProperty getVisitedFileProperty(){
-        return visitedFileProperty;
-    }
-
-    public LongProperty getHashedByteCountProperty(){
-        return hashedByteCountProperty;
-    }
-
-    public Duration getDuration(){
-        return duration;
-    }
-
-    public HashFilesTask getTask(){
-        return task;
-    }
-
-    public TreeMap<Path, HashedFile> getFileHashes() {
-        return fileHashes;
     }
 
 

@@ -13,48 +13,6 @@ import java.util.TreeSet;
  */
 public class FileSystemComparison {
 
-
-    /**
-     * The file system used as a reference in the comparison
-     */
-    private FileSystemHashMetadata referenceFS;
-    /**
-     * The file system compared to the reference
-     */
-    private FileSystemHashMetadata comparedFS;
-    /**
-     * The number of created files in the comparison
-     */
-    private int createdCount;
-    /**
-     * The number of deleted files in the comparison
-     */
-    private int deletedCount;
-    /**
-     * The number of modified files in the comparison
-     */
-    private int modifiedCount;
-    /**
-     * The number of identical files in the comparison
-     */
-    private int matchedCount;
-    /**
-     * The number of error encountered when performing the comparison
-     */
-    private int errorCount;
-    /**
-     * The date and time the comparison was generated
-     */
-    private Date datetime;
-    /**
-     * The project name
-     */
-    private String name;
-    /**
-     * The set of compared files and directories
-     */
-    private TreeSet<PathComparison> comparisonSet;
-
     /*******************************************************************************************************************
      *                                                                                                                 *
      *  CONSTRUCTORS                                                                                                   *
@@ -104,43 +62,91 @@ public class FileSystemComparison {
         initComparisonSet(set);
     }
 
+
+    /**
+     * The file system used as a reference in the comparison
+     */
+    private FileSystemHashMetadata referenceFS;
+
     public FileSystemHashMetadata getReferenceFS() {
         return referenceFS;
     }
+
+    /**
+     * The file system compared to the reference
+     */
+    private FileSystemHashMetadata comparedFS;
 
     public FileSystemHashMetadata getComparedFS() {
         return comparedFS;
     }
 
+    /**
+     * The number of created files in the comparison
+     */
+    private int createdCount;
+
     public int getCreatedCount() {
         return createdCount;
     }
+
+    /**
+     * The number of deleted files in the comparison
+     */
+    private int deletedCount;
 
     public int getDeletedCount() {
         return deletedCount;
     }
 
+    /**
+     * The number of modified files in the comparison
+     */
+    private int modifiedCount;
+
     public int getModifiedCount() {
         return modifiedCount;
     }
+
+    /**
+     * The number of identical files in the comparison
+     */
+    private int matchedCount;
 
     public int getMatchedCount() {
         return matchedCount;
     }
 
+    /**
+     * The number of error encountered when performing the comparison
+     */
+    private int errorCount;
+
     public int getErrorCount() {
         return errorCount;
     }
+
+    /**
+     * The date and time the comparison was generated
+     */
+    private Date datetime;
 
     public Date getDatetime() {
         return datetime;
     }
 
-    //TODO ADD DATE
+    /**
+     * The project name
+     */
+    private String name;
 
     public String getName() {
         return name;
     }
+    /**
+     * The set of compared files and directories
+     */
+    private TreeSet<PathComparison> comparisonSet;
 
     public TreeSet<PathComparison> getComparison() {
         TreeSet<PathComparison> copy = new TreeSet<>();

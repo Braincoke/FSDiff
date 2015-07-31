@@ -3,7 +3,7 @@ package gui.wizard.hash;
 import gui.Controller;
 
 /**
- * Created by Erwan Dano on 27/07/2015.
+ * A pane of the hashWizard
  */
 public class HashWizardPane extends Controller{
 

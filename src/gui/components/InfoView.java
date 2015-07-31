@@ -9,17 +9,17 @@ import javafx.scene.text.Text;
 
 /**
  * A component to easily view basic information in the following format :
- * <p>
+ *
  * ----------------------------------------------------------------------
  * Label         Information about the label
- * that can be a long text tha
- * t will wrap.
+ *               that can be a long text tha
+ *               t will wrap.
  * ----------------------------------------------------------------------
- * <p>
+ *
  * The couple (label, info) is held in an InfoItem object.
  * The InfoView will list all InfoItem object and resize all labels width to
  * the largest width for a better readability.
- * <p>
+ *
  * The information can be a long text and will wrap accordingly to the observable value
  * passed as a parameter of the resize() function
  * TODO Make sure that children are all InfoItem objects

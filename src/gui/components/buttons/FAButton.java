@@ -24,15 +24,7 @@ public class FAButton extends Button {
     }
     protected GlyphFont fontAwesome = GlyphFontRegistry.font("FontAwesome");
 
-    protected Glyph iconGlyph; //The FontAwesome Glyph
-    /**
-     * The icon size
-     */
-    protected DoubleProperty size;
-    /**
-     * The reference to the FontAwesome icon to load
-     */
-    protected StringProperty icon;
+
 
     public FAButton(){
         super();
@@ -41,9 +33,15 @@ public class FAButton extends Button {
         this.getStyleClass().add("fa-button");
     }
 
-    public DoubleProperty sizeProperty() {
-        return size;
-    }
+    /**
+     * The glyph used
+     */
+    protected Glyph iconGlyph;
+
+    /**
+     * The icon size
+     */
+    protected DoubleProperty size;
 
     public double getSize() {
         return size.get();
@@ -54,6 +52,16 @@ public class FAButton extends Button {
         if(icon.getValue()!=null)
             this.setIcon(icon.getValue());
     }
+
+    public DoubleProperty sizeProperty() {
+        return size;
+    }
+
+    /**
+     * The reference to the FontAwesome icon to load
+     */
+    protected StringProperty icon;
+
 
     public String getIcon() {
         return icon.get();

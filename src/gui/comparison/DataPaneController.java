@@ -1,6 +1,7 @@
 package gui.comparison;
 
 import core.ComparisonStatus;
+import gui.Controller;
 import gui.hexviewer.HexDump;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -8,10 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -23,21 +22,29 @@ import java.util.ResourceBundle;
 /**
  * Controller for the search results pane and the content viewing pane
  */
-public class DataPaneController extends AnchorPane implements Initializable {
+public class DataPaneController extends Controller {
 
 
     public static final double STATUS_WIDTH = 100;
     private ComparisonWindowController windowController;
-    /***********************************************************************
-     * HEX VIEWER
-     **********************************************************************/
+
+
+    /*******************************************************************************************************************
+     *                                                                                                                 *
+     * HEX VIEWER                                                                                                      *
+     *                                                                                                                 *
+     ******************************************************************************************************************/
     @FXML
     private TextArea hexViewer;
     @FXML
     private ProgressIndicator loadingIndicator;
-    /***********************************************************************
-     * SEARCH RESULTS
-     **********************************************************************/
+
+
+    /*******************************************************************************************************************
+     *                                                                                                                 *
+     * SEARCH RESULTS                                                                                                  *
+     *                                                                                                                 *
+     ******************************************************************************************************************/
     @FXML
     private TableView<ComparisonTreeItem> resultsTable;
     @FXML

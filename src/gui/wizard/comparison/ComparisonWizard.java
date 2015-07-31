@@ -12,7 +12,9 @@ import org.jdom2.JDOMException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * A Wizard to guide the user in the project configuration.
@@ -29,66 +31,35 @@ public class ComparisonWizard extends Wizard{
     private HashGenerationController hashGenerationController;
     private ComparisonProgressController comparisonProgressController;
     private ComparisonWindowController comparisonWindowController;
-    /**
-     * The project name
-     */
-    private String projectName;
 
-
-    /******************************************************************************************************************
-     * PROJECT SETTINGS
-     *****************************************************************************************************************/
-    /**
-     * The output directory for the project file
-     */
-    private Path outputDirectory;
-    /**
-     * The reference file system input
-     */
-    private FileSystemInput referenceInput;
-    /**
-     * The compared file system input
-     */
-    private FileSystemInput comparedInput;
-    /**
-     * The file system hash of the REFERENCE file system
-     */
-    private FileSystemHash referenceFSH;
-    /**
-     * The file system hash of the COMPARED file system
-     */
-    private FileSystemHash comparedFSH;
-    /**
-     * The result of the COMPARISON of the reference and compared file systems
-     */
-    private FileSystemComparison comparison;
-    /**
-     * The total number of bytes crunched when hashing the files
-     * This is used to update the progress bar
-     */
-    private long byteCount;
-    /**
-     * The total number of files to hash
-     * This is used to update the progress bar
-     */
-    private int fileCount;
-    /**
-     * The list of file system to hash
-     */
-    private List<FileSystemInput> hashList;
-    /**
-     * The list of file systems to load from a XML file
-     */
-    private List<FileSystemInput> fshxList;
 
     public ComparisonWizard(Main application, String projectName, Path outputDirectory) throws Exception {
         this.application = application;
         this.projectName = projectName;
         this.outputDirectory = outputDirectory;
         this.hashList = new ArrayList<>();
+        this.hashQueue = new LinkedList<>();
         this.fshxList = new ArrayList<>();
+        this.fshxQueue = new LinkedList<>();
         gotoReferenceChoice();
     }
+
+
+    /******************************************************************************************************************
+     *                                                                                                                *
+     * PROJECT SETTINGS                                                                                               *
+     *                                                                                                                *
+     *****************************************************************************************************************/
+
+    /**
+     * The project name
+     */
+    private String projectName;
+
+    /**
+     * The output directory for the project file
+     */
+    private Path outputDirectory;
 
     /**
      * The output file path
@@ -96,6 +67,11 @@ public class ComparisonWizard extends Wizard{
     public Path getOutputFilePath(){
         return outputDirectory.resolve(projectName+".fscx");
     }
+
+    /**
+     * The reference file system input
+     */
+    private FileSystemInput referenceInput;
 
     public FileSystemInput getReferenceInput() {
         return referenceInput;
@@ -105,6 +81,11 @@ public class ComparisonWizard extends Wizard{
         this.referenceInput = referenceInput;
     }
 
+    /**
+     * The compared file system input
+     */
+    private FileSystemInput comparedInput;
+
     public FileSystemInput getComparedInput() {
         return comparedInput;
     }
@@ -112,6 +93,11 @@ public class ComparisonWizard extends Wizard{
     public void setComparedInput(FileSystemInput comparedInput) {
         this.comparedInput = comparedInput;
     }
+
+    /**
+     * The file system hash of the REFERENCE file system
+     */
+    private FileSystemHash referenceFSH;
 
     public FileSystemHash getReferenceFSH() {
         return referenceFSH;
@@ -121,6 +107,11 @@ public class ComparisonWizard extends Wizard{
         this.referenceFSH = referenceFSH;
     }
 
+    /**
+     * The file system hash of the COMPARED file system
+     */
+    private FileSystemHash comparedFSH;
+
     public FileSystemHash getComparedFSH() {
         return comparedFSH;
     }
@@ -128,6 +119,11 @@ public class ComparisonWizard extends Wizard{
     public void setComparedFSH(FileSystemHash comparedFSH) {
         this.comparedFSH = comparedFSH;
     }
+
+    /**
+     * The result of the COMPARISON of the reference and compared file systems
+     */
+    private FileSystemComparison comparison;
 
     public FileSystemComparison getComparison() {
         return comparison;
@@ -137,6 +133,12 @@ public class ComparisonWizard extends Wizard{
         this.comparison = comparison;
     }
 
+    /**
+     * The total number of bytes crunched when hashing the files
+     * This is used to update the progress bar
+     */
+    private long byteCount;
+
     public long getByteCount() {
         return byteCount;
     }
@@ -144,6 +146,12 @@ public class ComparisonWizard extends Wizard{
     public void setByteCount(long byteCount) {
         this.byteCount = byteCount;
     }
+
+    /**
+     * The total number of files to hash
+     * This is used to update the progress bar
+     */
+    private int fileCount;
 
     public int getFileCount() {
         return fileCount;
@@ -153,13 +161,28 @@ public class ComparisonWizard extends Wizard{
         this.fileCount = fileCount;
     }
 
+    /**
+     * The list of file system to hash
+     */
+    private List<FileSystemInput> hashList;
+
     public List<FileSystemInput> getHashList() {
         return hashList;
     }
 
+    private Queue<FileSystemInput> hashQueue;
+    /**
+     * The list of file systems to load from a XML file
+     */
+    private List<FileSystemInput> fshxList;
+
     public List<FileSystemInput> getFshxList() {
         return fshxList;
     }
+
+    private Queue<FileSystemInput> fshxQueue;
+
+
 
     /******************************************************************************************************************
      *                                                                                                                *

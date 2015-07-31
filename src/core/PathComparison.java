@@ -17,18 +17,58 @@ public class PathComparison implements Comparable<PathComparison> {
      * The path of the two compared files or directories
      */
     private Path path;
+
+    public Path getPath() {
+        return path;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
+    }
+
     /**
      * The parent directory of the compared path
      */
     private PathComparison parent;
+
+    public PathComparison getParent() {
+        return parent;
+    }
+
+    public void setParent(PathComparison parent) {
+        this.parent = parent;
+    }
+
+    public Path getParentPath() {
+        return this.path.getParent();
+    }
+
     /**
      * The status of the comparison
      */
     private ComparisonStatus status;
+
+    public ComparisonStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ComparisonStatus status) {
+        this.status = status;
+    }
+
     /**
      * Indicates if the path is a directory
      */
     private boolean isDirectory;
+
+    public boolean isDirectory() {
+        return isDirectory;
+    }
+
+    public void setIsDirectory(boolean isDirectory) {
+        this.isDirectory = isDirectory;
+    }
+
     /**
      * Only for directories. Stores the number of files in this directory according to their status.
      * Example :
@@ -45,42 +85,6 @@ public class PathComparison implements Comparable<PathComparison> {
         for(int i = 0; i<size; i++) {
             directoryStatus[i] = 0;
         }
-    }
-
-    public Path getPath() {
-        return path;
-    }
-
-    public void setPath(Path path) {
-        this.path = path;
-    }
-
-    public PathComparison getParent() {
-        return parent;
-    }
-
-    public void setParent(PathComparison parent) {
-        this.parent = parent;
-    }
-
-    public Path getParentPath() {
-        return this.path.getParent();
-    }
-
-    public ComparisonStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ComparisonStatus status) {
-        this.status = status;
-    }
-
-    public boolean isDirectory() {
-        return isDirectory;
-    }
-
-    public void setIsDirectory(boolean isDirectory) {
-        this.isDirectory = isDirectory;
     }
 
     public int[] getDirectoryStatus() {

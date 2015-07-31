@@ -21,20 +21,24 @@ public class HashPreparationController extends HashWizardPane {
      */
     @FXML
     private Label fileCountPreparationLabel;
+
     /**
      * The total number of bytes visited
      */
     @FXML
     private Label byteCountPreparationLabel;
+
     /**
      * The unit (KB, MB, GB) for the byteCountPreparationLabel
      */
     @FXML
     private Label byteUnitPreparationLabel;
+
     /**
      * The file visitor that crawls and counts the number of files
      */
     private FileCountCrawler fileCountCrawler;
+
     /**
      * A 2 decimals formatter
      */

@@ -16,7 +16,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 /**
- * Created by Erwan Dano on 20/07/2015.
+ * Info pill to display status counts.
+ * Displayed as a circle for folders, will expand into a pill showing the status count when hovered.
  */
 public class Pill extends StackPane {
 

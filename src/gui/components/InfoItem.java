@@ -12,23 +12,6 @@ import javafx.scene.text.Text;
  */
 public class InfoItem extends HBox{
 
-    /**
-     * Label of the info to display
-     */
-    private Text labelNode;
-    /**
-     * Info to display
-     */
-    private Text infoNode;
-    /**
-     * Text to display inside the labelNode node
-     */
-    private StringProperty label;
-    /**
-     * Text to display inside the info node
-     */
-    private StringProperty text;
-
     public InfoItem(){
         text = new SimpleStringProperty();
         label = new SimpleStringProperty();
@@ -42,6 +25,12 @@ public class InfoItem extends HBox{
         this.getStyleClass().add("infoItem");
     }
 
+
+    /**
+     * Label of the info to display
+     */
+    private Text labelNode;
+
     public Text getLabelNode() {
         return labelNode;
     }
@@ -50,6 +39,11 @@ public class InfoItem extends HBox{
         this.labelNode = labelNode;
     }
 
+    /**
+     * Info to display
+     */
+    private Text infoNode;
+
     public Text getInfoNode() {
         return infoNode;
     }
@@ -57,6 +51,11 @@ public class InfoItem extends HBox{
     public void setInfoNode(Text text) {
         this.infoNode = text;
     }
+
+    /**
+     * Text to display inside the labelNode node
+     */
+    private StringProperty label;
 
     public String getLabel() {
         return label.get();
@@ -72,6 +71,11 @@ public class InfoItem extends HBox{
         return label;
     }
 
+    /**
+     * Text to display inside the info node
+     */
+    private StringProperty text;
+
     public String getText() {
         return text.get();
     }
@@ -85,6 +89,5 @@ public class InfoItem extends HBox{
     public StringProperty textProperty() {
         return text;
     }
-
 
 }
