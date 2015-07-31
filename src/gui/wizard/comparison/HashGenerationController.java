@@ -1,9 +1,9 @@
 package gui.wizard.comparison;
 
 import core.FileSystemHash;
+import core.FileSystemInput;
 import core.HashCrawler;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,6 +12,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Text;
 
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,14 +21,6 @@ import java.util.TimerTask;
  */
 public class HashGenerationController extends ComparisonWizardPane {
 
-    /**
-     * A GigaByte in bytes (= 1024 * 1024 * 1024)
-     */
-    private final int gigabyte = 1073741824;
-    /**
-     * The size of a kilobyte in bytes
-     */
-    private final long kilobyte = 1024;
     @FXML
     private Label percentageLabel;
     @FXML
@@ -67,6 +60,11 @@ public class HashGenerationController extends ComparisonWizardPane {
      * The output of the hash generation for the compared file system
      */
     private FileSystemHash comparedFSH;
+
+    /**
+     * The number of visited files
+     */
+    private int fileCount;
     /**
      * The sum of file size of visited files, in bytes
      */
@@ -74,11 +72,11 @@ public class HashGenerationController extends ComparisonWizardPane {
     /**
      * The number of files hashed in the reference file system so far
      */
-    private int referenceHashedFileCount = 0;
+    private int previousHashedFileCount = 0;
     /**
      * The count of bytes hashed in the reference file system so far
      */
-    private double referenceHashedByteCount = 0;
+    private double previousHashedByteCount = 0;
     /**
      * The hash crawler currently crawling
      */
@@ -126,104 +124,112 @@ public class HashGenerationController extends ComparisonWizardPane {
     }
 
     /**
-     * Start the hash generation
+     * Init UI for hash generation
      */
-    public void hash(){
-        //Init generic UI nodes
-        int fileCount = wizard.getFileCount();
+    private void initUI() {
+        fileCount = wizard.getFileCount();
         fileByteCount = wizard.getByteCount();
         fileCountLabel.setText(String.valueOf(fileCount));
-        initByteCount(fileByteCount);
+        updateByteCount(byteCountLabel, byteCountUnit, "KB", fileByteCount, 0);
         progressBar.setProgress(0);
-        //Init the FileSystemHash objects
-        referenceFSH = new FileSystemHash(wizard.getReferenceFSPath());
-        comparedFSH = new FileSystemHash(wizard.getComparedFSPath());
-        HashCrawler referenceCrawler = referenceFSH.getHashCrawler();
-        HashCrawler comparedCrawler = comparedFSH.getHashCrawler();
+    }
+
+
+    public void hash() {
+        initUI();
+        //Init list of input to hash
+        List<FileSystemInput> hashList = wizard.getHashList();
+        int queueLength = hashList.size();
+        FileSystemInput[] fsiArray = new FileSystemInput[queueLength];
+        FileSystemHash[] fshArray = new FileSystemHash[queueLength];
+        HashCrawler[] hashCrawlerArray = new HashCrawler[queueLength];
+        for (int i = 0; i < queueLength; i++) {
+            FileSystemInput fsi = hashList.get(i);
+            FileSystemHash fsh = new FileSystemHash(fsi);
+            fshArray[i] = fsh;
+            hashCrawlerArray[i] = fsh.getHashCrawler();
+        }
+        //Generate order of hash generation
+        if (queueLength > 1) {
+            //Link the crawlers between each other
+            for (int i = 0; i < (queueLength - 1); i++) {
+                final int index = i;
+                hashCrawlerArray[i].stateProperty().addListener((observable, oldValue, newValue) -> {
+                    //When a crawler has finished, update total file count and byte count and start the new crawler
+                    if (newValue == Worker.State.SUCCEEDED) {
+                        //Update the corresponding FS to the wizard TODO
+                        previousHashedFileCount += hashCrawlerArray[index].getHashedFileCount();
+                        previousHashedByteCount += hashCrawlerArray[index].getHashedByteCount();
+                        if (index < (queueLength - 1)) {
+                            bindUI(fshArray[index + 1]);
+                            currentCrawler = hashCrawlerArray[index + 1];
+                            fshArray[index + 1].computeHashes();
+                        }
+                    }
+                });
+            }
+            //When the last crawler has finished, display the comparison interface
+            hashCrawlerArray[queueLength - 1].stateProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue == Worker.State.SUCCEEDED) {
+                    //Add the corresponding FS to the wizard TODO
+                    timer.cancel();
+                    wizard.goToComparisonProgress();
+                }
+            });
+        }
+        //Init for the first hash generation
+        previousHashedFileCount = 0;
+        previousHashedByteCount = 0;
+        bindUI(fshArray[0]);
+        currentCrawler = hashCrawlerArray[0];
         //Set up a timer to show elapsed time
         seconds = 0;
         timer=new Timer();
         timer.scheduleAtFixedRate(new ElapsedTimeTask(), 1000, 1000);
-        //When the first file system is hashed continue with the compared
-        referenceCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue== Worker.State.SUCCEEDED){
-                wizard.setReferenceFSH(referenceFSH);
-                referenceHashedFileCount = referenceCrawler.getHashedFileCount();
-                referenceHashedByteCount = referenceCrawler.getHashedByteCount();
-                //Bind UI for comparedCrawler
-                bindForCompared(comparedCrawler);
-                currentCrawler = comparedCrawler;
-                //Start crawling when ready
-                comparedFSH.computeHashes();
-            }
-        });
-        //When the compared FS is hashed display the comparison interface
-        comparedCrawler.stateProperty().addListener(((observable, oldValue, newValue) -> {
-            if(newValue== Worker.State.SUCCEEDED){
-                timer.cancel();
-                wizard.setComparedFSH(comparedFSH);
-                wizard.goToComparisonProgress();
-            }
-        }));
-        //Start crawling
-        bindForReference(referenceCrawler);
-        currentCrawler = referenceCrawler;
-        referenceFSH.computeHashes();
+        //Start the hash generation
+        fshArray[0].computeHashes();
+
     }
 
-
-
-    /**
-     * Init UI binding for the reference FS crawler
-     */
-    private void bindForReference(HashCrawler referenceCrawler){
-        fileSystemHashedName.setText(wizard.getReferenceFSPath().toString());
-        fileVisitedText.textProperty().bind(referenceCrawler.getVisitedFileProperty());
-        hashedFileCountLabel.textProperty().bind(Bindings.convert(referenceCrawler.getHashedFileCountProperty()));
-        referenceCrawler.getHashedByteCountProperty().addListener((observable, oldValue, newValue) -> {
-            updateProgressBar(newValue, 0);
-            updateHashedByteCount(newValue, 0);
-        });
-    }
-
-    /**
-     * Init UI bindings for the compared FS crawler
-     */
-    private void bindForCompared(HashCrawler comparedCrawler){
-        fileSystemHashedName.setText(wizard.getComparedFSPath().toString());
-        fileVisitedText.textProperty().bind(comparedCrawler.getVisitedFileProperty());
+    private void bindUI(FileSystemHash fsh) {
+        HashCrawler crawler = fsh.getHashCrawler();
+        fileSystemHashedName.setText(fsh.getRootPath().toString());
+        fileVisitedText.textProperty().unbind();
+        fileVisitedText.textProperty().bind(crawler.getVisitedFileProperty());
         //Bind hashed file count
         hashedFileCountLabel.textProperty().unbind();
-        comparedCrawler.getHashedFileCountProperty().addListener((observable, oldValue, newValue) -> {
-            hashedFileCountLabel.setText(String.valueOf(referenceHashedFileCount + newValue.intValue()));
+        crawler.getHashedFileCountProperty().addListener((observable, oldValue, newValue) -> {
+            hashedFileCountLabel.setText(String.valueOf(previousHashedFileCount + newValue.intValue()));
         });
         //Bind hashed byte count
-        comparedCrawler.getHashedByteCountProperty().addListener((observable, oldValue, newValue) -> {
-            updateProgressBar(newValue, referenceHashedByteCount);
-            updateHashedByteCount(newValue, referenceHashedByteCount);
+        crawler.getHashedByteCountProperty().addListener((observable, oldValue, newValue) -> {
+            updateProgressBar(newValue, previousHashedByteCount);
+            updateHashedByteCount(newValue, previousHashedByteCount);
         });
     }
+
+    //TODO private void updateFSHToWizard(
 
     private void updateHashedByteCount(Number newValue, double offset){
         updateByteCount(hashedByteCountLabel, hashedByteCountUnit, unit, newValue, offset);
     }
 
-    private void initByteCount(Number byteCount){
-        updateByteCount(byteCountLabel, byteCountUnit, "KB", byteCount, 0);
-    }
-
     /**
      * Update the number of bytes crunched and adapt unit to the new value
-     * @param newValue
+     * @param newByteCount The new byte count value
      */
-    private void updateByteCount(Label byteCountLabel, Label byteCountUnit, String unit, Number newValue, double offset){
-        double byteCount = newValue.longValue() + offset;
-        double KBCount = byteCount/kilobyte;
+    private void updateByteCount(Label byteCountLabel, Label byteCountUnit, String unit, Number newByteCount, double offset) {
+        double byteCount = newByteCount.longValue() + offset;
+        /*
+      The size of a kilobyte in bytes
+     */
+        long kilobyte = 1024;
+        double KBCount = byteCount / kilobyte;
         double displayedCount = KBCount;
         if(KBCount > 1024){
-            double MBCount = KBCount/kilobyte;
+            double MBCount = KBCount / kilobyte;
             if(MBCount > 1024){
-                displayedCount = MBCount/kilobyte;
+                displayedCount = MBCount / kilobyte;
                 if(unit.compareTo("GB")!=0){
                     unit = "GB";
                     byteCountUnit.setText(unit);

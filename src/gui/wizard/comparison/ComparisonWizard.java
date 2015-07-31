@@ -1,13 +1,18 @@
 package gui.wizard.comparison;
 
+import core.FSXmlHandler;
 import core.FileSystemComparison;
 import core.FileSystemHash;
-import core.InputType;
+import core.FileSystemInput;
 import gui.Main;
 import gui.Wizard;
 import gui.comparison.ComparisonWindowController;
+import org.jdom2.JDOMException;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A Wizard to guide the user in the project configuration.
@@ -38,25 +43,13 @@ public class ComparisonWizard extends Wizard{
      */
     private Path outputDirectory;
     /**
-     * The path pointing to the COMPARED file system
-     * It can be a file or a directory, for a list of acceptable
-     * input types see the enum class InputType
+     * The reference file system input
      */
-    private Path comparedFSPath;
+    private FileSystemInput referenceInput;
     /**
-     * The path pointing to the REFERENCE file system
-     * It can be a file or a directory, for a list of acceptable
-     * input types see the enum class InputType
+     * The compared file system input
      */
-    private Path referenceFSPath;
-    /**
-     * The input type for the REFERENCE file system
-     */
-    private InputType referenceFSInputType;
-    /**
-     * The input type for the COMPARED file system
-     */
-    private InputType comparedFSInputType;
+    private FileSystemInput comparedInput;
     /**
      * The file system hash of the REFERENCE file system
      */
@@ -79,11 +72,21 @@ public class ComparisonWizard extends Wizard{
      * This is used to update the progress bar
      */
     private int fileCount;
+    /**
+     * The list of file system to hash
+     */
+    private List<FileSystemInput> hashList;
+    /**
+     * The list of file systems to load from a XML file
+     */
+    private List<FileSystemInput> fshxList;
 
     public ComparisonWizard(Main application, String projectName, Path outputDirectory) throws Exception {
         this.application = application;
         this.projectName = projectName;
         this.outputDirectory = outputDirectory;
+        this.hashList = new ArrayList<>();
+        this.fshxList = new ArrayList<>();
         gotoReferenceChoice();
     }
 
@@ -94,36 +97,20 @@ public class ComparisonWizard extends Wizard{
         return outputDirectory.resolve(projectName+".fscx");
     }
 
-    public Path getComparedFSPath() {
-        return comparedFSPath;
+    public FileSystemInput getReferenceInput() {
+        return referenceInput;
     }
 
-    public void setComparedFSPath(Path comparedFSPath) {
-        this.comparedFSPath = comparedFSPath;
+    public void setReferenceInput(FileSystemInput referenceInput) {
+        this.referenceInput = referenceInput;
     }
 
-    public Path getReferenceFSPath() {
-        return referenceFSPath;
+    public FileSystemInput getComparedInput() {
+        return comparedInput;
     }
 
-    public void setReferenceFSPath(Path referenceFSPath) {
-        this.referenceFSPath = referenceFSPath;
-    }
-
-    public InputType getReferenceFSInputType() {
-        return referenceFSInputType;
-    }
-
-    public void setReferenceFSInputType(InputType referenceFSInputType) {
-        this.referenceFSInputType = referenceFSInputType;
-    }
-
-    public InputType getComparedFSInputType() {
-        return comparedFSInputType;
-    }
-
-    public void setComparedFSInputType(InputType comparedFSInputType) {
-        this.comparedFSInputType = comparedFSInputType;
+    public void setComparedInput(FileSystemInput comparedInput) {
+        this.comparedInput = comparedInput;
     }
 
     public FileSystemHash getReferenceFSH() {
@@ -166,8 +153,13 @@ public class ComparisonWizard extends Wizard{
         this.fileCount = fileCount;
     }
 
+    public List<FileSystemInput> getHashList() {
+        return hashList;
+    }
 
-
+    public List<FileSystemInput> getFshxList() {
+        return fshxList;
+    }
 
     /******************************************************************************************************************
      *                                                                                                                *
@@ -203,20 +195,36 @@ public class ComparisonWizard extends Wizard{
      *  ref = Logical dir && comp == Logical dir -> gotoHashPreparation()
      */
     public void chooseComparisonPreparation(){
-        if(     referenceFSInputType == InputType.LOGICAL_DIRECTORY
-                && comparedFSInputType == InputType.LOGICAL_DIRECTORY){
-            //We need to hash both file systems
+        enqueue();
+        if (hashList.size() > 0) {
             gotoHashPreparation();
-        } else if ( referenceFSInputType == InputType.FSHX
-                &&  comparedFSInputType == InputType.FSHX){
-            //No need to hash anything, load the fshx files into FileSystemHash objects and produce the comparison
-
-        } else if ( (referenceFSInputType == InputType.FSHX && comparedFSInputType == InputType.LOGICAL_DIRECTORY)
-                ||  (referenceFSInputType == InputType.LOGICAL_DIRECTORY && comparedFSInputType == InputType.FSHX)
-                ) {
-            //We need to hash one of the file systems, go to the hash preparation
         } else {
-            //TODO
+            try {
+                referenceFSH = FSXmlHandler.loadFileSystemHash(referenceInput.getPath().toString());
+                comparedFSH = FSXmlHandler.loadFileSystemHash(comparedInput.getPath().toString());
+                goToComparisonProgress();
+            } catch (JDOMException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void enqueue() {
+        switch (referenceInput.getInputType()) {
+            case LOGICAL_DIRECTORY:
+                hashList.add(referenceInput);
+                break;
+            case FSHX:
+                fshxList.add(referenceInput);
+                break;
+        }
+        switch (comparedInput.getInputType()) {
+            case LOGICAL_DIRECTORY:
+                hashList.add(comparedInput);
+                break;
+            case FSHX:
+                fshxList.add(comparedInput);
+                break;
         }
     }
 

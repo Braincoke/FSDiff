@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 /**
- * Created by Erwan Dano on 24/07/2015.
+ * Dialog fo
  */
 public class NewComparisonProjectController extends StageController {
 
@@ -74,10 +74,6 @@ public class NewComparisonProjectController extends StageController {
         return controller;
     }
 
-    public void setProjectName(Event event){
-        projectName = projectNameText.getText();
-    }
-
     public void setProjectLocation(ActionEvent actionEvent) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Choose the project location");
@@ -91,6 +87,7 @@ public class NewComparisonProjectController extends StageController {
     }
 
     public void next(ActionEvent actionEvent) {
+        projectName = projectNameText.getText();
         application.gotoComparisonWizard(projectName,projectLocation);
         stage.close();
     }

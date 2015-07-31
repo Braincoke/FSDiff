@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by Erwan Dano on 10/07/2015.
+ * Controller for the search results pane and the content viewing pane
  */
 public class DataPaneController extends AnchorPane implements Initializable {
 

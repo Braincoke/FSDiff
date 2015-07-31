@@ -2,8 +2,6 @@ package core;
 
 import javafx.application.Platform;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -14,6 +12,7 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.TERMINATE;
@@ -22,7 +21,6 @@ import static java.nio.file.FileVisitResult.TERMINATE;
  * Crawls one or multiple directories to recursively count the number of files it includes
  */
 public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>{
-
 
     /**
      * The list of root directory to crawl
@@ -58,20 +56,20 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
      */
     private boolean cancelled;
 
-    public FileCountCrawler(Path... rootList){
-        this.rootList = rootList;
+    public FileCountCrawler(List<FileSystemInput> list) {
+        this.rootList = new Path[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            rootList[i] = list.get(i).getPath();
+        }
         this.fileCountProperty = new SimpleIntegerProperty(0);
         this.visitedFileProperty = new SimpleStringProperty("");
         this.byteCountProperty = new SimpleLongProperty(0);
         this.fileCount = 0;
         this.byteCount = 0;
         this.cancelled = false;
-        this.stateProperty().addListener(new ChangeListener<State>() {
-            @Override
-            public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
-                if(newValue==State.CANCELLED){
-                    cancelled = true;
-                }
+        this.stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == State.CANCELLED) {
+                cancelled = true;
             }
         });
     }
@@ -88,16 +86,16 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
         return fileCountProperty;
     }
 
+    public int getFileCount() {
+        return fileCount;
+    }
+
     public String getVisitedFile() {
         return visitedFileProperty.get();
     }
 
     public StringProperty visitedFileProperty() {
         return visitedFileProperty;
-    }
-
-    public int getFileCount() {
-        return fileCount;
     }
 
     public long getByteCount(){

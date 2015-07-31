@@ -39,9 +39,9 @@ public class FileSystemHashMetadata {
      */
     protected String OS;
     /**
-     * The path pointing to the root directory
+     * The input that was used to generate the file system hash
      */
-    protected Path rootPath;
+    protected FileSystemInput fileSystemInput;
     /**
      * The number of files hashed
      */
@@ -57,7 +57,7 @@ public class FileSystemHashMetadata {
 
     /*******************************************************************************************************************
      *                                                                                                                 *
-     *  COMPARISON GENERATION                                                                                          *
+     *  CONSTRUCTORS                                                                                         *
      *                                                                                                                 *
      ******************************************************************************************************************/
 
@@ -72,7 +72,9 @@ public class FileSystemHashMetadata {
         }
         fileSystem = metadata.get("fileSystem");
         OS = metadata.get("OS");
-        rootPath = Paths.get(metadata.get("rootPath"));
+        Path rootPath = Paths.get(metadata.get("rootPath"));
+        String inputTypeStr = metadata.get("inputType");
+        fileSystemInput = new FileSystemInput(inputTypeStr, rootPath, false);
         fileCount = Integer.parseInt(metadata.get("fileCount"));
         byteCount = Long.parseLong(metadata.get("byteCount"));
         errorCount = Integer.parseInt(metadata.get("errorCount"));
@@ -85,7 +87,7 @@ public class FileSystemHashMetadata {
         fileSystem = fileSystemHash.getFileSystem();
         duration = fileSystemHash.getDuration();
         OS = fileSystemHash.getOS();
-        rootPath = fileSystemHash.getRootPath();
+        fileSystemInput = fileSystemHash.getFileSystemInput();
         fileCount = fileSystemHash.getFileCount();
         byteCount = fileSystemHash.getByteCount();
         errorCount = fileSystemHash.getErrorCount();
@@ -94,7 +96,7 @@ public class FileSystemHashMetadata {
     public FileSystemHashMetadata() {
     }
 
-    public String getName()  {
+    public String getName() {
         return name;
     }
 
@@ -104,6 +106,38 @@ public class FileSystemHashMetadata {
 
     public Duration getDuration() {
         return duration;
+    }
+
+    public String getFileSystem() {
+        return fileSystem;
+    }
+
+    public String getOS() {
+        return OS;
+    }
+
+    public FileSystemInput getFileSystemInput() {
+        return fileSystemInput;
+    }
+
+    public Path getRootPath() {
+        return fileSystemInput.getPath();
+    }
+
+    public InputType getInputType() {
+        return fileSystemInput.getInputType();
+    }
+
+    public int getFileCount() {
+        return fileCount;
+    }
+
+    public long getByteCount() {
+        return byteCount;
+    }
+
+    public int getErrorCount() {
+        return errorCount;
     }
 
     public String formatDuration() {
@@ -124,30 +158,6 @@ public class FileSystemHashMetadata {
         if(millis>0 || days>0 || hours>0 || minutes>0 || seconds>0)
             output += millis + "ms";
         return output;
-    }
-
-    public String getFileSystem(){
-        return fileSystem;
-    }
-
-    public String getOS() {
-        return OS;
-    }
-
-    public Path getRootPath() {
-        return rootPath;
-    }
-
-    public int getFileCount() {
-        return fileCount;
-    }
-
-    public long getByteCount() {
-        return byteCount;
-    }
-
-    public int getErrorCount() {
-        return errorCount;
     }
 
     public String formatByteCount() {

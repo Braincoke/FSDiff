@@ -1,7 +1,7 @@
 package gui.wizard.comparison;
 
 import core.FileCountCrawler;
-import core.InputType;
+import core.FileSystemInput;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * Gather the total size of the blob to hash as well as the total number of files to hash
@@ -16,9 +17,6 @@ import java.text.DecimalFormat;
  */
 public class HashPreparationController extends ComparisonWizardPane {
 
-    private final long kilobyte = 1024;
-    private final long megabyte = 1024*1024;
-    private final long gigabyte = 1073741824;
     @FXML
     private Label fileCountPreparationLabel;
     @FXML
@@ -47,17 +45,8 @@ public class HashPreparationController extends ComparisonWizardPane {
      * and compute the sum of each file size in bytes
      */
     public void countFiles(){
-        InputType refInputType = wizard.getReferenceFSInputType();
-        InputType comInputType = wizard.getComparedFSInputType();
-        if(refInputType == InputType.LOGICAL_DIRECTORY && comInputType == InputType.LOGICAL_DIRECTORY){
-            fileCountCrawler = new FileCountCrawler(
-                    wizard.getReferenceFSPath(),
-                    wizard.getComparedFSPath());
-        } else if (refInputType == InputType.LOGICAL_DIRECTORY) {
-            fileCountCrawler = new FileCountCrawler(wizard.getReferenceFSPath());
-        } else if (comInputType == InputType.LOGICAL_DIRECTORY) {
-            fileCountCrawler = new FileCountCrawler(wizard.getComparedFSPath());
-        }
+        List<FileSystemInput> hashList = wizard.getHashList();
+        fileCountCrawler = new FileCountCrawler(hashList);
         //Bind file count
         fileCountPreparationLabel.textProperty().bind(Bindings.convert(
                 fileCountCrawler.fileCountProperty()));
@@ -75,16 +64,17 @@ public class HashPreparationController extends ComparisonWizardPane {
 
     /**
      * Update the number of bytes crunched and adapt unit to the new value
-     * @param newValue
+     * @param newValue The new byte count value
      */
     private void updateByteCount(Number newValue){
         double byteCount = newValue.doubleValue();
-        double KBCount = byteCount/kilobyte;
+        long kilobyte = 1024;
+        double KBCount = byteCount / kilobyte;
         double displayedCount = KBCount;
         if(KBCount > 1024){
-            double MBCount = KBCount/kilobyte;
+            double MBCount = KBCount / kilobyte;
             if(MBCount > 1024){
-                displayedCount = MBCount/kilobyte;
+                displayedCount = MBCount / kilobyte;
                 if(unit.compareTo("GB")!=0){
                     unit = "GB";
                     byteUnitPreparationLabel.setText(unit);

@@ -1,13 +1,17 @@
 package gui.wizard.comparison;
 
+import core.FileSystemInput;
 import javafx.event.ActionEvent;
 
+/**
+ * Choice of the compared file system
+ */
 public class ComparedFSChoiceController extends ChoiceController {
 
     @Override
     public void next() {
-        wizard.setComparedFSInputType(this.inputType);
-        wizard.setComparedFSPath(this.input);
+        FileSystemInput com = new FileSystemInput(this.inputType, this.input, false);
+        wizard.setComparedInput(com);
         wizard.chooseComparisonPreparation();
     }
 

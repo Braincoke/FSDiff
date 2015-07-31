@@ -43,6 +43,7 @@ public abstract class ChoiceController extends  ComparisonWizardPane {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Saved hashes", "*.fshx"));
         File file = fileChooser.showOpenDialog(application.getStage());
+        setInput(file);
 
     }
 

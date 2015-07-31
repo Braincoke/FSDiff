@@ -2,7 +2,7 @@ package gui.wizard.hash;
 
 import core.FSXmlHandler;
 import core.FileSystemHash;
-import core.InputType;
+import core.FileSystemInput;
 import gui.Main;
 import gui.Wizard;
 
@@ -20,26 +20,20 @@ public class HashWizard extends Wizard {
      * The name given to the hashed file system
      */
     private String name;
+    /**
+     * The output directory
+     */
+    private Path outputDirectory;
+    /**
+     * The file system input
+     */
+    private FileSystemInput fileSystemInput;
 
     /*******************************************************************************************************************
      *                                                                                                                 *
      *  PROJECT SETTINGS                                                                                               *
      *                                                                                                                 *
      *******************************************************************************************************************/
-    /**
-     * The output directory
-     */
-    private Path outputDirectory;
-    /**
-     * The path pointing to the file system to hash
-     * It can be a file or a directory, for a list of acceptable
-     * input types see the enum class InputType
-     */
-    private Path fsPath;
-    /**
-     * The input type of the file system to be hashed
-     */
-    private InputType inputType;
     /**
      * The result of the hash generation
      */
@@ -86,20 +80,12 @@ public class HashWizard extends Wizard {
             return outputDirectory.resolve(name.concat(".fshx"));
     }
 
-    public Path getFsPath() {
-        return fsPath;
+    public FileSystemInput getFileSystemInput() {
+        return fileSystemInput;
     }
 
-    public void setFsPath(Path fsPath) {
-        this.fsPath = fsPath;
-    }
-
-    public InputType getInputType() {
-        return inputType;
-    }
-
-    public void setInputType(InputType inputType) {
-        this.inputType = inputType;
+    public void setFileSystemInput(FileSystemInput fileSystemInput) {
+        this.fileSystemInput = fileSystemInput;
     }
 
     public FileSystemHash getFileSystemHash() {

@@ -1,5 +1,6 @@
 package gui.wizard.hash;
 
+import core.FileSystemInput;
 import core.InputType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -53,7 +54,7 @@ public class FSChoiceController extends HashWizardPane {
     /**
      * The path pointing to the input
      */
-    private Path input;
+    private Path inputPath;
     /**
      * Next button
      */
@@ -74,7 +75,7 @@ public class FSChoiceController extends HashWizardPane {
             outputDirectory = file.toPath();
             outputDirectoryTextField.setText(outputDirectory.toString());
         } else {
-            input = null;
+            inputPath = null;
             outputDirectoryTextField.setText(null);
         }
     }
@@ -83,19 +84,19 @@ public class FSChoiceController extends HashWizardPane {
      * Updates the input file and the corresponding text field
      * @param file
      */
-    public void setInput(File file){
+    public void setInputPath(File file) {
         if(file!=null) {
-            input = file.toPath();
-            locationTextField.setText(input.toString());
+            inputPath = file.toPath();
+            locationTextField.setText(inputPath.toString());
         } else {
-            input = null;
+            inputPath = null;
             locationTextField.setText(null);
         }
     }
 
     public void next(){
-        wizard.setInputType(inputType);
-        wizard.setFsPath(input);
+        FileSystemInput fsi = new FileSystemInput(inputType, inputPath, false);
+        wizard.setFileSystemInput(fsi);
         wizard.setOutputDirectory(outputDirectory);
         wizard.setName(outputNameTextField.getText());
         wizard.gotoHashPreparation();
@@ -123,7 +124,7 @@ public class FSChoiceController extends HashWizardPane {
     protected void browseLogical(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File file = directoryChooser.showDialog(application.getStage());
-        setInput(file);
+        setInputPath(file);
     }
 
     /**

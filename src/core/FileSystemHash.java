@@ -14,9 +14,13 @@ public class FileSystemHash extends FileSystemHashMetadata {
 
     private Logger log = Logger.getGlobal();
 
-    //List of file hashes
+    /**
+     * The set of file hashes
+     */
     private TreeMap<Path, HashedFile> fileHashes;
-    //The crawler
+    /**
+     * The service responsible for finding and hashing the files
+     */
     private HashCrawler hashCrawler;
 
     /**
@@ -30,18 +34,16 @@ public class FileSystemHash extends FileSystemHashMetadata {
         fileHashes = hashes;
     }
 
-    public FileSystemHash(Path rootPath, String name){
-        this(rootPath);
+    public FileSystemHash(FileSystemInput input) {
+        this.fileSystemInput = input;
+        hashCrawler = new HashCrawler(fileSystemInput.getPath());
+    }
+
+
+    public FileSystemHash(FileSystemInput input, String name) {
+        this.fileSystemInput = input;
         this.name = name;
-    }
-
-    public FileSystemHash(Path rootPath) {
-        this.rootPath = rootPath.toAbsolutePath();
-        hashCrawler = new HashCrawler(rootPath);
-    }
-
-    public HashCrawler getHashCrawler(){
-        return hashCrawler;
+        hashCrawler = new HashCrawler(fileSystemInput.getPath());
     }
 
     public TreeMap<Path, HashedFile> getFileHashes() {
@@ -50,6 +52,10 @@ public class FileSystemHash extends FileSystemHashMetadata {
             copy.put(entry.getKey(), entry.getValue());
         }
         return copy;
+    }
+
+    public HashCrawler getHashCrawler(){
+        return hashCrawler;
     }
 
     /**
@@ -61,7 +67,7 @@ public class FileSystemHash extends FileSystemHashMetadata {
         errorCount = 0;
         fileHashes = new TreeMap<>();
         OS = System.getProperty("os.name");
-        fileSystem = rootPath.getFileSystem().toString();
+        fileSystem = getRootPath().getFileSystem().toString();
         datetime = new Date();
         //When all the files have been hashed update metadata
         hashCrawler.setOnSucceeded((WorkerStateEvent e) -> {

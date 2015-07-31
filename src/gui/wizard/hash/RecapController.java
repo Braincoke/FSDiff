@@ -30,7 +30,7 @@ public class RecapController extends HashWizardPane {
         FileSystemHash fsh = wizard.getFileSystemHash();
         infoView.prefWidthProperty().bind(scrollPane.widthProperty());
         infoView.resize(scrollPane.widthProperty());
-        inputTypeInfo.setText(wizard.getInputType().getDescription());
+        inputTypeInfo.setText(wizard.getFileSystemInput().getInputType().getDescription());
         inputPathInfo.setText(fsh.getRootPath().toString());
         outputFilePathInfo.setText(wizard.getOutputFilePath().toString());
         elapsedInfo.setText(fsh.formatDuration());

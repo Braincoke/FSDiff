@@ -114,7 +114,7 @@ public class HashGenerationController extends HashWizardPane {
     public void hash(){
         initUI();
         //Init the FileSystemHash objects
-        fsh = new FileSystemHash(wizard.getFsPath(), wizard.getName());
+        fsh = new FileSystemHash(wizard.getFileSystemInput(), wizard.getName());
         HashCrawler hashCrawler = fsh.getHashCrawler();
         //Set up a timer to show elapsed time
         seconds = 0;
@@ -151,7 +151,7 @@ public class HashGenerationController extends HashWizardPane {
      * Init UI bindings
      */
     private void bindProperties(HashCrawler crawler){
-        fileSystemHashedName.setText(wizard.getFsPath().toString());
+        fileSystemHashedName.setText(wizard.getFileSystemInput().getPath().toString());
         fileVisitedText.textProperty().bind(crawler.getVisitedFileProperty());
         hashedFileCountLabel.textProperty().bind(Bindings.convert(crawler.getHashedFileCountProperty()));
         crawler.getHashedByteCountProperty().addListener((observable, oldValue, newValue) -> {

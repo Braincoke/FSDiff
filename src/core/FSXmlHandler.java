@@ -71,6 +71,10 @@ public class FSXmlHandler {
      *                                                                                                                 *
      *******************************************************************************************************************/
     public static FileSystemHashMetadata loadFileSystemHashMetadata(Element fsElement){
+        return new FileSystemHashMetadata(loadFSHMetadata(fsElement));
+    }
+
+    public static HashMap<String, String> loadFSHMetadata(Element fsElement) {
         HashMap<String, String> metadata = new HashMap<>();
         metadata.put("name", fsElement.getChildText("name"));
         metadata.put("date", fsElement.getChildText("date"));
@@ -79,11 +83,11 @@ public class FSXmlHandler {
         metadata.put("fileSystem", fsElement.getChildText("fileSystem"));
         metadata.put("OS", fsElement.getChildText("OS"));
         metadata.put("rootPath", fsElement.getChildText("rootPath"));
+        metadata.put("inputType", fsElement.getChildText("inputType"));
         metadata.put("fileCount", fsElement.getChildText("fileCount"));
         metadata.put("byteCount", fsElement.getChildText("byteCount"));
         metadata.put("errorCount", fsElement.getChildText("errorCount"));
-
-        return new FileSystemHashMetadata(metadata);
+        return metadata;
     }
 
     public static Element toXMLElement(FileSystemHashMetadata fsh, String elementName){
@@ -109,18 +113,21 @@ public class FSXmlHandler {
         Element filesystemElement = new Element("fileSystem");
         Element osElement = new Element("OS");
         Element rootDirectoryElement = new Element("rootPath");
+        Element inputTypeElement = new Element("inputType");
         Element fileCountElement = new Element("fileCount");
         Element byteCountElement = new Element("byteCount");
         Element errorCountElement = new Element("errorCount");
         filesystemElement.setText(fsh.getFileSystem()); //TODO verify on Linux that this outputs NTFS
         osElement.setText(fsh.getOS());
-        rootDirectoryElement.setText(fsh.getRootPath().toString());
+        rootDirectoryElement.setText(fsh.getFileSystemInput().getPath().toString());
+        inputTypeElement.setText(fsh.getFileSystemInput().getInputType().name());
         fileCountElement.setText(String.valueOf(fsh.getFileCount()));
         byteCountElement.setText(String.valueOf(fsh.getByteCount()));
         errorCountElement.setText(String.valueOf(fsh.getErrorCount()));
         fsElement
                 .addContent(filesystemElement)
                 .addContent(osElement)
+                .addContent(inputTypeElement)
                 .addContent(rootDirectoryElement)
                 .addContent(fileCountElement)
                 .addContent(byteCountElement)
@@ -148,28 +155,7 @@ public class FSXmlHandler {
         //Parse the document
         //Starting with the metadata
         Element metadataElement = fshashElement.getChild("metadata");
-        String nameText = metadataElement.getChildText("name");
-        String dateText = metadataElement.getChildText("date");
-        String timeText = metadataElement.getChildText("time");
-        String durationText = metadataElement.getChildText("duration");
-        String fileSystemText = metadataElement.getChildText("fileSystem");
-        String osText = metadataElement.getChildText("OS");
-        String rootDirectoryText = metadataElement.getChildText("rootPath");
-        String fileCountText = metadataElement.getChildText("fileCount");
-        String byteCountText = metadataElement.getChildText("byteCount");
-        String errorCountText = metadataElement.getChildText("errorCount");
-        HashMap<String, String> metadata = new HashMap<>();
-        metadata.put("name", nameText);
-        metadata.put("date", dateText);
-        metadata.put("time", timeText);
-        metadata.put("duration", durationText);
-        metadata.put("filesystem", fileSystemText);
-        metadata.put("OS", osText);
-        metadata.put("rootPath", rootDirectoryText);
-        metadata.put("fileCount", fileCountText);
-        metadata.put("byteCount", byteCountText);
-        metadata.put("errorCount", errorCountText);
-
+        HashMap<String, String> metadata = loadFSHMetadata(metadataElement);
 
         //Now the hashes
         TreeMap<Path, HashedFile> loadedFileHashes = new TreeMap<>();

@@ -1,13 +1,14 @@
 package gui.wizard.hash;
 
 import core.FileCountCrawler;
-import core.InputType;
+import core.FileSystemInput;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * Gather the total size of the blob to hash as well as the total number of files to hash
@@ -15,10 +16,6 @@ import java.text.DecimalFormat;
  */
 public class HashPreparationController extends HashWizardPane {
 
-    /**
-     * One kilobyte in bytes
-     */
-    private final long kilobyte = 1024;
     /**
      * The total number of file visited
      */
@@ -64,13 +61,9 @@ public class HashPreparationController extends HashWizardPane {
      * and compute the sum of each file size in bytes
      */
     public void countFiles(){
-        InputType fsInputType = wizard.getInputType();
-        if(fsInputType == InputType.LOGICAL_DIRECTORY) {
-            fileCountCrawler = new FileCountCrawler(
-                    wizard.getFsPath());
-        } else {
-            //TODO log error and go back to welcome screen
-        }
+        ArrayList<FileSystemInput> fileSystemInputList = new ArrayList<>();
+        fileSystemInputList.add(wizard.getFileSystemInput());
+        fileCountCrawler = new FileCountCrawler(fileSystemInputList);
         //Bind file count
         fileCountPreparationLabel.textProperty().bind(Bindings.convert(
                 fileCountCrawler.fileCountProperty()));
@@ -88,16 +81,17 @@ public class HashPreparationController extends HashWizardPane {
 
     /**
      * Update the number of bytes crunched and adapt unit to the new value
-     * @param newValue
+     * @param newValue new byte count value
      */
     private void updateByteCount(Number newValue){
         double byteCount = newValue.doubleValue();
-        double KBCount = byteCount/kilobyte;
+        long kilobyte = 1024;
+        double KBCount = byteCount / kilobyte;
         double displayedCount = KBCount;
         if(KBCount > 1024){
-            double MBCount = KBCount/kilobyte;
+            double MBCount = KBCount / kilobyte;
             if(MBCount > 1024){
-                displayedCount = MBCount/kilobyte;
+                displayedCount = MBCount / kilobyte;
                 if(unit.compareTo("GB")!=0){
                     unit = "GB";
                     byteUnitPreparationLabel.setText(unit);

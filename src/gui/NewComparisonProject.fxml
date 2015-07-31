@@ -20,7 +20,8 @@
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Project name" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Project Location" GridPane.rowIndex="1" />
-                        <TextField fx:id="projectNameText" onKeyPressed="#setProjectName" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" />
+                        <TextField fx:id="projectNameText" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+                                   GridPane.hgrow="ALWAYS"/>
                         <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
                             <children>
                                 <TextField fx:id="projectLocationText" HBox.hgrow="ALWAYS" onKeyPressed="#typeProjectLocation"/>

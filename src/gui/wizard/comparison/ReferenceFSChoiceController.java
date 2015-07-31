@@ -1,14 +1,16 @@
 package gui.wizard.comparison;
 
+import core.FileSystemInput;
+
 /**
- * Created by Erwan Dano on 24/07/2015.
+ * Choice of the reference file system
  */
 public class ReferenceFSChoiceController extends ChoiceController {
 
     @Override
     public void next() {
-        wizard.setReferenceFSInputType(this.inputType);
-        wizard.setReferenceFSPath(this.input);
+        FileSystemInput ref = new FileSystemInput(this.inputType, this.input, true);
+        wizard.setReferenceInput(ref);
         wizard.gotoComparedChoice();
     }
 }
