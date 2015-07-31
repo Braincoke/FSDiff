@@ -6,7 +6,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Erwan Dano on 24/07/2015.
+ * An FXML Controller
  */
 public abstract class Controller implements Initializable {
 

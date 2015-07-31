@@ -5,20 +5,22 @@ import core.FileSystemComparison;
 import core.FileSystemHash;
 import core.PathComparison;
 import gui.Controller;
+import gui.MenuBarController;
 import gui.wizard.comparison.ComparisonWizard;
 import javafx.fxml.FXML;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import org.jdom2.JDOMException;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 
@@ -57,6 +59,11 @@ public class ComparisonWindowController extends Controller {
      *                                                                                                                 *
      ******************************************************************************************************************/
 
+    //Menubar
+    @FXML
+    private MenuBar menuBar;
+    @FXML
+    private MenuBarController menuBarController;
     //Toolbar
     @FXML
     private ToolBar toolbar;
@@ -102,9 +109,42 @@ public class ComparisonWindowController extends Controller {
     @FXML
     private BottomPaneController bottomPaneController;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public Path getOutputFile() {
+        return outputFile;
     }
+
+    public void setOutputFile(Path outputFile) {
+        this.outputFile = outputFile;
+    }
+
+    public FileSystemComparison getFileSystemComparison() {
+        return comparison;
+    }
+
+    public void setSelectedPath(ComparisonTreeItem item) {
+        breadcrumbsController.updateBreadcrumbs(item);
+        if (!item.isDirectory())
+            dataPaneController.updateHexViewer(item);
+    }
+
+    public SplitPane getSplitPane() {
+        return splitPane;
+    }
+
+    public ComparisonTreeItem getRootTreeItem() {
+        return rootTreeItem;
+    }
+
+    public void search() {
+        dataPaneController.updateResults(toolbarController.search());
+    }
+
+
+    /*******************************************************************************************************************
+     *                                                                                                                 *
+     * INITIALIZATION                                                                                                     *
+     *                                                                                                                 *
+     ******************************************************************************************************************/
 
     /**
      * Initialize the comparison window from the data collected from the wizard
@@ -119,6 +159,7 @@ public class ComparisonWindowController extends Controller {
         bottomPaneController.setWindowController(this);
         toolbarController.setWindowController(this);
         dataPaneController.setWindowController(this);
+        menuBarController.setWindowController(this);
     }
 
     /**
@@ -136,31 +177,10 @@ public class ComparisonWindowController extends Controller {
             bottomPaneController.setWindowController(this);
             toolbarController.setWindowController(this);
             dataPaneController.setWindowController(this);
+            menuBarController.setWindowController(this);
         } catch (JDOMException | IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Path getOutputFile() {
-        return outputFile;
-    }
-
-    public FileSystemComparison getFileSystemComparison() {
-        return comparison;
-    }
-
-    public void setSelectedPath(ComparisonTreeItem item) {
-        breadcrumbsController.updateBreadcrumbs(item);
-        if(!item.isDirectory())
-            dataPaneController.updateHexViewer(item);
-    }
-
-    public SplitPane getSplitPane() {
-        return splitPane;
-    }
-
-    public ComparisonTreeItem getRootTreeItem(){
-        return rootTreeItem;
     }
 
 
@@ -226,8 +246,36 @@ public class ComparisonWindowController extends Controller {
         }
     }
 
-    public void search() {
-        dataPaneController.updateResults(toolbarController.search());
+
+    /*******************************************************************************************************************
+     * *
+     * FILE IO                                                                                                         *
+     * *
+     ******************************************************************************************************************/
+
+    public void openFSC() {
+        double width = application.getStage().getWidth();
+        double height = application.getStage().getHeight();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open file");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File system comparison", "*.fscx"));
+        File file = fileChooser.showOpenDialog(application.getStage());
+        if (file != null) {
+            ComparisonWindowController comparisonWindowController;
+            try {
+                comparisonWindowController = (ComparisonWindowController) application.replaceSceneContent("comparison/ComparisonWindow.fxml");
+                application.getStage().setWidth(width);
+                application.getStage().setHeight(height);
+                comparisonWindowController.setApplication(application);
+                comparisonWindowController.initFromXML(file.toPath());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void saveFSC() {
+        FSXmlHandler.saveToXML(comparison, getOutputFile());
     }
 
 }

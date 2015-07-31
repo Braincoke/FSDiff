@@ -53,9 +53,13 @@ public class FSXmlHandler {
     public static void saveToXML(FileSystemComparison fsc, Path savePath) {
         Element comparison = FSXmlHandler.toXMLElement(fsc);
         org.jdom2.Document document = new Document(comparison);
+        Path formattedSavePath = savePath;
+        if (!savePath.toString().endsWith(".fscx")) {
+            formattedSavePath = Paths.get(savePath.toString() + ".fscx");
+        }
         try {
             XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-            xmlOutputter.output(document, new FileOutputStream(savePath.toString()));
+            xmlOutputter.output(document, new FileOutputStream(formattedSavePath.toString()));
         } catch (java.io.IOException e) {
             //TODO log
         }

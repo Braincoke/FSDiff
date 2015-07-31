@@ -1,7 +1,62 @@
 package gui;
 
+import gui.comparison.ComparisonWindowController;
+import gui.wizard.hash.HashWizard;
+import javafx.event.ActionEvent;
+import javafx.stage.FileChooser;
+
+import java.io.File;
+
 /**
- * Created by Erwan Dano on 10/07/2015.
+ * Menu bar for the comparison window
  */
-public class MenuBarController {
+public class MenuBarController extends Controller {
+
+    private ComparisonWindowController windowController;
+
+    public ComparisonWindowController getWindowController() {
+        return windowController;
+    }
+
+    public void setWindowController(ComparisonWindowController windowController) {
+        this.windowController = windowController;
+        this.application = windowController.getApplication();
+    }
+
+    public void newProject() {
+        //TODO find a way to open a new INDEPENDENT window instead of replacing this one
+        NewComparisonProjectController.init(application);
+
+    }
+
+    public void newHash() {
+        //TODO find a way to open a new INDEPENDENT window instead of replacing this one
+        new HashWizard(application);
+    }
+
+    public void about() {
+        //TODO
+    }
+
+    public void open(ActionEvent actionEvent) {
+        windowController.openFSC();
+    }
+
+    public void save() {
+        windowController.saveFSC();
+    }
+
+    public void saveAs() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save comparison");
+        fileChooser.setInitialDirectory(windowController.getOutputFile().toFile().getParentFile());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Comparison file", "*.fscx"));
+        fileChooser.setInitialFileName(windowController.getOutputFile().getFileName().toString());
+        File file = fileChooser.showSaveDialog(application.getStage());
+        if (file != null) {
+            windowController.setOutputFile(file.toPath());
+            windowController.saveFSC();
+        }
+    }
+
 }

@@ -32,9 +32,7 @@ public class Main extends Application {
         stage.setTitle("FSDiff");
         stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
         stage.setMinHeight(MINIMUM_WINDOW_HEIGHT);
-        stage.setOnCloseRequest(e -> {
-            Platform.exit();
-        });
+        stage.setOnCloseRequest(e -> Platform.exit());
         gotoWelcomeScreen();
         primaryStage.show();
     }

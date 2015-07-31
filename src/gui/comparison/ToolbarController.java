@@ -1,20 +1,16 @@
 package gui.comparison;
 
 import core.ComparisonStatus;
-import core.FSXmlHandler;
+import gui.Controller;
 import gui.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.stage.FileChooser;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.GlyphFont;
 import org.controlsfx.glyphfont.GlyphFontRegistry;
 
-import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +19,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Erwan Dano on 10/07/2015.
  */
-public class ToolbarController extends ToolBar implements Initializable{
+public class ToolbarController extends Controller {
 
     public static final double TOOLBAR_HEIGHT = 28;
     public static final double SEARCHFIELD_HEIGHT = TOOLBAR_HEIGHT-4;
@@ -35,11 +31,12 @@ public class ToolbarController extends ToolBar implements Initializable{
 
     protected GlyphFont fontAwesome = GlyphFontRegistry.font("FontAwesome");
     private ComparisonWindowController windowController;
-    /****************************************************
-     *
-     * Search field
-     *
-     ****************************************************/
+
+    /*******************************************************************************************************************
+     * *
+     * SEARCH FIELD                                                                                                    *
+     * *
+     ******************************************************************************************************************/
     @FXML
     private TextField searchField;
     @FXML
@@ -98,29 +95,11 @@ public class ToolbarController extends ToolBar implements Initializable{
      ******************************************************************************************************************/
 
     public void openFSC(ActionEvent actionEvent) {
-        Main application = windowController.getApplication();
-        double width = application.getStage().getWidth();
-        double height = application.getStage().getHeight();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open file");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File system comparison", "*.fscx"));
-        File file = fileChooser.showOpenDialog(application.getStage());
-        if (file != null) {
-            ComparisonWindowController comparisonWindowController;
-            try {
-                comparisonWindowController = (ComparisonWindowController) application.replaceSceneContent("comparison/ComparisonWindow.fxml");
-                application.getStage().setWidth(width);
-                application.getStage().setHeight(height);
-                comparisonWindowController.setApplication(application);
-                comparisonWindowController.initFromXML(file.toPath());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        windowController.openFSC();
     }
 
     public void saveFSC(ActionEvent actionEvent) {
-        FSXmlHandler.saveToXML(windowController.getFileSystemComparison(), windowController.getOutputFile());
+        windowController.saveFSC();
     }
 
 }
