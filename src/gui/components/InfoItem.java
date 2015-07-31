@@ -7,7 +7,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 
 /**
- * Created by Erwan Dano on 28/07/2015.
+ * An element of InfoView, simply displays a label and an info related
+ * The text will wrap automatically thanks to the resize() function of InfoView
  */
 public class InfoItem extends HBox{
 
@@ -38,6 +39,7 @@ public class InfoItem extends HBox{
         setHgrow(labelNode, Priority.NEVER);
         setHgrow(infoNode, Priority.ALWAYS);
         setSpacing(10);
+        this.getStyleClass().add("infoItem");
     }
 
     public Text getLabelNode() {
@@ -83,4 +85,6 @@ public class InfoItem extends HBox{
     public StringProperty textProperty() {
         return text;
     }
+
+
 }

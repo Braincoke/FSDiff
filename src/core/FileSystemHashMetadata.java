@@ -2,6 +2,7 @@ package core;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -147,5 +148,29 @@ public class FileSystemHashMetadata {
 
     public int getErrorCount() {
         return errorCount;
+    }
+
+    public String formatByteCount() {
+        String result = "";
+        DecimalFormat df = new DecimalFormat("#.##");
+        double kilobyte = 1024;
+        double byteCount = this.byteCount;
+        double KBCount = byteCount / kilobyte;
+        double displayedCount = KBCount;
+        String unit = "KB";
+        //We are dealing with MB or more
+        if (KBCount > 1024) {
+            double MBCount = KBCount / kilobyte;
+            unit = "MB";
+            //We are dealing with GB or more
+            if (MBCount > 1024) {
+                displayedCount = MBCount / kilobyte;
+                unit = "GB";
+            } else {
+                displayedCount = MBCount;
+            }
+        }
+        result = String.valueOf(df.format(displayedCount)) + " " + unit;
+        return result;
     }
 }

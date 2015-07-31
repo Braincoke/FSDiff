@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import gui.components.buttons.IconButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@ComparisonWindow.css" id="leftMenuPane" fx:id="leftMenuPane" minHeight="0.0" minWidth="25.0" prefHeight="160.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/8" fx:controller="gui.comparison.LeftMenuController">
     <children>
@@ -17,81 +16,7 @@
                     </padding>
                     <tabs>
                         <fx:include source="ExplorerTab.fxml" fx:id="explorerTab"/>
-                        <Tab id="projectTab" fx:id="projectTab" closable="false">
-                            <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
-                                    <children>
-                                        <VBox id="projectProperties" fx:id="projectPropertiesVbox" layoutX="14.0" prefHeight="493.0" prefWidth="167.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <children>
-                                                <HBox maxHeight="25.0" minHeight="25.0" >
-                                                    <children>
-                                                        <Pane prefHeight="25.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                                                        <HBox fx:id="projectToolbar" alignment="CENTER_RIGHT" maxHeight="25.0" minHeight="25.0" prefWidth="200.0" VBox.vgrow="NEVER">
-                                                            <children>
-                                                                <IconButton fx:id="collapseProjectTreeButton" mnemonicParsing="false" icon="COMPRESS" size="18" />
-                                                                <IconButton fx:id="collapseLeftMenuButton1" mnemonicParsing="false" onAction="#collapseLeftMenuTab" icon="CARET_LEFT" size="18"/>
-                                                            </children>
-                                                        </HBox>
-                                                    </children>
-                                                </HBox>
-                                                <VBox fx:id="projectProperties" prefWidth="100.0" VBox.vgrow="ALWAYS">
-                                                    <children>
-                                                        <TitledPane alignment="TOP_LEFT" animated="false" text="Reference File System" textOverrun="CLIP" wrapText="true">
-                                                            <content>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                                    <children>
-                                                                        <VBox fx:id="referenceFSVbox" prefHeight="123.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                            <children>
-                                                                                <Label prefWidth="162.0" text="Base of the comparison" wrapText="true" VBox.vgrow="ALWAYS" />
-                                                                                <TextField fx:id="referenceFSTextField" editable="false" promptText="Choose the disk or directory that will serve as a reference" />
-                                                                                <HBox alignment="TOP_RIGHT">
-                                                                                    <children>
-                                                                                        <Button fx:id="chooseReferenceFSButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#browseReferenceFS" text="Browse" VBox.vgrow="NEVER" />
-                                                                                    </children>
-                                                                                </HBox>
-                                                                            </children>
-                                                                        </VBox>
-                                                                    </children>
-                                                                </AnchorPane>
-                                                            </content>
-                                                        </TitledPane>
-                                                        <TitledPane animated="false" text="Compared File System">
-                                                            <content>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                                    <children>
-                                                                        <VBox id="comparedFSVbox" fx:id="comparedFSVbox" prefHeight="123.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                            <children>
-                                                                                <Label fx:id="chooseComparedFSLabel" prefWidth="162.0" text="Compared file system" wrapText="true" VBox.vgrow="ALWAYS" />
-                                                                                <TextField fx:id="comparedFSTextField" editable="false" promptText="Choose the disk or directory to compare to the reference" />
-                                                                                <HBox alignment="TOP_RIGHT">
-                                                                                    <children>
-                                                                                        <Button fx:id="chooseComparedFSButton" mnemonicParsing="false" onAction="#browseComparedFS" text="Browse" />
-                                                                                    </children>
-                                                                                </HBox>
-                                                                            </children>
-                                                                        </VBox>
-                                                                    </children>
-                                                                </AnchorPane>
-                                                            </content>
-                                                        </TitledPane>
-                                                        <TitledPane animated="false" text="Options">
-                                                            <content>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                            </content>
-                                                        </TitledPane>
-                                                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
-                                                            <children>
-                                                                <Button fx:id="launchCompareButton" alignment="CENTER" mnemonicParsing="false" text="Compare" />
-                                                            </children>
-                                                        </VBox>
-                                                    </children>
-                                                </VBox>
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                </AnchorPane>
-                            </content>
-                        </Tab>
+                        <fx:include source="ProjectTab.fxml" fx:id="projectTab"/>
                     </tabs>
                 </TabPane>
                 <VBox fillWidth="false" focusTraversable="true" maxWidth="28.0" minWidth="28.0" prefWidth="28.0" StackPane.alignment="TOP_LEFT">

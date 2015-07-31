@@ -15,19 +15,10 @@ public class StartButton extends FAButton {
         super();
         this.getStyleClass().add("startButton");
         this.setMaxWidth(MAX_WIDTH);
-        this.setPadding(new Insets(15, 10, 15, 10));
+        this.setPadding(new Insets(15, 10, 15, 20));
         this.setFont(new Font(20));
         this.setGraphicTextGap(20);
         this.setAlignment(Pos.BASELINE_LEFT);
         setSize(20);
     }
-
-    @Override
-    public void setSize(double size) {
-        this.size.setValue(size);
-        if (icon.getValue() != null)
-            this.setIcon(icon.getValue());
-        System.out.println(this.getIcon() + " / " + this.getWidth());
-    }
-
 }

@@ -1,28 +1,23 @@
 package gui.comparison;
 
 import core.PathComparison;
+import gui.Controller;
 import gui.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
 import org.controlsfx.control.MasterDetailPane;
 import org.controlsfx.glyphfont.GlyphFont;
 import org.controlsfx.glyphfont.GlyphFontRegistry;
 
 import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Controls the left side bar
  */
-public class LeftMenuController extends AnchorPane implements Initializable{
+public class LeftMenuController extends Controller {
     static {
         // Register a custom default font
         GlyphFontRegistry.register("FontAwesome", Main.class.getResourceAsStream("fontawesome.ttf"), 16);
@@ -41,6 +36,8 @@ public class LeftMenuController extends AnchorPane implements Initializable{
     private TabPane leftMenuTabPane;
     @FXML
     private Tab projectTab;
+    @FXML
+    private ProjectTabController projectTabController;
     private Tab selectedTab;
     private double[] savedDividerPositions;
     private double dividerPosition;
@@ -126,31 +123,6 @@ public class LeftMenuController extends AnchorPane implements Initializable{
         }
     }
 
-    @FXML
-    public void browseReferenceFS(ActionEvent actionEvent) {
-        Stage stage = new Stage();
-        Scene scene;
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Reference file system");
-        referenceFSFile = directoryChooser.showDialog(stage);
-        referenceFSTextField.setText(referenceFSFile.getAbsolutePath());
-    }
-
-    @FXML
-    public void browseComparedFS(ActionEvent actionEvent) {
-        Stage stage = new Stage();
-        Scene scene;
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Compared file system");
-        comparedFSFile = directoryChooser.showDialog(stage);
-        comparedFSTextField.setText(comparedFSFile.getAbsolutePath());
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
     public ComparisonWindowController getWindowController() {
         return windowController;
     }
@@ -170,5 +142,6 @@ public class LeftMenuController extends AnchorPane implements Initializable{
                 else
                     leftMenuHidden = false;
         });
+        this.projectTabController.setWindowController(this.windowController);
     }
 }
