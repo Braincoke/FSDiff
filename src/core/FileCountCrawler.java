@@ -57,6 +57,7 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
     public LongProperty getByteCountProperty(){
         return byteCountProperty;
     }
+
     /**
      * The total number of files visited
      */
@@ -89,6 +90,7 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
      * The total number of file visited
      */
     private int fileCount;
+
     /**
      * The total number of bytes visited = sum( filesize )
      */
@@ -110,6 +112,7 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
     public CountFilesTask getTask(){
         return task;
     }
+
     /**
      * Indicates that the user wish to cancel the files
      */

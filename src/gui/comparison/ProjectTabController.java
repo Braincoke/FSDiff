@@ -84,13 +84,13 @@ public class ProjectTabController extends Controller {
         deletedItem.setText(String.valueOf(comparison.getDeletedCount()));
         outputItem.setText(windowController.getOutputFile().toString());
         FileSystemHashMetadata reference = comparison.getReferenceFS();
-        //TODO inputTypeRefItem
+        inputTypeRefItem.setText(reference.getInputType().getDescription());
         pathRefItem.setText(reference.getRootPath().toString());
         filesRefItem.setText(String.valueOf(reference.getFileCount()));
         elapsedRefItem.setText(reference.formatDuration());
         sizeRefItem.setText(reference.formatByteCount());
         FileSystemHashMetadata compared = comparison.getComparedFS();
-        //TODO inputTypeRefItem
+        inputTypeComItem.setText(compared.getInputType().getDescription());
         pathComItem.setText(compared.getRootPath().toString());
         filesComItem.setText(String.valueOf(compared.getFileCount()));
         elapsedComItem.setText(compared.formatDuration());

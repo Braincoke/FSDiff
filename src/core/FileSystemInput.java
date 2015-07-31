@@ -45,7 +45,7 @@ public class FileSystemInput {
      */
     private Boolean reference;
 
-    public Boolean getReference() {
+    public Boolean isReference() {
         return reference;
     }
 

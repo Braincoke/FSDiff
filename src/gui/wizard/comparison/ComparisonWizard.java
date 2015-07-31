@@ -171,6 +171,11 @@ public class ComparisonWizard extends Wizard{
     }
 
     private Queue<FileSystemInput> hashQueue;
+
+    public Queue<FileSystemInput> getHashQueue() {
+        return hashQueue;
+    }
+
     /**
      * The list of file systems to load from a XML file
      */
@@ -182,7 +187,9 @@ public class ComparisonWizard extends Wizard{
 
     private Queue<FileSystemInput> fshxQueue;
 
-
+    public Queue<FileSystemInput> getFshxQueue() {
+        return fshxQueue;
+    }
 
     /******************************************************************************************************************
      *                                                                                                                *
@@ -218,35 +225,50 @@ public class ComparisonWizard extends Wizard{
      *  ref = Logical dir && comp == Logical dir -> gotoHashPreparation()
      */
     public void chooseComparisonPreparation(){
-        enqueue();
-        if (hashList.size() > 0) {
+        if (hashQueue.size() > 0) {
             gotoHashPreparation();
+        } else if(fshxQueue.size() > 0) {
+            loadFSHX();
+            chooseComparisonPreparation();
         } else {
+            goToComparisonProgress();
+        }
+    }
+
+    public void loadFSHX(){
+        for(FileSystemInput fsi : fshxQueue){
+            fshxQueue.poll();
             try {
-                referenceFSH = FSXmlHandler.loadFileSystemHash(referenceInput.getPath().toString());
-                comparedFSH = FSXmlHandler.loadFileSystemHash(comparedInput.getPath().toString());
-                goToComparisonProgress();
+                if (fsi.isReference()) {
+                    referenceFSH = FSXmlHandler.loadFileSystemHash(fsi.getPath().toString());
+                } else {
+                    comparedFSH = FSXmlHandler.loadFileSystemHash(fsi.getPath().toString());
+                }
             } catch (JDOMException | IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void enqueue() {
+    public void enqueue() {
         switch (referenceInput.getInputType()) {
             case LOGICAL_DIRECTORY:
                 hashList.add(referenceInput);
+                hashQueue.add(referenceInput);
                 break;
             case FSHX:
                 fshxList.add(referenceInput);
+                fshxQueue.add(referenceInput);
                 break;
         }
         switch (comparedInput.getInputType()) {
             case LOGICAL_DIRECTORY:
                 hashList.add(comparedInput);
+                hashQueue.add(comparedInput);
                 break;
             case FSHX:
                 fshxList.add(comparedInput);
+                fshxQueue.add(comparedInput);
                 break;
         }
     }

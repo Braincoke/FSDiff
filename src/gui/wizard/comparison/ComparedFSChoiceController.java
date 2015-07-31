@@ -12,6 +12,7 @@ public class ComparedFSChoiceController extends ChoiceController {
     public void next() {
         FileSystemInput com = new FileSystemInput(this.inputType, this.input, false);
         wizard.setComparedInput(com);
+        wizard.enqueue();
         wizard.chooseComparisonPreparation();
     }
 

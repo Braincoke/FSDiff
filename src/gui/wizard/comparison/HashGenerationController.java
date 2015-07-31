@@ -12,7 +12,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Text;
 
 import java.text.DecimalFormat;
-import java.util.List;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -138,13 +138,14 @@ public class HashGenerationController extends ComparisonWizardPane {
     public void hash() {
         initUI();
         //Init list of input to hash
-        List<FileSystemInput> hashList = wizard.getHashList();
-        int queueLength = hashList.size();
+        Queue<FileSystemInput> hashQueue = wizard.getHashQueue();
+        int queueLength = hashQueue.size();
         FileSystemInput[] fsiArray = new FileSystemInput[queueLength];
         FileSystemHash[] fshArray = new FileSystemHash[queueLength];
         HashCrawler[] hashCrawlerArray = new HashCrawler[queueLength];
         for (int i = 0; i < queueLength; i++) {
-            FileSystemInput fsi = hashList.get(i);
+            FileSystemInput fsi = hashQueue.poll();
+            fsiArray[i] = fsi;
             FileSystemHash fsh = new FileSystemHash(fsi);
             fshArray[i] = fsh;
             hashCrawlerArray[i] = fsh.getHashCrawler();
@@ -157,7 +158,8 @@ public class HashGenerationController extends ComparisonWizardPane {
                 hashCrawlerArray[i].stateProperty().addListener((observable, oldValue, newValue) -> {
                     //When a crawler has finished, update total file count and byte count and start the new crawler
                     if (newValue == Worker.State.SUCCEEDED) {
-                        //Update the corresponding FS to the wizard TODO
+                        //Update the corresponding FS to the wizard
+                        setFSHinWizard(fsiArray, fshArray, index);
                         previousHashedFileCount += hashCrawlerArray[index].getHashedFileCount();
                         previousHashedByteCount += hashCrawlerArray[index].getHashedByteCount();
                         if (index < (queueLength - 1)) {
@@ -171,7 +173,17 @@ public class HashGenerationController extends ComparisonWizardPane {
             //When the last crawler has finished, display the comparison interface
             hashCrawlerArray[queueLength - 1].stateProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue == Worker.State.SUCCEEDED) {
-                    //Add the corresponding FS to the wizard TODO
+                    //Add the corresponding FS to the wizard
+                    setFSHinWizard(fsiArray, fshArray, queueLength-1);
+                    timer.cancel();
+                    wizard.chooseComparisonPreparation();
+                }
+            });
+        } else if (queueLength == 1){
+            hashCrawlerArray[0].stateProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue == Worker.State.SUCCEEDED) {
+                    //Add the corresponding FS to the wizard
+                    setFSHinWizard(fsiArray, fshArray, queueLength-1);
                     timer.cancel();
                     wizard.chooseComparisonPreparation();
                 }
@@ -184,11 +196,10 @@ public class HashGenerationController extends ComparisonWizardPane {
         currentCrawler = hashCrawlerArray[0];
         //Set up a timer to show elapsed time
         seconds = 0;
-        timer=new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new ElapsedTimeTask(), 1000, 1000);
         //Start the hash generation
         fshArray[0].computeHashes();
-
     }
 
     private void bindUI(FileSystemHash fsh) {
@@ -208,7 +219,13 @@ public class HashGenerationController extends ComparisonWizardPane {
         });
     }
 
-    //TODO private void updateFSHToWizard(
+    private void setFSHinWizard(FileSystemInput[] fileSystemInputs, FileSystemHash[] fileSystemHashs, int index){
+        if(fileSystemInputs[index].isReference()){
+            wizard.setReferenceFSH(fileSystemHashs[index]);
+        } else {
+            wizard.setComparedFSH(fileSystemHashs[index]);
+        }
+    }
 
     private void updateHashedByteCount(Number newValue, double offset){
         updateByteCount(hashedByteCountLabel, hashedByteCountUnit, unit, newValue, offset);
