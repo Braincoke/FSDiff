@@ -25,6 +25,10 @@ public class InfoItem extends HBox{
         this.getStyleClass().add("infoItem");
     }
 
+    public InfoItem(String label){
+        this();
+        setLabel(label);
+    }
 
     /**
      * Label of the info to display

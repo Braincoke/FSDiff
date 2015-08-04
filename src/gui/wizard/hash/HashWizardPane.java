@@ -15,5 +15,12 @@ public class HashWizardPane extends Controller{
 
     public void setWizard(HashWizard wizard) {
         this.wizard = wizard;
+        this.application = wizard.getApplication();
+        init();
     }
+
+    /**
+     * Allow init customization for extended classes
+     */
+    public void init() {}
 }

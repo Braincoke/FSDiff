@@ -68,11 +68,11 @@ public class HashGenerationController extends ComparisonWizardPane {
      */
     private double fileByteCount;
     /**
-     * The number of files hashed in the reference file system so far
+     * The number of files hashed so far
      */
     private int previousHashedFileCount = 0;
     /**
-     * The count of bytes hashed in the reference file system so far
+     * The count of bytes hashed so far
      */
     private double previousHashedByteCount = 0;
     /**

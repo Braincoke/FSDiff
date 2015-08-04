@@ -145,8 +145,18 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        VisitFileTask task = new VisitFileTask(file);
+        /*VisitFileTask task = new VisitFileTask(file);
         new Thread(task).start();
+        TODO is this the cause of the byteCount being off?
+        */
+        fileCount++;
+        byteCount = byteCount + file.toFile().length();
+        if(fileCount%500==0) {
+            Platform.runLater(() -> {
+                fileCountProperty.set(fileCount);
+                byteCountProperty.set(byteCount);
+            });
+        }
         return CONTINUE;
     }
 
@@ -190,14 +200,11 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
         @Override
         protected Void call() throws Exception {
             fileCount++;
-            byteCount += file.toFile().length();
+            byteCount = byteCount + file.toFile().length();
             if(fileCount%500==0) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        fileCountProperty.set(fileCount);
-                        byteCountProperty.set(byteCount);
-                    }
+                Platform.runLater(() -> {
+                    fileCountProperty.set(fileCount);
+                    byteCountProperty.set(byteCount);
                 });
             }
             return null;

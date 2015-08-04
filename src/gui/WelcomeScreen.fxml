@@ -5,15 +5,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="WelcomePane" prefHeight="500.0"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="WelcomePane" prefHeight="600.0"
             prefWidth="700.0"
             xmlns="http://javafx.com/javafx/8"
             stylesheets="@WelcomeScreen.css"
             fx:controller="gui.WelcomeScreenController">
    <children>
-       <VBox fx:id="WelcomeVbox" alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+       <VBox fx:id="WelcomeVbox" alignment="TOP_CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
           <children>
-              <VBox fx:id="LogoVbox" alignment="CENTER" prefHeight="150.0" prefWidth="100.0">
+              <VBox fx:id="LogoVbox" alignment="CENTER" prefHeight="150.0" prefWidth="100.0" VBox.vgrow="NEVER">
                 <children>
                    <Text fx:id="LogoText" strokeType="OUTSIDE" strokeWidth="0.0" text="FSDiff">
                       <font>
@@ -23,9 +23,9 @@
                    <Text fx:id="VersionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Version 0.0.0" />
                 </children>
              </VBox>
-             <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
+             <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
                 <children>
-                    <GridPane alignment="TOP_CENTER" hgap="10.0" vgap="40.0" VBox.vgrow="NEVER">
+                    <GridPane alignment="CENTER" hgap="10.0" vgap="40.0" VBox.vgrow="NEVER">
                      <columnConstraints>
                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="200.0"/>
                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="495.0" minWidth="10.0" prefWidth="485.0"/>
@@ -47,6 +47,9 @@
                       </children>
                    </GridPane>
                 </children>
+                <padding>
+                    <Insets top="50" bottom="30" />
+                </padding>
              </VBox>
           </children>
          <padding>

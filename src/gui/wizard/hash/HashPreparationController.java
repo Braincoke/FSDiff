@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Gather the total size of the blob to hash as well as the total number of files to hash
@@ -65,9 +66,10 @@ public class HashPreparationController extends HashWizardPane {
      * and compute the sum of each file size in bytes
      */
     public void countFiles(){
-        ArrayList<FileSystemInput> fileSystemInputList = new ArrayList<>();
-        fileSystemInputList.add(wizard.getFileSystemInput());
-        fileCountCrawler = new FileCountCrawler(fileSystemInputList);
+        List<HashProject> hashProjectList = wizard.getHashProjectList();
+        List<FileSystemInput> inputList = new ArrayList<>();
+        hashProjectList.stream().forEach(hashProject -> inputList.add(hashProject.getFileSystemInput()));
+        fileCountCrawler = new FileCountCrawler(inputList);
         //Bind file count
         fileCountPreparationLabel.textProperty().bind(Bindings.convert(
                 fileCountCrawler.fileCountProperty()));

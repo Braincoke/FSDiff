@@ -1,0 +1,25 @@
+.tab{
+   -fx-padding: 5;
+}
+
+.split-pane *.split-pane-divider {
+    -fx-padding: 0 1 0 1;
+}
+
+.iconButton {
+    -fx-background-color: none;
+}
+
+.toolbarButton {
+    -fx-background-color: none;
+}
+
+.toolbarButton:hover {
+    -fx-background-color: -fx-body-color, -fx-faint-focus-color;
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+.infoItem.even {
+    -fx-background-color:  -fx-faint-focus-color;
+}

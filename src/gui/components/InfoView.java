@@ -63,11 +63,11 @@ public class InfoView extends VBox {
         ObservableList<Node> children = getChildren();
         //Find the label max width
         double labelMaxWidth = 150;
-        double padding = 20;
         //Now bind properties for auto resize
-        for(Node node : children){
+        int length = children.size();
+        for (Node node : children) {
             InfoItem item = (InfoItem) node;
-            Text info =  item.getInfoNode();
+            Text info = item.getInfoNode();
             Text label = item.getLabelNode();
             label.setWrappingWidth(labelMaxWidth);
             info.wrappingWidthProperty().bind(readOnlyDoubleProperty.subtract(labelMaxWidth * 1.5));
@@ -76,6 +76,14 @@ public class InfoView extends VBox {
         if(getChildren().size() > 0 && !initDone) {
             getChildren().get(0).getStyleClass().add("firstItem");
             getChildren().get(getChildren().size() - 1).getStyleClass().add("lastItem");
+            for(int i=0; i<length; i++){
+                children.get(i).getStyleClass().add("infoItem");
+                if(i%2==0){
+                    children.get(i).getStyleClass().add("even");
+                } else {
+                    children.get(i).getStyleClass().add("odd");
+                }
+            }
             initDone = true;
         }
     }

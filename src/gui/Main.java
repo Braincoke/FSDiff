@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class Main extends Application {
 
     private final double MINIMUM_WINDOW_WIDTH = 700.0;
-    private final double MINIMUM_WINDOW_HEIGHT = 500.0;
+    private final double MINIMUM_WINDOW_HEIGHT = 600.0;
     private Stage stage;
 
     public static void main(String[] args) {
@@ -73,7 +73,7 @@ public class Main extends Application {
         try (InputStream in = Main.class.getResourceAsStream(fxml)) {
             page = loader.load(in);
         }
-        Scene scene = new Scene(page, 700, 500);
+        Scene scene = new Scene(page, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.sizeToScene();
         Controller controller = loader.getController();
@@ -90,13 +90,13 @@ public class Main extends Application {
             loader.setController(controller);
             page = (AnchorPane) loader.load(in);
         }
-        Scene scene = new Scene(page, 700, 500);
+        Scene scene = new Scene(page, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.sizeToScene();
     }
 
     public StageController openStage(String fxml) throws Exception {
-        return openStage(fxml, 700, 500);
+        return openStage(fxml, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
     }
     public StageController openStage(String fxml, double sceneWidth, double sceneHeight) throws Exception {
         FXMLLoader loader = new FXMLLoader();
@@ -107,7 +107,7 @@ public class Main extends Application {
             page = loader.load(in);
         }
         Stage newStage = new Stage();
-        Scene scene = new Scene(page, 700, 500);
+        Scene scene = new Scene(page, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
         newStage.setScene(scene);
         newStage.sizeToScene();
         StageController controller = loader.getController();

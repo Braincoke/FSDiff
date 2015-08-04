@@ -49,7 +49,11 @@
                   </HBox>
                   <TextProgressBar
                           fx:id="progressBar"
-                          text="0%" progress="0" />
+                          text="0%"
+                          progress="0"
+                          maxWidth="800.0"
+                          prefHeight="100.0"
+                          prefWidth="200.0" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="20.0" spacing="20.0">
                      <children>
                         <Label text="Hashed : " />

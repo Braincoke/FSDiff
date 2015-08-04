@@ -42,9 +42,13 @@ public class FSXmlHandler {
     public static void saveToXML(FileSystemHash fsh, Path savePath) {
         Element fshash = FSXmlHandler.toXMLElement(fsh);
         org.jdom2.Document document = new Document(fshash);
+        Path formattedSavePath = savePath;
+        if (!(savePath.toString().endsWith(".fshx"))) {
+            formattedSavePath = Paths.get(savePath.toString() + ".fshx");
+        }
         try {
             XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-            xmlOutputter.output(document, new FileOutputStream(savePath.toString()));
+            xmlOutputter.output(document, new FileOutputStream(formattedSavePath.toString()));
         } catch (java.io.IOException e) {
             //TODO log
         }
@@ -54,7 +58,7 @@ public class FSXmlHandler {
         Element comparison = FSXmlHandler.toXMLElement(fsc);
         org.jdom2.Document document = new Document(comparison);
         Path formattedSavePath = savePath;
-        if (!savePath.toString().endsWith(".fscx")) {
+        if (!(savePath.toString().endsWith(".fscx"))) {
             formattedSavePath = Paths.get(savePath.toString() + ".fscx");
         }
         try {

@@ -1,17 +1,16 @@
 package gui.wizard.hash;
 
-import core.FSXmlHandler;
-import core.FileSystemHash;
-import core.FileSystemInput;
 import gui.Main;
 import gui.wizard.Wizard;
 
-import java.nio.file.Path;
+import java.util.List;
+import java.util.Queue;
 
 public class HashWizard extends Wizard {
 
 
     //Controllers
+    private FSListController fsListController;
     private FSChoiceController fsChoiceController;
     private HashPreparationController hashPreparationController;
     private HashGenerationController hashGenerationController;
@@ -24,73 +23,30 @@ public class HashWizard extends Wizard {
     }
 
 
-    /*******************************************************************************************************************
-     *                                                                                                                 *
-     *  PROJECT SETTINGS                                                                                               *
-     *                                                                                                                 *
-     *******************************************************************************************************************/
-
     /**
-     * The name given to the hashed file system
+     * List of file systems to hash
      */
-    private String name;
+    private List<HashProject> hashProjectList;
 
-    public String getName() {
-        return name;
+    public List<HashProject> getHashProjectList() {
+        return hashProjectList;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setHashProjectList(List<HashProject> hashProjectList) {
+        this.hashProjectList = hashProjectList;
     }
 
-    /**
-     * The output directory
-     */
-    private Path outputDirectory;
+    private Queue<HashProject> hashProjectQueue;
 
-    public Path getOutputDirectory() {
-        return outputDirectory;
+    public Queue<HashProject> getHashProjectQueue() {
+        return hashProjectQueue;
     }
 
-    public void setOutputDirectory(Path outputDirectory) {
-        this.outputDirectory = outputDirectory;
+    public void setHashProjectQueue(Queue<HashProject> hashProjectQueue) {
+        this.hashProjectQueue = hashProjectQueue;
     }
 
-    /**
-     * The output file path
-     */
-    public Path getOutputFilePath(){
-        if(name.endsWith(".fshx"))
-            return outputDirectory.resolve(name);
-        else
-            return outputDirectory.resolve(name.concat(".fshx"));
-    }
 
-    /**
-     * The file system input
-     */
-    private FileSystemInput fileSystemInput;
-
-    public FileSystemInput getFileSystemInput() {
-        return fileSystemInput;
-    }
-
-    public void setFileSystemInput(FileSystemInput fileSystemInput) {
-        this.fileSystemInput = fileSystemInput;
-    }
-
-    /**
-     * The result of the hash generation
-     */
-    private FileSystemHash fileSystemHash;
-
-    public FileSystemHash getFileSystemHash() {
-        return fileSystemHash;
-    }
-
-    public void setFileSystemHash(FileSystemHash fileSystemHash) {
-        this.fileSystemHash = fileSystemHash;
-    }
 
     /**
      * The total number of byte to hash
@@ -131,9 +87,9 @@ public class HashWizard extends Wizard {
      */
     public void gotoFileSystemChoice() {
         try{
-            fsChoiceController =
-                    (FSChoiceController) application.replaceSceneContent("wizard/hash/FSChoice.fxml");
-            fsChoiceController.setWizard(this);
+            fsListController =
+                    (FSListController) application.replaceSceneContent("wizard/hash/FSList.fxml");
+            fsListController.setWizard(this);
             application.getStage().setTitle("Choose a file system to hash");
         } catch (Exception e){
             e.printStackTrace();
@@ -180,7 +136,6 @@ public class HashWizard extends Wizard {
                     (RecapController) application.replaceSceneContent("wizard/hash/Recap.fxml");
             recapController.setWizard(this);
             application.getStage().setTitle("FSDiff");
-            FSXmlHandler.saveToXML(fileSystemHash, getOutputFilePath());
             recapController.recap();
         } catch (Exception e){
             e.printStackTrace();

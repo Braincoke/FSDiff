@@ -1,10 +1,10 @@
 package gui.wizard.hash;
 
+import core.FSXmlHandler;
 import core.FileSystemHash;
 import core.HashCrawler;
 import gui.components.TextProgressBar;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -99,6 +101,19 @@ public class HashGenerationController extends HashWizardPane {
      */
     private int hours;
 
+    /**
+     * The number of files hashed so far
+     */
+    private int previousHashedFileCount = 0;
+    /**
+     * The count of bytes hashed so far
+     */
+    private double previousHashedByteCount = 0;
+
+    /**
+     * The hash crawler currently crawling
+     */
+    private HashCrawler currentCrawler;
 
     /**
      * Cancel the hash generation
@@ -111,56 +126,100 @@ public class HashGenerationController extends HashWizardPane {
         wizard.gotoWelcomeScreen();
     }
 
-    /**
-     * Start the hash generation
-     */
-    public void hash(){
+    public void hash() {
         initUI();
-        //Init the FileSystemHash objects
-        fsh = new FileSystemHash(wizard.getFileSystemInput(), wizard.getName());
-        HashCrawler hashCrawler = fsh.getHashCrawler();
+        //Init list of input to hash
+        List<HashProject> hashProjectList = wizard.getHashProjectList();
+        Queue<HashProject> hashProjectQueue = wizard.getHashProjectQueue();
+        int listLength = hashProjectList.size();
+        for (HashProject hashProject : hashProjectList) {
+            FileSystemHash fsh = new FileSystemHash(hashProject.getFileSystemInput());
+            hashProject.setFileSystemHash(fsh);
+        }
+        //Generate order of hash generation
+        if (listLength > 1) {
+            //Link the crawlers between each other
+            for (int i = 0; i < (listLength - 1); i++) {
+                final int index = i;
+                HashProject currentProject = hashProjectList.get(i);
+                HashCrawler hashCrawler = currentProject.getFileSystemHash().getHashCrawler();
+                hashCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
+                    //When a crawler has finished, update total file count and byte count and start the new crawler
+                    if (newValue == Worker.State.SUCCEEDED) {
+                        FSXmlHandler.saveToXML(currentProject.getFileSystemHash(), currentProject.getOutputFilePath());
+                        previousHashedFileCount += hashCrawler.getHashedFileCount();
+                        previousHashedByteCount += hashCrawler.getHashedByteCount();
+                        if (index < (listLength - 1)) {
+                            HashProject nextProject = hashProjectList.get(index+1);
+                            FileSystemHash nextFSH = nextProject.getFileSystemHash();
+                            bindUI(nextFSH);
+                            currentCrawler = nextProject.getFileSystemHash().getHashCrawler();
+                            nextFSH.computeHashes();
+                        }
+                    }
+                });
+            }
+            //When the last crawler has finished, display the summary of the process
+            HashProject lastProject = hashProjectList.get(listLength-1);
+            HashCrawler lastCrawler = lastProject.getFileSystemHash().getHashCrawler();
+            lastCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue == Worker.State.SUCCEEDED) {
+                    FSXmlHandler.saveToXML(lastProject.getFileSystemHash(), lastProject.getOutputFilePath());
+                    timer.cancel();
+                    wizard.gotoRecap();
+                }
+            });
+        } else if (listLength == 1){
+            HashProject onlyProject = hashProjectList.get(0);
+            HashCrawler onlyCrawler = onlyProject.getFileSystemHash().getHashCrawler();
+            onlyCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue == Worker.State.SUCCEEDED) {
+                    FSXmlHandler.saveToXML(onlyProject.getFileSystemHash(), onlyProject.getOutputFilePath());
+                    timer.cancel();
+                    wizard.gotoRecap();
+                }
+            });
+        }
+        //Init for the first hash generation
+        previousHashedFileCount = 0;
+        previousHashedByteCount = 0;
+        FileSystemHash firstFSH = hashProjectList.get(0).getFileSystemHash();
+        bindUI(firstFSH);
+        currentCrawler = firstFSH.getHashCrawler();
         //Set up a timer to show elapsed time
         seconds = 0;
-        timer=new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new ElapsedTimeTask(), 1000, 1000);
-        //When the hash generation is over, continue with the recap panel
-        hashCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue== Worker.State.SUCCEEDED){
-                wizard.setFileSystemHash(fsh);
-                timer.cancel();
-                wizard.gotoRecap();
-            }
+        //Start the hash generation
+        firstFSH.computeHashes();
+    }
+
+    private void bindUI(FileSystemHash fsh) {
+        HashCrawler crawler = fsh.getHashCrawler();
+        fileSystemHashedName.setText(fsh.getRootPath().toString());
+        fileVisitedText.textProperty().unbind();
+        fileVisitedText.textProperty().bind(crawler.getVisitedFileProperty());
+        //Bind hashed file count
+        hashedFileCountLabel.textProperty().unbind();
+        crawler.getHashedFileCountProperty().addListener((observable, oldValue, newValue) -> {
+            hashedFileCountLabel.setText(String.valueOf(previousHashedFileCount + newValue.intValue()));
         });
-        //Start crawling
-        bindProperties(hashCrawler);
-        crawler = hashCrawler;
-        fsh.computeHashes();
+        //Bind hashed byte count
+        crawler.getHashedByteCountProperty().addListener((observable, oldValue, newValue) -> {
+            updateProgressBar(newValue, previousHashedByteCount);
+            updateHashedByteCount(newValue, previousHashedByteCount);
+        });
     }
 
     /**
-     * Init progress information
+     * Init UI for hash generation
      */
-    private void initUI(){
+    private void initUI() {
         fileCount = wizard.getFileCount();
         fileByteCount = wizard.getByteCount();
         fileCountLabel.setText(String.valueOf(fileCount));
-        //Init byte count
         updateByteCount(byteCountLabel, byteCountUnit, "KB", fileByteCount, 0);
-
-    }
-
-
-    /**
-     * Init UI bindings
-     */
-    private void bindProperties(HashCrawler crawler){
-        fileSystemHashedName.setText(wizard.getFileSystemInput().getPath().toString());
-        fileVisitedText.textProperty().bind(crawler.getVisitedFileProperty());
-        hashedFileCountLabel.textProperty().bind(Bindings.convert(crawler.getHashedFileCountProperty()));
-        crawler.getHashedByteCountProperty().addListener((observable, oldValue, newValue) -> {
-            updateProgressBar(newValue, 0);
-            updateHashedByteCount(newValue, 0);
-        });
+        progressBar.setProgress(0);
     }
 
     private void updateHashedByteCount(Number newValue, double offset){
