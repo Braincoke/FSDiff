@@ -4,7 +4,7 @@ import core.FSXmlHandler;
 import core.FileSystemHash;
 import core.FileSystemInput;
 import gui.Main;
-import gui.Wizard;
+import gui.wizard.Wizard;
 
 import java.nio.file.Path;
 

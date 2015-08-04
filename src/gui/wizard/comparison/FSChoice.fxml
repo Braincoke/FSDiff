@@ -4,13 +4,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="gui.wizard.comparison.ComparedFSChoiceController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
    <children>
       <BorderPane prefHeight="540.0" prefWidth="740.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <bottom>
              <HBox alignment="BOTTOM_RIGHT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER" spacing="10">
                 <children>
-                   <Button fx:id="previousButton" mnemonicParsing="false" onAction="#previous" text="Previous" />
+                    <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+                    <Button fx:id="previousButton" mnemonicParsing="false" onAction="#previous" text="Previous" />
                     <Button fx:id="nextButton" disable="true" mnemonicParsing="false" onAction="#next" text="Next" />
                 </children>
              </HBox>
@@ -18,12 +19,12 @@
          <top>
              <VBox alignment="TOP_CENTER" prefHeight="150.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
                 <children>
-                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Compared File System">
+                   <Text fx:id="headerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Compared File System">
                       <font>
                          <Font size="48.0" />
                       </font>
                    </Text>
-                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the File System that will be compared to the reference" textAlignment="CENTER" wrappingWidth="400.0" />
+                   <Text fx:id="subheaderText" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the File System that will be compared to the reference" textAlignment="CENTER" wrappingWidth="400.0" />
                 </children>
              </VBox>
          </top>

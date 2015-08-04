@@ -1,11 +1,12 @@
 package gui.wizard.comparison;
 
-import gui.Controller;
+import gui.wizard.Wizard;
+import gui.wizard.WizardPane;
 
 /**
  * A pane of the comparison wizard
  */
-public class ComparisonWizardPane extends Controller {
+public class ComparisonWizardPane extends WizardPane {
 
     protected ComparisonWizard wizard;
 
@@ -13,9 +14,17 @@ public class ComparisonWizardPane extends Controller {
         return wizard;
     }
 
-    public void setWizard(ComparisonWizard wizard) {
-        this.wizard = wizard;
+    @Override
+    public void setWizard(Wizard wizard){
+        this.wizard = (ComparisonWizard) wizard;
         setApplication(wizard.getApplication());
+        init();
     }
+
+    @Override
+    public void init() {}
+
+    @Override
+    public void reload(){}
 }
 

@@ -5,8 +5,8 @@ import core.FileSystemComparison;
 import core.FileSystemHash;
 import core.FileSystemInput;
 import gui.Main;
-import gui.Wizard;
 import gui.comparison.ComparisonWindowController;
+import gui.wizard.Wizard;
 import org.jdom2.JDOMException;
 
 import java.io.IOException;
@@ -198,25 +198,23 @@ public class ComparisonWizard extends Wizard{
      ******************************************************************************************************************/
 
     public void gotoReferenceChoice(){
-        try{
-            referenceChoiceController =
-                    (ReferenceFSChoiceController) application.replaceSceneContent("wizard/comparison/ReferenceFSChoice.fxml");
-            referenceChoiceController.setWizard(this);
-            application.getStage().setTitle("Choose a reference FS");
-        } catch (Exception e){
-            e.printStackTrace();
+        if(referenceChoiceController==null){
+            referenceChoiceController = new ReferenceFSChoiceController();
         }
+        referenceChoiceController = (ReferenceFSChoiceController) gotoWizardPane(
+                "wizard/comparison/FSChoice.fxml",
+                            referenceChoiceController,
+                            "Choose a reference FS");
     }
-    public void gotoComparedChoice(){
-        try{
-            comparedChoiceController =
-                    (ComparedFSChoiceController) application.replaceSceneContent("wizard/comparison/ComparedFSChoice.fxml");
-            comparedChoiceController.setWizard(this);
-            application.getStage().setTitle("Choose a compared FS");
 
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    public void gotoComparedChoice(){
+        if(comparedChoiceController==null)
+            comparedChoiceController = new ComparedFSChoiceController();
+        comparedChoiceController = (ComparedFSChoiceController) gotoWizardPane(
+                "wizard/comparison/FSChoice.fxml",
+                comparedChoiceController,
+                "Choose a compared FS"
+        );
     }
 
     /**
@@ -274,45 +272,33 @@ public class ComparisonWizard extends Wizard{
     }
 
     public void gotoHashPreparation(){
-        try {
-            hashPreparationController =
-                    (HashPreparationController) application.replaceSceneContent("wizard/comparison/HashPreparation.fxml");
-            hashPreparationController.setWizard(this);
-            application.getStage().setTitle("Preparing");
-            hashPreparationController.countFiles();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        hashPreparationController = (HashPreparationController) gotoWizardPane(
+                "wizard/comparison/HashPreparation.fxml",
+                "Preparing"
+        );
+        hashPreparationController.countFiles();
     }
 
     public void gotoHashProgress(){
-        try {
-            hashGenerationController =
-                    (HashGenerationController) application.replaceSceneContent("wizard/comparison/HashGeneration.fxml");
-            hashGenerationController.setWizard(this);
-            application.getStage().setTitle("Generating hashes");
-            hashGenerationController.hash();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        hashGenerationController = (HashGenerationController) gotoWizardPane(
+                "wizard/comparison/HashGeneration.fxml",
+                "Generating hashes"
+        );
+        hashGenerationController.hash();
     }
 
     public void goToComparisonProgress(){
-        try {
-            comparisonProgressController =
-                    (ComparisonProgressController) application.replaceSceneContent("wizard/comparison/ComparisonProgress.fxml");
-            comparisonProgressController.setWizard(this);
-            application.getStage().setTitle("Comparing the file systems");
-            comparisonProgressController.compare();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        comparisonProgressController = (ComparisonProgressController) gotoWizardPane(
+                "wizard/comparison/ComparisonProgress.fxml",
+                "Comparing the file systems"
+                );
+        comparisonProgressController.compare();
     }
 
     public void gotoWelcomeScreen() {
         try {
             application.gotoWelcomeScreen();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -323,23 +309,13 @@ public class ComparisonWizard extends Wizard{
             comparisonWindowController =
                     (ComparisonWindowController) application.replaceSceneContent("comparison/ComparisonWindow.fxml");
             application.getStage().setWidth(ComparisonWindowController.INTERFACE_WIDTH);
-            application.getStage().setHeight(ComparisonWindowController.INTERFACE_WIDTH);
+            application.getStage().setHeight(ComparisonWindowController.INTERFACE_HEIGHT);
             application.getStage().setTitle(projectName);
             comparisonWindowController.setApplication(application);
             comparisonWindowController.initFromWizard(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-
-    /*****************************************************************************************************************
-     *  BACK TO NAVIGATION : returning to an already visited pane
-     ****************************************************************************************************************/
-
-    public void backToReferenceChoice() {
-
     }
 
 }

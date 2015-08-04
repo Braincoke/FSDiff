@@ -10,6 +10,9 @@ import java.util.ResourceBundle;
  */
 public abstract class Controller implements Initializable {
 
+    /**
+     * The application the Controller is a part of
+     */
     protected Main application;
 
     public Main getApplication() {

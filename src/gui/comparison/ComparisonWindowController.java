@@ -32,10 +32,24 @@ public class ComparisonWindowController extends Controller {
      * The output file to save the file system comparison
      */
     private Path outputFile;
+
+    public Path getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(Path outputFile) {
+        this.outputFile = outputFile;
+    }
+
     /**
      * The comparison of file systems
      */
     private FileSystemComparison comparison;
+
+    public FileSystemComparison getFileSystemComparison() {
+        return comparison;
+    }
+
     /**
      * The reference file system in the comparison
      */
@@ -48,11 +62,22 @@ public class ComparisonWindowController extends Controller {
      * The file selected by the user through the filter results or the file explorer
      */
     private PathComparison selectedPath;
+
+    public void setSelectedPath(ComparisonTreeItem item) {
+        breadcrumbsController.updateBreadcrumbs(item);
+        if (!item.isDirectory())
+            dataPaneController.updateHexViewer(item);
+    }
+
     /**
      * The split pane separating the dataPane from the left menu
      */
     @FXML
     private SplitPane splitPane;
+
+    public SplitPane getSplitPane() {
+        return splitPane;
+    }
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -88,6 +113,10 @@ public class ComparisonWindowController extends Controller {
     private AnchorPane leftMenu;
     private ComparisonTreeItem rootTreeItem;
 
+    public ComparisonTreeItem getRootTreeItem() {
+        return rootTreeItem;
+    }
+
     /*******************************************************************************************************************
      *                                                                                                                 *
      * CENTER PANE                                                                                                     *
@@ -100,6 +129,9 @@ public class ComparisonWindowController extends Controller {
     @FXML
     private DataPaneController dataPaneController;
 
+    public void search() {
+        dataPaneController.updateResults(toolbarController.search());
+    }
     /*******************************************************************************************************************
      *                                                                                                                 *
      * BOTTOM PANE                                                                                                     *
@@ -112,36 +144,6 @@ public class ComparisonWindowController extends Controller {
     @FXML
     private BottomPaneController bottomPaneController;
 
-    public Path getOutputFile() {
-        return outputFile;
-    }
-
-    public void setOutputFile(Path outputFile) {
-        this.outputFile = outputFile;
-    }
-
-    public FileSystemComparison getFileSystemComparison() {
-        return comparison;
-    }
-
-    public void setSelectedPath(ComparisonTreeItem item) {
-        breadcrumbsController.updateBreadcrumbs(item);
-        if (!item.isDirectory())
-            dataPaneController.updateHexViewer(item);
-    }
-
-    public SplitPane getSplitPane() {
-        return splitPane;
-    }
-
-    public ComparisonTreeItem getRootTreeItem() {
-        return rootTreeItem;
-    }
-
-    public void search() {
-        dataPaneController.updateResults(toolbarController.search());
-    }
-
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -151,7 +153,7 @@ public class ComparisonWindowController extends Controller {
 
     /**
      * Initialize the comparison window from the data collected from the wizard
-     * @param wizard
+     * @param wizard   The comparison wizard used to start the project
      */
     public void initFromWizard(ComparisonWizard wizard){
         this.comparison = wizard.getComparison();
@@ -163,6 +165,7 @@ public class ComparisonWindowController extends Controller {
         toolbarController.setWindowController(this);
         dataPaneController.setWindowController(this);
         menuBarController.setWindowController(this);
+        saveFSC();
     }
 
     /**

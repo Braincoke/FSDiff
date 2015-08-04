@@ -3,6 +3,7 @@ package gui.wizard.comparison;
 import core.InputType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
@@ -17,6 +18,8 @@ import java.util.ResourceBundle;
 public abstract class ChoiceController extends  ComparisonWizardPane {
 
     @FXML
+    protected Button previousButton;
+    @FXML
     protected Button nextButton;
     @FXML
     protected ComboBox<InputType> inputTypeComboBox;
@@ -24,9 +27,23 @@ public abstract class ChoiceController extends  ComparisonWizardPane {
     protected TextField locationTextField;
     @FXML
     protected Button browseButton;
+    @FXML
+    protected Text headerText;
+    @FXML
+    protected Text subheaderText;
 
     protected InputType inputType;
-    protected Path input; //Whether it is a .fshx, .raw, $MFT, or a logical file, the input will be a path
+    protected Path inputPath; //Whether it is a .fshx, .raw, $MFT, or a logical file, the input will be a path
+
+    @Override
+    public void reload(){
+        if(inputPath != null){
+            locationTextField.setText(inputPath.toString());
+        }
+        if(inputType != null){
+            inputTypeComboBox.getSelectionModel().select(inputType);
+        }
+    }
 
     public void browse(){
         switch (inputType){
@@ -43,24 +60,30 @@ public abstract class ChoiceController extends  ComparisonWizardPane {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Saved hashes", "*.fshx"));
         File file = fileChooser.showOpenDialog(application.getStage());
-        setInput(file);
+        setInputPath(file);
 
     }
 
     protected void browseLogical(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File file = directoryChooser.showDialog(application.getStage());
-        setInput(file);
+        setInputPath(file);
     }
 
     public abstract void next();
 
-    protected void setInput(File file){
+    public abstract void previous();
+
+    public void cancel() {
+        wizard.gotoWelcomeScreen();
+    }
+
+    protected void setInputPath(File file){
         if(file!=null) {
-            input = file.toPath();
-            locationTextField.setText(input.toString());
+            inputPath = file.toPath();
+            locationTextField.setText(inputPath.toString());
         } else {
-            input = null;
+            inputPath = null;
             locationTextField.setText(null);
         }
     }
@@ -72,7 +95,8 @@ public abstract class ChoiceController extends  ComparisonWizardPane {
         inputTypeComboBox.setCellFactory(new Callback<ListView<InputType>, ListCell<InputType>>() {
             @Override
             public ListCell<InputType> call(ListView<InputType> param) {
-                final ListCell<InputType> cell = new ListCell<InputType>() {
+
+                return new ListCell<InputType>() {
                     @Override
                     public void updateItem(InputType item,
                                            boolean empty) {
@@ -83,14 +107,18 @@ public abstract class ChoiceController extends  ComparisonWizardPane {
                             setText(null);
                     }
                 };
-
-
-                return cell;
             }
         });
-        inputTypeComboBox.getSelectionModel().selectFirst();
+        if(inputType==null)
+            inputTypeComboBox.getSelectionModel().selectFirst();
         ValidationSupport validationSupport = new ValidationSupport();
         validationSupport.registerValidator(locationTextField, Validator.createEmptyValidator("You must select a data input"));
         validationSupport.invalidProperty().addListener((observable, oldValue, newValue) -> nextButton.setDisable(newValue));
+        privateInitialization();
     }
+
+    /**
+     * Initialization for extended classes
+     */
+    protected abstract void privateInitialization();
 }

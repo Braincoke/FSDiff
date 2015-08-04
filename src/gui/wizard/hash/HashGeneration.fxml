@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import gui.components.TextProgressBar?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -46,18 +47,10 @@
                         <Label fx:id="elapsedTimeLabel" text="0h 0min 0s" />
                      </children>
                   </HBox>
-                  <StackPane maxWidth="800.0" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <ProgressBar fx:id="progressBar" maxWidth="800.0" prefWidth="600.0" progress="0.0" StackPane.alignment="CENTER" />
-                        <HBox fx:id="percentageHbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" StackPane.alignment="CENTER">
-                           <children>
-                              <Label fx:id="percentageLabel" text="0" />
-                              <Label text="\%" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </StackPane>
-                  <HBox fx:id="hashCountHbox" alignment="CENTER" prefHeight="100.0" prefWidth="20.0" spacing="20.0">
+                  <TextProgressBar
+                          fx:id="progressBar"
+                          text="0%" progress="0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="20.0" spacing="20.0">
                      <children>
                         <Label text="Hashed : " />
                         <VBox maxWidth="200.0" spacing="10.0" HBox.hgrow="SOMETIMES">

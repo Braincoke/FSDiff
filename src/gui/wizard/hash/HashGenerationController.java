@@ -2,13 +2,13 @@ package gui.wizard.hash;
 
 import core.FileSystemHash;
 import core.HashCrawler;
+import gui.components.TextProgressBar;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Text;
 
 import java.text.DecimalFormat;
@@ -25,13 +25,11 @@ public class HashGenerationController extends HashWizardPane {
      */
     private final long kilobyte = 1024;
     @FXML
-    private Label percentageLabel;
+    private TextProgressBar progressBar;
     @FXML
     private Label fileSystemHashedName;
     @FXML
     private Text fileVisitedText;
-    @FXML
-    private ProgressBar progressBar;
     @FXML
     private Label hashedFileCountLabel;
     @FXML
@@ -171,7 +169,7 @@ public class HashGenerationController extends HashWizardPane {
 
     /**
      * Update the number of bytes crunched and adapt unit to the new value
-     * @param newValue
+     * @param newValue     the new number of bytes hashed
      */
     private void updateByteCount(Label byteCountLabel, Label byteCountUnit, String unit, Number newValue, double offset){
         double byteCount = newValue.longValue() + offset;
@@ -198,8 +196,7 @@ public class HashGenerationController extends HashWizardPane {
 
     private void updateProgressBar(Number newValue, double offset){
         double percentage = (newValue.doubleValue()+offset) / fileByteCount;
-        progressBar.setProgress(percentage);
-        percentageLabel.setText(String.valueOf(df.format(percentage*100)));
+        progressBar.setPercentage((int) Math.floor(percentage*100));
     }
 
     private class ElapsedTimeTask extends TimerTask {

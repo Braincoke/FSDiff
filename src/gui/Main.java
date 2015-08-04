@@ -67,34 +67,28 @@ public class Main extends Application {
 
     public Controller replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        InputStream in = Main.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource(fxml));
         AnchorPane page;
-        try {
-            page = (AnchorPane) loader.load(in);
-        } finally {
-            in.close();
+        try (InputStream in = Main.class.getResourceAsStream(fxml)) {
+            page = loader.load(in);
         }
         Scene scene = new Scene(page, 700, 500);
         stage.setScene(scene);
         stage.sizeToScene();
-        Controller controller = (Controller) loader.getController();
+        Controller controller = loader.getController();
         controller.setApplication(this);
         return controller;
     }
 
     public void replaceSceneContent(String fxml, Controller controller) throws Exception{
         FXMLLoader loader = new FXMLLoader();
-        loader.setController(controller);
-        InputStream in = Main.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource(fxml));
         AnchorPane page;
-        try {
+        try (InputStream in = Main.class.getResourceAsStream(fxml)) {
+            loader.setController(controller);
             page = (AnchorPane) loader.load(in);
-        } finally {
-            in.close();
         }
         Scene scene = new Scene(page, 700, 500);
         stage.setScene(scene);
@@ -106,20 +100,17 @@ public class Main extends Application {
     }
     public StageController openStage(String fxml, double sceneWidth, double sceneHeight) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        InputStream in = Main.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource(fxml));
         AnchorPane page;
-        try {
-            page = (AnchorPane) loader.load(in);
-        } finally {
-            in.close();
+        try (InputStream in = Main.class.getResourceAsStream(fxml)) {
+            page = loader.load(in);
         }
         Stage newStage = new Stage();
         Scene scene = new Scene(page, 700, 500);
         newStage.setScene(scene);
         newStage.sizeToScene();
-        StageController controller = (StageController) loader.getController();
+        StageController controller = loader.getController();
         controller.setApplication(this);
         controller.setStage(newStage);
         controller.setScene(scene);

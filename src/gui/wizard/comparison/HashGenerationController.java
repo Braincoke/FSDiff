@@ -3,12 +3,12 @@ package gui.wizard.comparison;
 import core.FileSystemHash;
 import core.FileSystemInput;
 import core.HashCrawler;
+import gui.components.TextProgressBar;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Text;
 
 import java.text.DecimalFormat;
@@ -22,13 +22,11 @@ import java.util.TimerTask;
 public class HashGenerationController extends ComparisonWizardPane {
 
     @FXML
-    private Label percentageLabel;
-    @FXML
     private Label fileSystemHashedName;
     @FXML
     private Text fileVisitedText;
     @FXML
-    private ProgressBar progressBar;
+    private TextProgressBar progressBar;
     @FXML
     private Label hashedFileCountLabel;
     @FXML
@@ -263,9 +261,8 @@ public class HashGenerationController extends ComparisonWizardPane {
     }
 
     private void updateProgressBar(Number newValue, double offset){
-        double percentage = (newValue.doubleValue()+offset) / fileByteCount;
-        progressBar.setProgress(percentage);
-        percentageLabel.setText(String.valueOf(df.format(percentage*100)));
+        double percentage = (newValue.doubleValue()+offset) * 100d / fileByteCount;
+        progressBar.setPercentage((int) Math.floor(percentage));
     }
 
     private class ElapsedTimeTask extends TimerTask {

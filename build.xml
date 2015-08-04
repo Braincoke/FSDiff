@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="FSDiff" default="default" basedir="."
+         xmlns:fx="javafx:com.sun.javafx.tools.ant">
+
+    <property name="JAVA_HOME" value="C:\\Program Files\\Java\\jdk1.8.0_51"/>
+    <property name="build.src.dir" value="src"/>
+    <property name="build.classes.dir" value="build/classes"/>
+    <property name="build.dist.dir" value="build/dist"/>
+
+    <target name="default" depends="clean,compile">
+
+        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"
+                 uri="javafx:com.sun.javafx.tools.ant"
+                 classpath="${JAVA_HOME}/lib/ant-javafx.jar"/>
+
+        <fx:application id="FSDiffID"
+                        name="FSDiffApp"
+                        mainClass="gui.Main"/>
+
+        <fx:resources id="appRes">
+            <fx:fileset dir="${build.dist.dir}" includes="FSDiff.jar"/>
+        </fx:resources>
+
+        <fx:jar destfile="${build.dist.dir}/FSDiff.jar">
+            <fx:application refid="FSDiffID"/>
+            <fx:resources refid="appRes"/>
+            <fileset dir="${build.classes.dir}"/>
+        </fx:jar>
+
+        <fx:deploy width="800" height="1000"
+                   outdir="." embedJNLP="true"
+                   outfile="fsdiff">
+
+            <fx:application refId="FSDiffID"/>
+
+            <fx:resources refid="appRes"/>
+
+            <fx:info title="FSDiff"/>
+
+        </fx:deploy>
+
+    </target>
+
+    <target name="clean">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.dist.dir}"/>
+
+        <delete>
+            <fileset dir="${build.classes.dir}" includes="**/*"/>
+            <fileset dir="${build.dist.dir}" includes="**/*"/>
+        </delete>
+
+    </target>
+
+    <target name="compile" depends="clean">
+
+        <javac includeantruntime="false"
+               srcdir="${build.src.dir}"
+               destdir="${build.classes.dir}" />
+    </target>
+
+</project>
