@@ -128,14 +128,19 @@ public class FSChoiceController extends HashWizardPane {
         if(file!=null) {
             inputPath = file.toPath();
             inputPathTextField.setText(inputPath.toString());
-            if(outputNameTextField.getText()==null || outputNameTextField.getText().trim().isEmpty())
-                outputNameTextField.setText(inputPath.getFileName().toString());
+            if(outputNameTextField.getText()==null || outputNameTextField.getText().trim().isEmpty()) {
+                String name = inputPath.getNameCount()==0 ? inputPath.toString() : inputPath.getFileName().toString();
+                outputNameTextField.setText(makeFileNameValid(name));
+            }
         } else {
             inputPath = null;
             inputPathTextField.setText(null);
         }
     }
 
+    private String makeFileNameValid(String filename){
+        return filename.replaceAll("[^a-zA-Z0-9.-]", "_");
+    }
 
     public void browseOutput(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
