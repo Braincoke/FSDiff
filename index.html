@@ -20,18 +20,51 @@
 
     <section class="main-content">
       <h1>
-<a id="fsdiff" class="anchor" href="#fsdiff" aria-hidden="true"><span class="octicon octicon-link"></span></a>FSDiff</h1>
+<a id="presentation" class="anchor" href="#presentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Presentation</h1>
 
-<p>FSDiff is a tool to find the differences between two snapshots of a file system.</p>
+<p>FSDiff lets you easily track the modifications made to a disk or a directory by tracking modified, created and deleted files.</p>
 
-<p>This software is written as part of my Master's Degree in Computing.</p>
+<h3>
+<a id="first-example-use-folder-comparison" class="anchor" href="#first-example-use-folder-comparison" aria-hidden="true"><span class="octicon octicon-link"></span></a>First example use: folder comparison</h3>
 
-<p>The software aims at providing a way to compare two snapshots of a file system to identify created, deleted and modified files.
-One application of such a software is to help in the discovery of new forensic artifacts.</p>
+<p>With FSDiff you can compare the modifications made to a folder or a disk at two points in time by following these simple steps:</p>
+
+<ol>
+<li><p>Use FSDiff to generate a "File System Hash" of the desired folder. The output will be a <code>.fshx</code> file that is holds the state of the folder at that point in time. This file will be used as the "reference file system".</p></li>
+<li><p>Repeat this process at some other point in time to generate a second <code>.fshx</code> file. This file will be used as the "compared file system".</p></li>
+<li><p>Use FSDiff to start a new comparison project and load the saved <code>.fshx</code> files into the software when asked. FSDiff will output a "File System Comparison" file (a <code>.fscx</code> file) and load the comparison interface that you can see below:</p></li>
+</ol>
 
 <p align="center">
-<img src="https://github.com/Braincoke/FSDiff-Wiki-Resources/blob/master/images/comparison_interface/presentation.gif" height="400">
+<img src="https://raw.githubusercontent.com/Braincoke/FSDiff-Wiki-Resources/master/images/comparison_interface/presentation.gif" height="600">
 </p>
+
+<p>For more information on the comparison interface, see the GitHub Wiki at <a href="https://github.com/Braincoke/FSDiff/wiki/Comparison-interface">comparison interface</a></p>
+
+<h3>
+<a id="second-example-use-a-forensic-artifact-finder" class="anchor" href="#second-example-use-a-forensic-artifact-finder" aria-hidden="true"><span class="octicon octicon-link"></span></a>Second example use: a forensic artifact finder</h3>
+
+<p>FSDiff was originally built with this application in mind. Whenever a new operating system is released, the knowledge base
+on the Forensic artifacts related to the OS has to be updated. Most of the time researcher will use tools such as Autopsy, FTK or EnCase to try to find the differences between the old operating system and the new one. However these tools have been written based on the old knowledge base and will not be compatible with the new operating system's artifacts.</p>
+
+<p>FSDiff provides a way to find new forensic artifacts (used in combination with the forensic tools listed previously). A forensic artifact being a file holding specific information, here is a simple way to find clues about new forensic artifacts thanks to FSDiff:</p>
+
+<ol>
+<li><p>Load a Virtual Machine with the operating system and generate a hexdump of the virtual disk to obtain the first .raw image file. That file will be used as the reference file system.</p></li>
+<li><p>In the same virtual machine perform a minor modification of the OS. For instance you could modify a file name, or download an image, or start a program ...</p></li>
+<li><p>Generate a hexdump of the virtual disk to obtain the second .raw image file. That file will be used as the compared file system.</p></li>
+<li><p>Mount the two image files as read-only on your operating system. If you use Windows you could use <a href="http://www.osforensics.com/tools/mount-disk-images.html">OSFMount</a> to perform that operation.</p></li>
+<li><p>Use FSDiff to generate a "New Comparison Project" and generate the comparison</p></li>
+</ol>
+
+<p>Now you can see which files have been modified. There is a high probability that these files are forensic artifacts. You can use Autopsy, EnCase or FTK to check if these artifacts are known or are new artifacts.</p>
+
+<h1>
+<a id="about" class="anchor" href="#about" aria-hidden="true"><span class="octicon octicon-link"></span></a>About</h1>
+
+<p>FSDiff is developed as part of my Master's Degree in Computing. You can learn more about how it works in the <a href="https://github.com/Braincoke/FSDiff/wiki">GitHub Wiki</a>.</p>
+
+<p>If you are a developer looking to understand how FSDiff was built you might be interested in the <a href="https://github.com/Braincoke/FSDiff/wiki/Developer-documentation">developer documentation</a></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/Braincoke/FSDiff">Fsdiff</a> is maintained by <a href="https://github.com/Braincoke">Braincoke</a>.</span>
