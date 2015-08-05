@@ -1,63 +1,70 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0"?>
+<project name="FSDiff" basedir="." default="compile"  xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-<project name="FSDiff" default="default" basedir="."
-         xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <property file="build.properties"/>
 
-    <property name="JAVA_HOME" value="C:\\Program Files\\Java\\jdk1.8.0_51"/>
-    <property name="build.src.dir" value="src"/>
-    <property name="build.classes.dir" value="build/classes"/>
-    <property name="build.dist.dir" value="build/dist"/>
 
-    <target name="default" depends="clean,compile">
+
+    <!-- Clean the build directory -->
+    <target name="clean" description="Clean output directories">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.dist.dir}"/>
+        <mkdir dir="${build.dist.lib.dir}" />
+        <delete>
+            <fileset dir="${build.classes.dir}" includes="**/*"/>
+            <fileset dir="${build.dist.dir}" includes="**/*"/>
+            <fileset dir="${build.dist.lib.dir}" includes="**/*"/>
+        </delete>
+    </target>
+
+    <!-- Indicates libraries location for the compilation -->
+    <path id="lib-classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <pathelement path="${build.classes.dir}"/>
+    </path>
+
+    <!-- Compile java files and copy all other files -->
+    <target name="compile" depends="clean" description="Compile source tree java files">
+        <javac destdir="${build.classes.dir}">
+            <src path="${src.dir}"/>
+            <classpath refid="lib-classpath"/>
+        </javac>
+        <!-- Used for adding FXML and CSS files to the .jar -->
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.dir}" excludes="**/*.java" includes="**"/>
+        </copy>
+        <!-- Used for adding libraries in the same parent directory as the .jar -->
+        <!-- TODO It would be nice to have the libraries bundled in the .jar -->
+        <copy todir="${build.dist.lib.dir}" >
+            <fileset dir="${lib.dir}" includes="${jar.files}" />
+        </copy>
+    </target>
+
+
+    <!-- Deploy the JavaFX Application -->
+    <target name="deploy" depends="clean,compile">
 
         <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"
                  uri="javafx:com.sun.javafx.tools.ant"
                  classpath="${JAVA_HOME}/lib/ant-javafx.jar"/>
 
-        <fx:application id="FSDiffID"
-                        name="FSDiffApp"
+        <fx:application id="app"
+                        name="${name}"
                         mainClass="gui.Main"/>
 
-        <fx:resources id="appRes">
-            <fx:fileset dir="${build.dist.dir}" includes="FSDiff.jar"/>
+        <!-- Indicates to the final .jar where to find the external libraries -->
+        <fx:resources id="appResources">
+            <fx:fileset dir="${build.dist.dir}" includes="lib/${jar.files}"/>
         </fx:resources>
 
         <fx:jar destfile="${build.dist.dir}/FSDiff.jar">
-            <fx:application refid="FSDiffID"/>
-            <fx:resources refid="appRes"/>
+            <fx:application refid="app"/>
+            <fx:resources refid="appResources"/>
             <fileset dir="${build.classes.dir}"/>
         </fx:jar>
 
-        <fx:deploy width="800" height="1000"
-                   outdir="." embedJNLP="true"
-                   outfile="fsdiff">
-
-            <fx:application refId="FSDiffID"/>
-
-            <fx:resources refid="appRes"/>
-
-            <fx:info title="FSDiff"/>
-
-        </fx:deploy>
-
     </target>
-
-    <target name="clean">
-        <mkdir dir="${build.classes.dir}"/>
-        <mkdir dir="${build.dist.dir}"/>
-
-        <delete>
-            <fileset dir="${build.classes.dir}" includes="**/*"/>
-            <fileset dir="${build.dist.dir}" includes="**/*"/>
-        </delete>
-
-    </target>
-
-    <target name="compile" depends="clean">
-
-        <javac includeantruntime="false"
-               srcdir="${build.src.dir}"
-               destdir="${build.classes.dir}" />
-    </target>
-
 </project>
