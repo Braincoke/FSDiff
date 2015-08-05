@@ -51,7 +51,7 @@ public class InfoView extends VBox {
     }
 
     private void initPadding() {
-        setPadding(new Insets(10, 0, 10, 0));
+        setPadding(new Insets(0, 0, 0, 0));
     }
 
     /**
@@ -77,7 +77,7 @@ public class InfoView extends VBox {
             getChildren().get(0).getStyleClass().add("firstItem");
             getChildren().get(getChildren().size() - 1).getStyleClass().add("lastItem");
             for(int i=0; i<length; i++){
-                children.get(i).getStyleClass().add("infoItem");
+                //children.get(i).getStyleClass().add("infoItem");
                 if(i%2==0){
                     children.get(i).getStyleClass().add("even");
                 } else {

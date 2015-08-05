@@ -56,11 +56,11 @@
 /******************* PROJECT TAB ****************************/
 
 .infoItem {
-    -fx-border-color: grey;
-    -fx-border-width: 0px 0px 1px 0px;
-    -fx-padding: 0px 0px 15px 0px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0px 0px 0px 0px;
+    -fx-padding: 15px 0px 15px 0px;
 }
 
-.infoItem.lastItem {
-    -fx-border-width: 0px;
+.infoItem.even {
+    -fx-background-color:  #FBFBFB;
 }
