@@ -41,7 +41,7 @@
                         <MasterDetailPane detailSide="TOP"
                                           showDetailNode="false"
                                           animated="true"
-                                          dividerPosition="0.4"
+                                          dividerPosition="0.5"
                                           fx:id="explorerFilterPane"
                                           VBox.vgrow="ALWAYS"
                                           HBox.hgrow="ALWAYS"

@@ -20,7 +20,7 @@
                          <Font size="56.0" />
                       </font>
                    </Text>
-                   <Text fx:id="VersionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Version 0.0.0" />
+                   <Text fx:id="VersionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Version 0.1.0" />
                 </children>
              </VBox>
              <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="300.0" VBox.vgrow="ALWAYS">

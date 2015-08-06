@@ -83,8 +83,10 @@ public class NewComparisonProjectController extends StageController {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Choose the project location");
         File file = directoryChooser.showDialog(stage);
-        projectLocation = file.toPath();
-        projectLocationText.setText(projectLocation.toString());
+        if(file!=null) {
+            projectLocation = file.toPath();
+            projectLocationText.setText(projectLocation.toString());
+        }
     }
 
     public void cancel(ActionEvent actionEvent) {

@@ -64,9 +64,11 @@ public class ComparisonWindowController extends Controller {
     private PathComparison selectedPath;
 
     public void setSelectedPath(ComparisonTreeItem item) {
-        breadcrumbsController.updateBreadcrumbs(item);
-        if (!item.isDirectory())
-            dataPaneController.updateHexViewer(item);
+        if(item!=null) {
+            breadcrumbsController.updateBreadcrumbs(item);
+            if (!item.isDirectory())
+                dataPaneController.updateHexViewer(item);
+        }
     }
 
     /**
