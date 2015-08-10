@@ -206,7 +206,6 @@ public class DataPaneController extends Controller {
                 @Override
                 protected void updateItem(ComparisonTreeItem item, boolean empty) {
                     super.updateItem(item, empty);
-
                     if (item == null || empty) {
                         setText(null);
                         setStyle("");
@@ -216,6 +215,9 @@ public class DataPaneController extends Controller {
 
                         // Style the path accordingly to its status
                         switch (item.getStatus()){
+                            case MATCHED:
+                                setStyle("");
+                                break;
                             case MODIFIED:
                                 setTextFill(CssColor.MODIFIED.getTextColor());
                                 setStyle("-fx-background-color:" + CssColor.MODIFIED.getBackgroundRgba());
