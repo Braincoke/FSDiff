@@ -2,18 +2,18 @@ package gui.comparison;
 
 import core.ComparisonStatus;
 import gui.Controller;
-import gui.hexviewer.HexDump;
+import gui.components.buttons.IconButton;
+import gui.hexviewer.HexDiffBrowser;
+import gui.hexviewer.HexDumpBrowser;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
@@ -26,7 +26,11 @@ public class DataPaneController extends Controller {
 
 
     public static final double STATUS_WIDTH = 100;
+    private static final int HEXVIEWER_PAGE_LINES = 10;
     private ComparisonWindowController windowController;
+
+    @FXML
+    private SplitPane dataSplitPane;
 
 
     /*******************************************************************************************************************
@@ -35,10 +39,70 @@ public class DataPaneController extends Controller {
      *                                                                                                                 *
      ******************************************************************************************************************/
     @FXML
-    private TextArea hexViewer;
-    @FXML
-    private ProgressIndicator loadingIndicator;
+    private Tab hexTab;
 
+    @FXML
+    private IconButton toggleExpandButton;
+
+    private double[] dataDividerPositions;
+    private double[] leftDividerPositions;
+
+    public void updateHexViewer(ComparisonTreeItem treeItem){
+        Path refPath = windowController.getFileSystemComparison().getReferenceFS().getRootPath();
+        Path comPath = windowController.getFileSystemComparison().getComparedFS().getRootPath();
+        Path itemPath = treeItem.getPath();
+        Path filePath;
+        HexDumpBrowser dumpBrowser = new HexDumpBrowser();
+        HexDiffBrowser diffBrowser = new HexDiffBrowser();
+        switch (treeItem.getStatus()){
+            case MODIFIED:
+                Path refFile = refPath.resolve(itemPath);
+                Path comFile = comPath.resolve(itemPath);
+                diffBrowser.loadDiff(refFile.toFile(), comFile.toFile(), 0);
+                hexTab.setContent(diffBrowser);
+                break;
+            case MATCHED:
+            case DELETED:
+                filePath = refPath.resolve(itemPath);
+                dumpBrowser.loadFile(filePath.toFile(), 0);
+                hexTab.setContent(dumpBrowser);
+                break;
+            case CREATED:
+                filePath = comPath.resolve(itemPath);
+                dumpBrowser = new HexDumpBrowser();
+                dumpBrowser.loadFile(filePath.toFile(), 0);
+                hexTab.setContent(dumpBrowser);
+                break;
+        }
+        /*Task<Boolean> task = new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                try {
+                    String text = HexDump.getString(filePath.toFile(),0, HEXVIEWER_PAGE_LINES);
+                    hexViewer.setText(text);
+                    return true;
+                } catch (IOException e) {
+                    hexViewer.setText("Could not load file : " + filePath +" \n" + e.getMessage());
+                    return false;
+                }
+            }
+        };
+        new Thread(task).start();*/
+    }
+
+    public void toggleExpand() {
+        if(toggleExpandButton.getIcon().compareTo("EXPAND")==0){
+            dataDividerPositions = dataSplitPane.getDividerPositions();
+            leftDividerPositions = windowController.getSplitPane().getDividerPositions();
+            windowController.getSplitPane().setDividerPositions(0);
+            dataSplitPane.setDividerPositions(0);
+            toggleExpandButton.setIcon("COMPRESS");
+        } else {
+            toggleExpandButton.setIcon("EXPAND");
+            dataSplitPane.setDividerPositions(dataDividerPositions);
+            windowController.getSplitPane().setDividerPositions(leftDividerPositions);
+        }
+    }
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -58,41 +122,6 @@ public class DataPaneController extends Controller {
         this.windowController.search();
     }
 
-    public void updateHexViewer(ComparisonTreeItem treeItem){
-        Path refPath = windowController.getFileSystemComparison().getReferenceFS().getRootPath();
-        Path comPath = windowController.getFileSystemComparison().getComparedFS().getRootPath();
-        Path itemPath = treeItem.getPath();
-        Path filePath;
-        switch (treeItem.getStatus()){
-            case MATCHED:
-            case MODIFIED:
-            case DELETED:
-                filePath = refPath.resolve(itemPath);
-                break;
-            case CREATED:
-                filePath = comPath.resolve(itemPath);
-                break;
-            default:
-                filePath = refPath.resolve(itemPath);
-                break;
-        }
-        loadingIndicator.setVisible(true);
-        Task<Boolean> task = new Task<Boolean>() {
-            @Override
-            protected Boolean call() throws Exception {
-                try {
-                    String text = HexDump.getString(filePath.toFile());
-                    hexViewer.setText(text);
-                    return true;
-                } catch (IOException e) {
-                    hexViewer.setText("Could not load file : " + filePath +" \n" + e.getMessage());
-                    return false;
-                }
-            }
-        };
-        task.setOnSucceeded(event -> loadingIndicator.setVisible(false));
-        new Thread(task).start();
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -125,6 +154,7 @@ public class DataPaneController extends Controller {
         resultsTable.setItems(searchResults);
 
     }
+
 
     class StatusCellValueFactory implements  Callback<TableColumn.CellDataFeatures<ComparisonTreeItem, ComparisonTreeItem>,
             ObservableValue<ComparisonTreeItem>> {

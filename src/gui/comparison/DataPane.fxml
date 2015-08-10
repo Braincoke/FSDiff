@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import gui.comparison.DataPaneController?>
+<?import gui.components.buttons.IconButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="gui.comparison.DataPaneController" id="dataPane" fx:id="dataPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0"
             prefWidth="100.0" xmlns="http://javafx.com/javafx/8">
     <children>
@@ -46,45 +47,38 @@
                         </VBox>
                     </children></AnchorPane>
                 <AnchorPane id="dataViewingPane" fx:id="dataViewingPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                    <children>
-                        <TabPane id="dataViewingTabPane" fx:id="dataViewingTabPane"
-                                 layoutX="154.0" layoutY="80.0"
-                                 prefHeight="294.0" prefWidth="554.0"
-                                 tabClosingPolicy="UNAVAILABLE"
-                                 AnchorPane.bottomAnchor="0.0"
-                                 AnchorPane.leftAnchor="0.0"
-                                 AnchorPane.rightAnchor="0.0"
-                                 AnchorPane.topAnchor="0.0">
-                            <tabs>
-                                <Tab id="hexTab" fx:id="hexTab" text="Hex">
-                                    <content>
-                                        <StackPane minHeight="0.0"
-                                                    minWidth="0.0"
-                                                    prefHeight="180.0"
-                                                    prefWidth="800.0">
-                                            <TextArea AnchorPane.topAnchor="0"
-                                                      AnchorPane.rightAnchor="0"
-                                                      AnchorPane.leftAnchor="0"
-                                                      AnchorPane.bottomAnchor="0"
-                                                      minWidth="800"
-                                                      fx:id="hexViewer"
-                                                      editable="false">
-                                                <font>
-                                                    <Font name="Monospaced Regular" size="15.0" />
-                                                </font>
-                                            </TextArea>
-                                            <ProgressIndicator progress="-1" visible="false" fx:id="loadingIndicator" />
-                                        </StackPane>
-                                    </content>
-                                </Tab>
-                                <Tab id="stringsTab" fx:id="stringsTab" text="Strings">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                    </content>
-                                </Tab>
-                            </tabs>
-                        </TabPane>
-                    </children>
+                    <StackPane
+                            AnchorPane.bottomAnchor="0.0"
+                            AnchorPane.leftAnchor="0.0"
+                            AnchorPane.rightAnchor="0.0"
+                            AnchorPane.topAnchor="0.0">
+                        <children>
+                            <TabPane id="dataViewingTabPane" fx:id="dataViewingTabPane"
+                                     layoutX="154.0" layoutY="80.0"
+                                     prefHeight="294.0" prefWidth="554.0"
+                                     tabClosingPolicy="UNAVAILABLE">
+                                <tabs>
+                                    <Tab id="hexTab" fx:id="hexTab" text="Hex">
+                                        <content>
+                                            <!-- HexDumpBrowser or HexDiffViewer will be added here -->
+                                        </content>
+                                    </Tab>
+                                    <!-- TODO
+                                    <Tab id="stringsTab" fx:id="stringsTab" text="Strings">
+                                        <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                        </content>
+                                    </Tab> -->
+                                </tabs>
+                            </TabPane>
+                            <HBox alignment="TOP_RIGHT" pickOnBounds="false" prefHeight="50.0" prefWidth="150.0" >
+                                <IconButton icon="EXPAND" size="16" onAction="#toggleExpand" fx:id="toggleExpandButton"/>
+                                <padding>
+                                    <Insets top="5"/>
+                                </padding>
+                            </HBox>
+                        </children>
+                    </StackPane>
                 </AnchorPane>
             </items>
         </SplitPane>
