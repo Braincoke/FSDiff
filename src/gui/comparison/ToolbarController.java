@@ -3,6 +3,7 @@ package gui.comparison;
 import core.ComparisonStatus;
 import gui.Controller;
 import gui.Main;
+import gui.components.CheckBoxMenuItem;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
@@ -46,6 +47,8 @@ public class ToolbarController extends Controller {
     private FilterDropDownMenuItem filterCreated;
     @FXML
     private FilterDropDownMenuItem filterDeleted;
+    @FXML
+    private CheckBoxMenuItem useRegex;
 
     public void setWindowController(ComparisonWindowController windowController){
         this.windowController = windowController;
@@ -62,7 +65,7 @@ public class ToolbarController extends Controller {
         filterOptions.put(ComparisonStatus.MODIFIED, filterModified.isSelected());
         filterOptions.put(ComparisonStatus.CREATED, filterCreated.isSelected());
         filterOptions.put(ComparisonStatus.DELETED, filterDeleted.isSelected());
-        return root.filterFiles(filterOptions, searchField.getText());
+        return root.filterFiles(filterOptions, searchField.getText(), useRegex.isSelected());
     }
 
     @Override

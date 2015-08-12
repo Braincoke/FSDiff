@@ -74,20 +74,6 @@ public class DataPaneController extends Controller {
                 hexTab.setContent(dumpBrowser);
                 break;
         }
-        /*Task<Boolean> task = new Task<Boolean>() {
-            @Override
-            protected Boolean call() throws Exception {
-                try {
-                    String text = HexDump.getString(filePath.toFile(),0, HEXVIEWER_PAGE_LINES);
-                    hexViewer.setText(text);
-                    return true;
-                } catch (IOException e) {
-                    hexViewer.setText("Could not load file : " + filePath +" \n" + e.getMessage());
-                    return false;
-                }
-            }
-        };
-        new Thread(task).start();*/
     }
 
     public void toggleExpand() {

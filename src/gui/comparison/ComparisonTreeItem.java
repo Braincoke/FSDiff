@@ -26,13 +26,14 @@ public class ComparisonTreeItem extends TreeItem<PathComparison> {
      * Filter only the files in the current branch. Returns a list of the filtered files.
      * @param comparisonStatusFilter    The comparison status filters
      * @param regex                     The regular expression to apply to the file path
+     * @param useRegex                  Indicates if the regex should be used as a regex or not
      * @return                          A list of the filtered files
      */
     public List<ComparisonTreeItem> filterFiles(final HashMap<ComparisonStatus, Boolean> comparisonStatusFilter,
-                                                String regex){
+                                                String regex, boolean useRegex){
 
         ArrayList<ComparisonTreeItem> filteredList = new ArrayList<>();
-        this.filterList(filteredList, comparisonStatusFilter, regex);
+        this.filterList(filteredList, comparisonStatusFilter, regex, useRegex);
         return filteredList;
     }
 
@@ -46,7 +47,7 @@ public class ComparisonTreeItem extends TreeItem<PathComparison> {
      */
     public void filterList(List<ComparisonTreeItem> list,
                            final HashMap<ComparisonStatus, Boolean> comparisonStatusFilter,
-                           String regex){
+                           String regex, boolean useRegex){
         ComparisonTreeItem readOnlyRoot = this;
         boolean passedFilter = false;
         //Are we filtering a leaf (== file)?
@@ -59,11 +60,13 @@ public class ComparisonTreeItem extends TreeItem<PathComparison> {
             }
             if (passedFilter) {
                 PathComparison pathComparison = readOnlyRoot.getValue();
-                if (regex.compareTo("") == 0) {
+                if (regex.trim().compareTo("") == 0) {
                     list.add(readOnlyRoot);
-                } else if (pathComparison.getPath().toString().contains(regex)) {
-                    //TODO implement real regex filter
-                    list.add(readOnlyRoot);
+                } else{
+                    if(useRegex && (pathComparison.getPath().toString().matches(regex)))
+                        list.add(readOnlyRoot);
+                    else if(!useRegex && (pathComparison.getPath().toString().contains(regex)))
+                        list.add(readOnlyRoot);
                 }
             }
         } else if(readOnlyRoot.isDirectory()) {
@@ -78,14 +81,14 @@ public class ComparisonTreeItem extends TreeItem<PathComparison> {
             if (passedFilter) {
                 readOnlyRoot.getChildrenList().stream()
                         .filter(child -> child != null)
-                        .forEach(child -> child.filterList(list, comparisonStatusFilter, regex));
+                        .forEach(child -> child.filterList(list, comparisonStatusFilter, regex, useRegex));
             }
         } else {
             //We are filtering the root that does not hold a proper PathComparison
             //Filter every child
             readOnlyRoot.getChildrenList().stream()
                     .filter(child -> child != null)
-                    .forEach(child -> child.filterList(list, comparisonStatusFilter, regex));
+                    .forEach(child -> child.filterList(list, comparisonStatusFilter, regex, useRegex));
         }
     }
 

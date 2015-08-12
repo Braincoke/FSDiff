@@ -2,6 +2,7 @@
 
 <?import gui.comparison.*?>
 <?import gui.components.buttons.ToolBarButton?>
+<?import gui.components.CheckBoxMenuItem?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -53,6 +54,7 @@
                         <FilterDropDownMenuItem status="Modified" fx:id="filterModified" checked="true"/>
                         <FilterDropDownMenuItem status="Created" fx:id="filterCreated" checked="true"/>
                         <FilterDropDownMenuItem status="Deleted" fx:id="filterDeleted" checked="true"/>
+                        <CheckBoxMenuItem fx:id="useRegex" checked="false" text="Use regex"/>
                     </items>
                 </MenuButton>
             </children>
