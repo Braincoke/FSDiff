@@ -35,4 +35,9 @@ public class ByteDiff {
     public void setByteHex(String byteHex) {
         this.byteHex = byteHex;
     }
+
+    @Override
+    public String toString(){
+        return "Byte: " + byteHex + " - Operation: " + operation;
+    }
 }

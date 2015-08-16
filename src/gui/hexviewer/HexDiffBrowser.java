@@ -1,51 +1,55 @@
 package gui.hexviewer;
 
-import gui.components.buttons.IconButton;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import utils.HexDiff;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * A simple interface to browse the hex dump of a file
  */
-public class HexDiffBrowser extends AnchorPane {
+public class HexDiffBrowser extends HexBrowser {
 
-    public static final int DEFAULT_LINE_NUMBER_PER_PAGE = 15;
-    private static final Double ZOOM_FACTOR = 0.10;
 
     public HexDiffBrowser(){
         super();
-        linesPerPage = DEFAULT_LINE_NUMBER_PER_PAGE;
-        this.toolBar = initToolBar();
+
+        /* Master pane */
         this.referenceView = new HexDiffWebView();
         this.comparedView = new HexDiffWebView();
         this.splitPane = new SplitPane(referenceView, comparedView);
-        VBox vBox = new VBox(toolBar, splitPane);
-        VBox.setVgrow(splitPane, Priority.ALWAYS);
-        this.getChildren().add(vBox);
-        setRightAnchor(vBox, 0d);
-        setBottomAnchor(vBox, 0d);
-        setLeftAnchor(vBox, 0d);
-        setTopAnchor(vBox, 0d);
+        this.progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxWidth(80);
+        progressIndicator.setMaxHeight(80);
+        StackPane stackPane = new StackPane(splitPane, progressIndicator);
+        masterDetailPane.setMasterNode(stackPane);
+        masterDetailPane.setDividerPosition(0.3);
+
+        /* Detail pane */
+        initDetailPane();
 
         //CTRL + SCROLL WHEEL TO ZOOM IN OR OUT
-        EventHandler<ScrollEvent> scrollZoom = new EventHandler<ScrollEvent>() {
-            @Override
-            public void handle(ScrollEvent event) {
-                if (event.isControlDown()) {
-                    if (event.getDeltaY() > 0) {
-                        zoomIn();
-                    } else {
-                        zoomOut();
-                    }
+        EventHandler<ScrollEvent> scrollZoom = event -> {
+            if (event.isControlDown()) {
+                if (event.getDeltaY() > 0) {
+                    zoomIn();
+                } else {
+                    zoomOut();
                 }
             }
         };
@@ -54,6 +58,7 @@ public class HexDiffBrowser extends AnchorPane {
         comparedView.getWebView().setOnScroll(scrollZoom);
         linesPerPageTextField.setText(String.valueOf(linesPerPage));
     }
+
 
     /**
      * The file used as a reference in the diff
@@ -90,71 +95,10 @@ public class HexDiffBrowser extends AnchorPane {
     }
 
     /**
-     * The current page being displayed
-     * page = ( offset / (nbLinesPerPage*32) ) + 1
+     * The object holding the differences
      */
-    private int page;
+    private HexDiff hexDiff;
 
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.offset = (page-1)*linesPerPage*32;
-        this.currentPageLabel.setText(String.valueOf(page));
-        this.page = page;
-    }
-
-    /**
-     * The current offset
-     */
-    private long offset;
-
-    public long getOffset() {
-        return offset;
-    }
-
-    public void setOffset(long offset) {
-        setPage((int) ((offset/(linesPerPage*32))+1));
-        this.offset = offset;
-    }
-
-    /**
-     * The last offset we can go to according to
-     * the file length
-     */
-    private long offsetMax;
-
-    private void setOffsetMax(long offsetMax) {
-        this.offsetMax = offsetMax;
-        setPageMax((int) (( offsetMax/ (linesPerPage*32) ) + 1));
-    }
-
-    /**
-     * The last page we can go to
-     */
-    private int pageMax;
-
-    private void setPageMax(int pageMax){
-        this.pageMax = pageMax;
-        this.lastPageLabel.setText(" / " + String.valueOf(pageMax));
-    }
-
-    /**
-     * The number of lines per page
-     */
-    private int linesPerPage;
-
-    public int getLinesPerPage() {
-        return linesPerPage;
-    }
-
-    public void setLinesPerPage(int linesPerPage) {
-        this.linesPerPage = linesPerPage;
-        linesPerPageTextField.setText(String.valueOf(linesPerPage));
-        setPageMax((int) ((offsetMax / (linesPerPage * 32)) + 1));
-        setPage((int) ((offset / (linesPerPage * 32)) + 1));
-    }
 
     /**
      * The hex viewer for the reference file
@@ -186,9 +130,22 @@ public class HexDiffBrowser extends AnchorPane {
         setReferenceFile(reference);
         setComparedFile(compared);
         setOffset(offset);
-        HexDiff diff = new HexDiff(reference,compared,offset,linesPerPage);
-        this.referenceView.loadLines(diff, true);
-        this.comparedView.loadLines(diff,false);
+        hexDiff = new HexDiff(reference,compared);
+        progressIndicator.progressProperty().bind(hexDiff.getDiffGenerator().progressProperty());
+        progressIndicator.setVisible(true);
+        toolBar.setDisable(true);
+        hexDiff.getDiffGenerator().stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                progressIndicator.setVisible(false);
+                this.referenceView.loadLines(hexDiff, true);
+                this.comparedView.loadLines(hexDiff, false);
+                setModifiedOffsets(hexDiff.getModifiedOffsets());
+                toolBar.setDisable(false);
+            }
+        });
+        try {
+            hexDiff.loadDiff(offset, linesPerPage);
+        } catch (IOException ignored) {}
     }
 
     /**
@@ -202,105 +159,150 @@ public class HexDiffBrowser extends AnchorPane {
 
     /*******************************************************************************************************************
      *                                                                                                                 *
-     * TOOLBAR                                                                                                         *
-     *  ______________________________________________________________________________________________________________ *
-     * |                                                ______                           ______                       |*
-     * | <-  currentPage / pageMax ->   |  Go to page |______| [Go]   |  Go to offset |______| [Go] | Lines per page  |*
-     * |______________________________________________________________________________________________________________|*
+     * DETAIL PANE                                                                                                     *
      *                                                                                                                 *
      ******************************************************************************************************************/
 
     /**
-     * The toolbar used to change pages
+     * We have to override the parent method to take into account the modified pages
+     * @param linesPerPage
      */
-    private ToolBar toolBar;
-
-    public ToolBar getToolBar() {
-        return toolBar;
+    @Override
+    public void setLinesPerPage(int linesPerPage) {
+        this.linesPerPage = linesPerPage;
+        linesPerPageTextField.setText(String.valueOf(linesPerPage));
+        setPageMax(offsetMax);
+        setPage(offset);
+        setModifiedPages(hexDiff.getModifiedOffsets());
     }
 
-    public void setToolBar(ToolBar toolBar) {
-        this.toolBar = toolBar;
+    /**
+     * The list of pages that were modified
+     */
+    private ObservableList<Integer> modifiedPages;
+
+    private void setModifiedPages(SortedSet<Long> modifiedOffsets){
+        modifiedPages.clear();
+        SortedSet<Integer> pages = new TreeSet<>();
+        for(Long modOffset : modifiedOffsets){
+            int page = offsetToPage(modOffset);
+            pages.add(page);
+        }
+        modifiedPages.setAll(pages);
+    }
+
+
+    /**
+     * The list of offsets that were modified
+     */
+    private ObservableList<String> modifiedOffsets;
+
+    private void setModifiedOffsets(SortedSet<Long> modifiedOffsets){
+        this.modifiedOffsets.clear();
+        int previousPage = 0;
+        for(Long modOffset : modifiedOffsets){
+            int page = offsetToPage(modOffset);
+            if(page!=previousPage){
+                this.modifiedOffsets.add(String.format("%06X", modOffset));
+            }
+            previousPage = page;
+        }
+        setModifiedPages(modifiedOffsets);
     }
 
     /**
-     * The current page displayed in the toolbar
+     * Initialize the detail pane
      */
-    private Label currentPageLabel;
+    private void initDetailPane() {
+        modifiedPages = FXCollections.observableArrayList();
+        modifiedOffsets = FXCollections.observableArrayList();
+
+        VBox detailPane = new VBox();
+
+        /* List of modified pages and modified offsets */
+        HBox modifiedPagesHbox = new HBox();
+        HBox modifiedOffsetsHbox = new HBox();
+        modifiedPagesHbox.setSpacing(10);
+        modifiedOffsetsHbox.setSpacing(10);
+        modifiedPagesHbox.setAlignment(Pos.BASELINE_CENTER);
+        modifiedOffsetsHbox.setAlignment(Pos.BASELINE_CENTER);
+
+        ListView<Integer> modifiedPagesList = new ListView<>(modifiedPages);
+        ListView<String> modifiedOffsetsList = new ListView<>(modifiedOffsets);
+        modifiedPagesList.setOrientation(Orientation.HORIZONTAL);
+        modifiedOffsetsList.setOrientation(Orientation.HORIZONTAL);
+        modifiedPagesList.setMaxHeight(55);
+        modifiedOffsetsList.setMaxHeight(55);
+        HBox.setHgrow(modifiedPagesList, Priority.ALWAYS);
+        HBox.setHgrow(modifiedOffsetsList, Priority.ALWAYS);
+        modifiedPagesList.setCellFactory(param -> new ModifiedPageCell());
+        modifiedOffsetsList.setCellFactory(param -> new ModifiedOffsetCell());
+
+        Label modifiedPagesLabel =   new Label("Modified pages  ");
+        Label modifiedOffsetsLabel = new Label("Modified offsets");
+        modifiedPagesLabel.setAlignment(Pos.BASELINE_CENTER);
+        modifiedOffsetsLabel.setAlignment(Pos.BASELINE_CENTER);
+
+        modifiedPagesHbox.getChildren().addAll(modifiedPagesLabel, modifiedPagesList);
+        modifiedOffsetsHbox.getChildren().addAll(modifiedOffsetsLabel, modifiedOffsetsList);
+        VBox modifiedBookmarks = new VBox(modifiedPagesHbox, modifiedOffsetsHbox);
+        modifiedBookmarks.setSpacing(10);
+        modifiedBookmarks.setFillWidth(true);
+        modifiedBookmarks.setMaxHeight(120);
+        VBox.setVgrow(modifiedBookmarks, Priority.NEVER);
+
+
+        detailPane.getChildren().add(modifiedBookmarks);
+        detailPane.setSpacing(10);
+        detailPane.setPadding(new Insets(20));
+        masterDetailPane.setDetailNode(detailPane);
+    }
 
     /**
-     * The last page that can be displayed
+     * Allows the user to go to a modified page by double clicking on the item
      */
-    private Label lastPageLabel;
+    private class ModifiedPageCell extends ListCell<Integer> {
+
+        public ModifiedPageCell(){}
+
+        @Override
+        protected void updateItem(Integer item, boolean empty){
+            super.updateItem(item, empty);
+            if(item==null || empty){
+                setText("");
+            } else {
+                setText(String.valueOf(item));
+                this.setOnMouseClicked(event -> {
+                    if(event.getClickCount()>=2){
+                        gotoPage(item);
+                    }
+                });
+            }
+        }
+    }
 
     /**
-     * The number of lines displayed per page
+     * Allows the user to go to the page of a modified offset by double clicking on the offset
      */
-    private TextField linesPerPageTextField;
+    private class ModifiedOffsetCell extends ListCell<String> {
 
-    /**
-     * Initialize the toolbar
-     * @return the initialized toolbar
-     */
-    private ToolBar initToolBar() {
-        ToolBar toolBar = new ToolBar();
-
-        //Page indicator
-        IconButton previousPageBtn = new IconButton();
-        previousPageBtn.setIcon("CHEVRON_LEFT");
-        HBox pageIndicator = new HBox();
-        currentPageLabel  = new Label();
-        lastPageLabel = new Label();
-        IconButton nextPageBtn = new IconButton();
-        nextPageBtn.setIcon("CHEVRON_RIGHT");
-        pageIndicator.getChildren().addAll(currentPageLabel, lastPageLabel);
-        pageIndicator.setAlignment(Pos.CENTER);
-        toolBar.getItems().addAll(previousPageBtn, pageIndicator, nextPageBtn, new Separator());
-
-        //Go to page
-        Label gotoPageLabel = new Label("Go to page");
-        TextField gotoPageTxt = new TextField();
-        gotoPageTxt.setPrefWidth(50);
-        gotoPageTxt.setAlignment(Pos.BASELINE_RIGHT);
-        Button gotoPageBtn = new Button("Go");
-        toolBar.getItems().addAll(gotoPageLabel, gotoPageTxt, gotoPageBtn, new Separator());
-
-        //Go to offset
-        Label gotoOffsetLabel = new Label("Go to offset");
-        TextField gotoOffsetTxt = new TextField();
-        gotoOffsetTxt.setPromptText("Offset in hex");
-        gotoOffsetTxt.setAlignment(Pos.BASELINE_RIGHT);
-        Button gotoOffsetBtn = new Button("Go");
-        toolBar.getItems().addAll(gotoOffsetLabel, gotoOffsetTxt, gotoOffsetBtn, new Separator());
-
-        //Set lines per page
-        Label linesPerPageLabel = new Label("Lines per page");
-        linesPerPageTextField = new TextField();
-        linesPerPageTextField.setAlignment(Pos.BASELINE_RIGHT);
-        linesPerPageTextField.setPrefWidth(40);
-        toolBar.getItems().addAll(linesPerPageLabel, linesPerPageTextField, new Separator());
-
-        //Zoom
-        IconButton zoomInBtn = new IconButton();
-        zoomInBtn.setIcon("SEARCH_PLUS");
-        IconButton zoomOutBtn = new IconButton();
-        zoomOutBtn.setIcon("SEARCH_MINUS");
-        toolBar.getItems().addAll(zoomOutBtn, zoomInBtn);
-
-        //Set actions
-        previousPageBtn.setOnAction(event -> previousPage());
-        nextPageBtn.setOnAction(event -> nextPage());
-        gotoPageTxt.setOnAction(event -> gotoPage(Integer.parseInt(gotoPageTxt.getText())));
-        gotoPageBtn.setOnAction(event -> gotoPage(Integer.parseInt(gotoPageTxt.getText())));
-        gotoOffsetTxt.setOnAction(event -> gotoOffset(Long.parseLong(gotoOffsetTxt.getText(), 16)));
-        gotoOffsetBtn.setOnAction(event -> gotoOffset(Long.parseLong(gotoOffsetTxt.getText(), 16)));
-        linesPerPageTextField.setOnAction(event1 -> {
-            setLinesPerPage(Integer.valueOf(linesPerPageTextField.getText()));
-            reloadWebViews();
-        });
-        zoomInBtn.setOnAction(event -> zoomIn());
-        zoomOutBtn.setOnAction(event -> zoomOut());
-        return toolBar;
+        public ModifiedOffsetCell(){}
+        @Override
+        protected void updateItem(String item, boolean empty){
+            super.updateItem(item, empty);
+            if(item==null || empty){
+                setText("");
+            } else {
+                setText(String.valueOf(item));
+                this.setOnMouseClicked(event -> {
+                    if(event.getClickCount()>=2){
+                        long offset = Long.parseLong(item, 16);
+                        int page = offsetToPage(offset);
+                        gotoPage(page);
+                    }
+                });
+            }
+        }
     }
 
     /*******************************************************************************************************************
@@ -309,62 +311,22 @@ public class HexDiffBrowser extends AnchorPane {
      *                                                                                                                 *
      ******************************************************************************************************************/
 
-    /**
-     * Go to the hex dump next page
-     */
-    private void nextPage(){
-        long newOffset = offset + linesPerPage*32;
-        if(newOffset<offsetMax) {
-            setOffset(offset + linesPerPage*32);
-            reloadWebViews();
-        }
-    }
-
-    /**
-     * Go to the previous hex dump page
-     */
-    private void previousPage(){
-        if(offset>=linesPerPage*32){
-           setOffset(offset - linesPerPage*32);
-            reloadWebViews();
-        }
-    }
-
-    /**
-     * Go to the specified offset
-     * @param newOffset    The offset to use as a start point when loading the hex view
-     */
-    private void gotoOffset(long newOffset){
-        if(newOffset<offsetMax && newOffset>=0){
-            setOffset(newOffset);
-            reloadWebViews();
-        }
-    }
-
-    /**
-     * Go to the specified page
-     * @param page  The page to load in the hex view
-     */
-    private void gotoPage(int page) {
-        if(page<=pageMax && page>0){
-            setPage(page);
-            reloadWebViews();
-        }
-    }
 
     /**
      * Reload the hex view
      */
-    private void reloadWebViews(){
-        HexDiff diff = new HexDiff(referenceFile, comparedFile, offset, linesPerPage);
-        this.referenceView.loadLines(diff, true);
-        this.comparedView.loadLines(diff, false);
+    protected void reloadWebView(){
+        try {
+            hexDiff.loadDiff(offset, linesPerPage);
+        } catch (IOException ignored) {}
+        this.referenceView.loadLines(hexDiff, true);
+        this.comparedView.loadLines(hexDiff, false);
     }
 
     /**
      * Zoom in : enlarge the webview's font
      */
-    private void zoomIn(){
+    protected void zoomIn(){
         Double currentZoom = referenceView.getWebView().getZoom();
         referenceView.getWebView().zoomProperty().setValue(currentZoom + ZOOM_FACTOR);
         comparedView.getWebView().zoomProperty().setValue(currentZoom + ZOOM_FACTOR);
@@ -374,11 +336,12 @@ public class HexDiffBrowser extends AnchorPane {
     /**
      * Zoom out : shrink the webview's font
      */
-    private void zoomOut(){
+    protected void zoomOut(){
         Double currentZoom = referenceView.getWebView().getZoom();
         referenceView.getWebView().zoomProperty().setValue(currentZoom - ZOOM_FACTOR);
         comparedView.getWebView().zoomProperty().setValue(currentZoom - ZOOM_FACTOR);
     }
+
 
 
 }
