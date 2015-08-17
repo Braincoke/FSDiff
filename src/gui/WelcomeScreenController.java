@@ -1,7 +1,7 @@
 package gui;
 
 
-import gui.comparison.ComparisonWindowController;
+import gui.loaders.LoadingFSCXController;
 import gui.wizard.hash.HashWizard;
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
@@ -36,13 +36,11 @@ public class WelcomeScreenController extends Controller {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File system comparison", "*.fscx"));
         File file = fileChooser.showOpenDialog(application.getStage());
         if(file!=null) {
-            ComparisonWindowController comparisonWindowController;
+            LoadingFSCXController loadingController;
             try {
-                comparisonWindowController = (ComparisonWindowController) application.replaceSceneContent("comparison/ComparisonWindow.fxml");
-                application.getStage().setWidth(ComparisonWindowController.INTERFACE_WIDTH);
-                application.getStage().setHeight(ComparisonWindowController.INTERFACE_HEIGHT);
-                comparisonWindowController.setApplication(application);
-                comparisonWindowController.initFromXML(file.toPath());
+                loadingController = (LoadingFSCXController) application.replaceSceneContent("loaders/LoadingFSCX.fxml");
+                loadingController.setApplication(application);
+                loadingController.start(file.getPath());
             } catch (Exception e) {
                 e.printStackTrace();
             }

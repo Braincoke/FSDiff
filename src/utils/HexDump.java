@@ -46,7 +46,7 @@ public class HexDump {
             for(int i=size; i<nbLines; i++) {
                 hexDumpLines.add(new HexDumpLine(ERROR_OFFSET, "..IO.EXCEPTION..", "..IO.EXCEPTION.."));
             }
-            Logger.getLogger(HexDump.class.getName()).log(Level.WARNING, "Error when loading the file : ", e);
+            Logger.getLogger(HexDump.class.getName()).log(Level.WARNING, "Error when loading the file : " + file.getPath(), e);
         }
         return hexDumpLines;
     }

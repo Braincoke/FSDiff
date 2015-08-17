@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <MenuBar xmlns:fx="http://javafx.com/fxml" id="menuBar" fx:id="menuBar"
-         fx:controller="gui.MenuBarController" xmlns="http://javafx.com/javafx/8">
+         fx:controller="gui.comparison.MenuBarController" xmlns="http://javafx.com/javafx/8">
     <menus>
         <Menu mnemonicParsing="false" text="File">
             <items>

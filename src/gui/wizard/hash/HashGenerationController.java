@@ -1,6 +1,5 @@
 package gui.wizard.hash;
 
-import core.FSXmlHandler;
 import core.FileSystemHash;
 import core.HashCrawler;
 import gui.components.TextProgressBar;
@@ -10,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
+import loaders.FSXmlHandler;
 
 import java.text.DecimalFormat;
 import java.util.List;

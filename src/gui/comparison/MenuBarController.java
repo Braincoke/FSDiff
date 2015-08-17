@@ -1,6 +1,7 @@
-package gui;
+package gui.comparison;
 
-import gui.comparison.ComparisonWindowController;
+import gui.Controller;
+import gui.NewComparisonProjectController;
 import gui.wizard.hash.HashWizard;
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;

@@ -1,11 +1,9 @@
 package gui.comparison;
 
-import core.FSXmlHandler;
 import core.FileSystemComparison;
 import core.FileSystemHash;
 import core.PathComparison;
 import gui.Controller;
-import gui.MenuBarController;
 import gui.wizard.comparison.ComparisonWizard;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
@@ -14,6 +12,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import loaders.FSXmlHandler;
 import org.jdom2.JDOMException;
 
 import java.io.File;
@@ -191,6 +190,22 @@ public class ComparisonWindowController extends Controller {
         }
     }
 
+    /**
+     * Initialise the comparison window from a FileSystemComparison object
+     * @param comparison    The object holding the comparison
+     * @param fscx          Path to the saved comparison or the output file
+     */
+    public void initWindow(FileSystemComparison comparison, String fscx){
+        this.comparison = comparison;
+        this.outputFile = Paths.get(fscx);
+        this.initDirectoryTree();
+        leftMenuController.setWindowController(this);
+        breadcrumbsController.setWindowController(this);
+        bottomPaneController.setWindowController(this);
+        toolbarController.setWindowController(this);
+        dataPaneController.setWindowController(this);
+        menuBarController.setWindowController(this);
+    }
 
 
     /**

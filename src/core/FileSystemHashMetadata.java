@@ -23,7 +23,7 @@ public class FileSystemHashMetadata {
      *                                                                                                                 *
      ******************************************************************************************************************/
 
-    FileSystemHashMetadata(HashMap<String, String> metadata) {
+    public FileSystemHashMetadata(HashMap<String, String> metadata) {
         name = metadata.get("name");
         String datetimeString = metadata.get("date") + "_" + metadata.get("time");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
@@ -43,7 +43,7 @@ public class FileSystemHashMetadata {
         duration = Duration.parse(metadata.get("duration"));
     }
 
-    FileSystemHashMetadata(FileSystemHash fileSystemHash) {
+    public FileSystemHashMetadata(FileSystemHash fileSystemHash) {
         name = fileSystemHash.getName();
         datetime = fileSystemHash.getDatetime();
         fileSystem = fileSystemHash.getFileSystem();

@@ -1,12 +1,12 @@
 package gui.wizard.comparison;
 
-import core.FSXmlHandler;
 import core.FileSystemComparison;
 import core.FileSystemHash;
 import core.FileSystemInput;
 import gui.Main;
 import gui.comparison.ComparisonWindowController;
 import gui.wizard.Wizard;
+import loaders.FSXmlHandler;
 import org.jdom2.JDOMException;
 
 import java.io.IOException;
