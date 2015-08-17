@@ -25,7 +25,7 @@ public enum InputType {
      * When selecting an InputType in the ComboBox, the ComboBox will use toString() to display
      * the description of the selected InputType.
      * This is an ugly override but at the moment I could not find any other way of doing it.
-     * @return
+     * @return      The description of the input type
      */
     @Override
     public String toString(){

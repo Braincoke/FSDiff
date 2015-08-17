@@ -129,7 +129,7 @@ public class PathComparison implements Comparable<PathComparison> {
     }
 
     /**
-     * @param comparisonStatus
+     * @param comparisonStatus  The comparison status to query
      * @return The count of the comparison status
      */
     public int getCount(ComparisonStatus comparisonStatus){
@@ -140,15 +140,10 @@ public class PathComparison implements Comparable<PathComparison> {
         }
     }
 
-    public String getStringCount(ComparisonStatus comparisonStatus) {
-        return String.valueOf(getCount(comparisonStatus));
-    }
-
     @Override
     public int compareTo(PathComparison o) {
         return path.compareTo(o.getPath());
     }
-
 
 
     public int comparePath(PathComparison potentialParent) {

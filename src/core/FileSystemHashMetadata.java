@@ -1,5 +1,7 @@
 package core;
 
+import gui.Main;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
@@ -9,13 +11,11 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class only records the metadata of a performed file system hash
  */
 public class FileSystemHashMetadata {
-    protected static final Logger log = Logger.getLogger("cliLogger");
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -23,6 +23,10 @@ public class FileSystemHashMetadata {
      *                                                                                                                 *
      ******************************************************************************************************************/
 
+    /**
+     * Create a FileSystemHash metadata from the given metadata
+     * @param metadata  Metadata of the file system hash
+     */
     public FileSystemHashMetadata(HashMap<String, String> metadata) {
         name = metadata.get("name");
         String datetimeString = metadata.get("date") + "_" + metadata.get("time");
@@ -30,7 +34,8 @@ public class FileSystemHashMetadata {
         try {
             datetime = dateFormat.parse(datetimeString);
         } catch (ParseException e) {
-            log.log(Level.WARNING, "Could not retrieve date and time of creation", e);
+            Main.logger.log(Level.WARNING, "Could not retrieve date and time of creation when creating file system hash" +
+                    "metadata", e);
         }
         fileSystem = metadata.get("fileSystem");
         OS = metadata.get("OS");
@@ -43,6 +48,10 @@ public class FileSystemHashMetadata {
         duration = Duration.parse(metadata.get("duration"));
     }
 
+    /**
+     * Create FileSystemHashMetadata from the metadata in a FileSystemHash
+     * @param fileSystemHash    The FileSystemHash from where to extract the metadata
+     */
     public FileSystemHashMetadata(FileSystemHash fileSystemHash) {
         name = fileSystemHash.getName();
         datetime = fileSystemHash.getDatetime();
@@ -90,6 +99,7 @@ public class FileSystemHashMetadata {
     public Duration getDuration() {
         return duration;
     }
+
     /**
      * The file system
      */
@@ -120,6 +130,10 @@ public class FileSystemHashMetadata {
 
     public Path getRootPath() {
         return fileSystemInput.getPath();
+    }
+
+    public void setRootPath(String rootPath){
+        fileSystemInput.setPath(rootPath);
     }
 
     public InputType getInputType() {
@@ -153,6 +167,11 @@ public class FileSystemHashMetadata {
         return errorCount;
     }
 
+    /**
+     * Format the "duration" attribute in a human readable format :
+     *  3 days 1 h 10 min 43 s 331 ms
+     * @return  The formatted duration
+     */
     public String formatDuration() {
         long millis = duration.toMillis()%1000;
         long seconds = duration.getSeconds()%60;
@@ -163,18 +182,22 @@ public class FileSystemHashMetadata {
         if(days>0)
             output += days + " days ";
         if(hours>0 || days >0)
-            output += hours + "h";
+            output += hours + " h";
         if(minutes>0 || days>0 || hours >0)
-            output += minutes + "min";
+            output += minutes + " min";
         if(seconds>0 || days>0 || hours>0 || minutes>0)
-            output += seconds + "s";
+            output += seconds + " s";
         if(millis>0 || days>0 || hours>0 || minutes>0 || seconds>0)
-            output += millis + "ms";
+            output += millis + " ms";
         return output;
     }
 
+    /**
+     * Format the byte count in a human readable format
+     * @return  The formatted byte count
+     */
     public String formatByteCount() {
-        String result = "";
+        String result;
         DecimalFormat df = new DecimalFormat("#.##");
         double kilobyte = 1024;
         double byteCount = this.byteCount;

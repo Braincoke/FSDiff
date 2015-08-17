@@ -1,7 +1,6 @@
 package core;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -28,32 +27,22 @@ public class HashGenerator {
      * @param file      the input file to hash
      * @param algorithm the algorithm to use to hash the file (md5, sha-1 ...)
      * @return          a string representing the hash in hexadecimal
-     * @throws HashGenerationException
      */
     private static String hashFile(Path file, String algorithm)
-            throws HashGenerationException {
-        try {
-            FileInputStream inputStream = new FileInputStream(file.toFile());
-            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            throws IOException, NoSuchAlgorithmException {
+        FileInputStream inputStream = new FileInputStream(file.toFile());
+        MessageDigest digest = MessageDigest.getInstance(algorithm);
 
-            byte[] bytesBuffer = new byte[1024];
-            int bytesRead = -1;
+        byte[] bytesBuffer = new byte[1024];
+        int bytesRead = -1;
 
-            while ((bytesRead = inputStream.read(bytesBuffer)) != -1) {
-                digest.update(bytesBuffer, 0, bytesRead);
-            }
-
-            byte[] hashedBytes = digest.digest();
-
-            return convertByteArrayToHexString(hashedBytes);
-
-        } catch (FileNotFoundException e) {
-            throw new HashGenerationException(
-                    "File not found", e);
-        } catch (NoSuchAlgorithmException | IOException e) {
-            e.printStackTrace();
+        while ((bytesRead = inputStream.read(bytesBuffer)) != -1) {
+            digest.update(bytesBuffer, 0, bytesRead);
         }
-        return "Error";
+
+        byte[] hashedBytes = digest.digest();
+
+        return convertByteArrayToHexString(hashedBytes);
     }
 
     /** Converts a byte array to a string representing the byte array in hexadecimal
@@ -74,9 +63,8 @@ public class HashGenerator {
      *
      * @param file
      * @return the hash as a string in hexadecimal
-     * @throws HashGenerationException
      */
-    public static String generateMD5(Path file) throws HashGenerationException {
+    public static String generateMD5(Path file) throws IOException, NoSuchAlgorithmException {
         return hashFile(file, "MD5");
     }
 
@@ -84,9 +72,8 @@ public class HashGenerator {
      *
      * @param file
      * @return the hash as a string in hexadecimal
-     * @throws HashGenerationException
      */
-    public static String generateSHA1(Path file) throws HashGenerationException {
+    public static String generateSHA1(Path file) throws  IOException, NoSuchAlgorithmException {
         return hashFile(file, "SHA-1");
     }
 
@@ -94,9 +81,8 @@ public class HashGenerator {
      *
      * @param file
      * @return the hash as a string in hexadecimal
-     * @throws HashGenerationException
      */
-    public static String generateSHA256(Path file) throws HashGenerationException {
+    public static String generateSHA256(Path file) throws IOException, NoSuchAlgorithmException {
         return hashFile(file, "SHA-256");
     }
 
@@ -104,9 +90,8 @@ public class HashGenerator {
      *
      * @param file The file to be hashed
      * @return A list of the hashes of the files [MD5, SHA1, SHA256]
-     * @throws HashGenerationException
      */
-    public static ArrayList<String> generateHashesList(Path file) throws HashGenerationException {
+    public static ArrayList<String> generateHashesList(Path file) throws IOException, NoSuchAlgorithmException {
         ArrayList<String> hashes = new ArrayList<>();
         hashes.add(0, generateMD5(file));
         hashes.add(0, generateSHA1(file));
@@ -114,13 +99,13 @@ public class HashGenerator {
         return hashes;
     }
 
-    public static HashedFile generateHashedFile(Path file) throws HashGenerationException {
+    public static HashedFile generateHashedFile(Path file) throws  IOException, NoSuchAlgorithmException {
         HashedFile hashedFile = new HashedFile(file);
         hashedFile.setMd5(generateMD5(file));
         return hashedFile;
     }
 
-    public HashedFile getHashedFile(Path file) throws HashGenerationException {
+    public HashedFile getHashedFile(Path file) throws IOException, NoSuchAlgorithmException {
         HashedFile hashedFile = new HashedFile(file);
         if(md5)
             hashedFile.setMd5(generateMD5(file));

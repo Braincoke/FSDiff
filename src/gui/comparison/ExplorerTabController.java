@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 
 /**
+ * Controller for the tab showing the directory tree
  */
 public class ExplorerTabController extends Controller {
 

@@ -1,7 +1,14 @@
 package core;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
+/**
+ * Class holding the data about a file system that the user wants to hash.
+ * If the InputType is FSHX then the hash are stored in a FSHX file.
+ * If the InputType is LOGICAL then the user passed a path to a directory to hash.
+ * TODO Add ability to use RAW files
+ */
 public class FileSystemInput {
 
 
@@ -38,6 +45,11 @@ public class FileSystemInput {
 
     public Path getPath() {
         return path;
+    }
+
+
+    public void setPath(String path) {
+        this.path = Paths.get(path);
     }
 
     /**

@@ -1,5 +1,6 @@
 package core;
 
+import gui.Main;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.concurrent.Service;
@@ -11,16 +12,17 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.TreeMap;
+import java.util.logging.Level;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 
 /**
- * Crawls a directory and generate
- * a hash of every file inside.
- * Extends the Service class to run as a background task of a JavaFX application
+ * Crawls a directory and generate a hash of every file inside.
+ * Extends the Service class to run as a background task of the FX Application Thread safely
  */
 public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
 
@@ -178,13 +180,8 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
                 visitedFileProperty.setValue(file.toString());
             });
 
-        } catch (HashGenerationException e) {
-            errorCount++;
-            Platform.runLater(() -> {
-                errorCountProperty.set(errorCount);
-                visitedCountProperty.set(visitedCount);
-            });
-            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            Main.logger.log(Level.WARNING, "Tried to use an unknown algorithm to generate digest", e);
         }
         return CONTINUE;
     }
@@ -247,7 +244,7 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
                 LocalTime endTime = LocalTime.now();
                 duration = Duration.between(startTime, endTime);
             } catch (IOException e) {
-                e.printStackTrace();
+                Main.logger.log(Level.WARNING, "Error when hashing the files", e);
             }
             return null;
         }

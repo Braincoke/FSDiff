@@ -19,7 +19,15 @@ public class FileSystemComparison {
      *                                                                                                                 *
      ******************************************************************************************************************/
 
-
+    /**
+     * Create a FileSystemComparison
+     * @param referenceFS   The metadata of the reference file system
+     * @param comparedFS    The metadata of the compared file system
+     * @param metadata      The metadata of the comparison
+     * @param datetime      The date and time the comparison was generated
+     * @param set           The set of compared paths
+     * @param name          The name given to the comparison
+     */
     public FileSystemComparison(FileSystemHashMetadata referenceFS,
                                 FileSystemHashMetadata comparedFS,
                                 List<Integer> metadata,
@@ -38,12 +46,12 @@ public class FileSystemComparison {
     }
 
     /**
-     *
-     * @param referenceFS
-     * @param comparedFS
-     * @param metadata
-     * @param set
-     * @param name
+     * Create a FileSystemComparison
+     * @param referenceFS   The metadata of the reference file system
+     * @param comparedFS    The metadata of the compared file system
+     * @param metadata      The metadata of the comparison
+     * @param set           The set of compared paths
+     * @param name          The name given to the comparison
      */
     public FileSystemComparison(FileSystemHashMetadata referenceFS,
                                 FileSystemHashMetadata comparedFS,
@@ -157,7 +165,7 @@ public class FileSystemComparison {
     /**
      * As a FileSystemHash object only contains the hashes of files
      * we need to recreate the directory tree from the paths of the files
-     * @param set
+     * @param set   The set of compared paths
      */
     private void initComparisonSet(TreeSet<PathComparison> set) {
         List<Path> pathGenealogyList = new ArrayList<>();
@@ -193,18 +201,21 @@ public class FileSystemComparison {
                 pathComparison.setParent(directoryComparison);
             }
             //Trim the genealogy lists for the new branch
-            //TODO prettify the code
-            try {
-                trimList(pathGenealogyList, 0, end);
-                trimList(directoryComparisonList, 0, end);
-            }catch (StackOverflowError e){
-                e.printStackTrace();
-                System.exit(1);
-            }
+            trimList(pathGenealogyList, 0, end);
+            trimList(directoryComparisonList, 0, end);
+
         }
     }
 
 
+    /**
+     * Trim the given list from "start" to "end".
+     * Example: If the list is [ A, B, C, D, E , F]
+     * then trim(list, 1, 4) will output [B, C, D, E]
+     * @param list      The list to trim
+     * @param start     The index indicating the beginning of the trimmed list (included)
+     * @param end       The index indicating the end of the trimmed list (included)
+     */
     private void trimList(List list, int start, int end){
         int lastIndex = list.size()-1;
         int startIndex = start;

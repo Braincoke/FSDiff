@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
@@ -47,6 +48,10 @@ public class DataPaneController extends Controller {
     private double[] dataDividerPositions;
     private double[] leftDividerPositions;
 
+    /**
+     * Loads the required hex view according to the item status
+     * @param treeItem  The item holding the PathComparison
+     */
     public void updateHexViewer(ComparisonTreeItem treeItem){
         Path refPath = windowController.getFileSystemComparison().getReferenceFS().getRootPath();
         Path comPath = windowController.getFileSystemComparison().getComparedFS().getRootPath();
@@ -76,6 +81,10 @@ public class DataPaneController extends Controller {
         }
     }
 
+    /**
+     * Expand the hex view to the total size of the window or reduce it to its original size
+     * //TODO Handle fullscreen event
+     */
     public void toggleExpand() {
         if(toggleExpandButton.getIcon().compareTo("EXPAND")==0){
             dataDividerPositions = dataSplitPane.getDividerPositions();
@@ -109,10 +118,15 @@ public class DataPaneController extends Controller {
     }
 
 
+    /**
+     * Initialise the tableView
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        pathColumn.setCellValueFactory(new PathCellValueFactory());
-        statusColumn.setCellValueFactory(new StatusCellValueFactory());
+        pathColumn.setCellValueFactory(new CustomCellValueFactory());
+        statusColumn.setCellValueFactory(new CustomCellValueFactory());
         pathColumn.setCellFactory(new PathCellFactory());
         statusColumn.setCellFactory(new StatusCellFactory());
         //The path column automatically takes the remaining room to display its contents
@@ -141,8 +155,10 @@ public class DataPaneController extends Controller {
 
     }
 
-
-    class StatusCellValueFactory implements  Callback<TableColumn.CellDataFeatures<ComparisonTreeItem, ComparisonTreeItem>,
+    /**
+     * Custom cell value factory to be sure to have TreeItems in each cell
+     */
+    class CustomCellValueFactory implements  Callback<TableColumn.CellDataFeatures<ComparisonTreeItem, ComparisonTreeItem>,
             ObservableValue<ComparisonTreeItem>> {
 
         @Override
@@ -151,20 +167,14 @@ public class DataPaneController extends Controller {
         }
     }
 
-    class PathCellValueFactory implements Callback<TableColumn.CellDataFeatures<ComparisonTreeItem, ComparisonTreeItem>,
-            ObservableValue<ComparisonTreeItem>> {
-
-        @Override
-        public ObservableValue<ComparisonTreeItem> call(TableColumn.CellDataFeatures<ComparisonTreeItem, ComparisonTreeItem> param) {
-            return new ReadOnlyObjectWrapper<>(param.getValue());
-        }
-    }
-
+    /**
+     * Custom Cell factory that displays the status of the item
+     */
     class StatusCellFactory implements Callback<TableColumn, TableCell> {
 
         @Override
         public TableCell call(TableColumn param) {
-            TableCell cell = new TableCell<ComparisonTreeItem, ComparisonTreeItem>() {
+            TableCell<ComparisonTreeItem, ComparisonTreeItem> cell = new TableCell<ComparisonTreeItem, ComparisonTreeItem>() {
                 @Override
                 protected void updateItem(ComparisonTreeItem item, boolean empty){
                     super.updateItem(item, empty);
@@ -180,15 +190,19 @@ public class DataPaneController extends Controller {
                     }
                 }
             };
+
             return cell;
         }
     }
 
+    /**
+     * Custom cell factory that displays the path of the item and change the background color according to its status
+     */
     class PathCellFactory implements Callback<TableColumn, TableCell> {
 
         @Override
         public TableCell call(TableColumn param) {
-            TableCell cell = new TableCell<ComparisonTreeItem, ComparisonTreeItem>() {
+            TableCell<ComparisonTreeItem, ComparisonTreeItem> cell = new TableCell<ComparisonTreeItem, ComparisonTreeItem>() {
                 @Override
                 protected void updateItem(ComparisonTreeItem item, boolean empty) {
                     super.updateItem(item, empty);
@@ -221,8 +235,9 @@ public class DataPaneController extends Controller {
                 }
             };
 
+            //TODO add context menu (menus : compare to..., view hex dump, ...)
             cell.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-                if (event.getClickCount() > 1) {
+                if (event.getClickCount() > 1 && event.getButton()== MouseButton.PRIMARY) {
                     TableCell c = (TableCell) event.getSource();
                     ComparisonTreeItem comparisonTreeItem = (ComparisonTreeItem) c.getItem();
                     windowController.setSelectedPath(comparisonTreeItem);

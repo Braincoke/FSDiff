@@ -1,26 +1,29 @@
 package gui.comparison;
 
-import core.FileSystemComparison;
-import core.FileSystemHash;
-import core.PathComparison;
+import core.*;
 import gui.Controller;
+import gui.Main;
 import gui.wizard.comparison.ComparisonWizard;
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import loaders.FSXmlHandler;
 import org.jdom2.JDOMException;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.TreeSet;
+import java.util.logging.Level;
 
 
 public class ComparisonWindowController extends Controller {
@@ -167,6 +170,7 @@ public class ComparisonWindowController extends Controller {
         dataPaneController.setWindowController(this);
         menuBarController.setWindowController(this);
         saveFSC();
+        checkRootPaths();
     }
 
     /**
@@ -174,7 +178,6 @@ public class ComparisonWindowController extends Controller {
      * @param fscx Path to the saved comparison (in a XML format)
      */
     public void initFromXML(Path fscx){
-        //TODO
         try {
             this.comparison = FSXmlHandler.loadFileSystemComparison(fscx.toString());
             this.outputFile = fscx;
@@ -185,8 +188,9 @@ public class ComparisonWindowController extends Controller {
             toolbarController.setWindowController(this);
             dataPaneController.setWindowController(this);
             menuBarController.setWindowController(this);
+            checkRootPaths();
         } catch (JDOMException | IOException e) {
-            e.printStackTrace();
+            Main.logger.log(Level.WARNING, "Could not load FSCX file", e);
         }
     }
 
@@ -205,6 +209,7 @@ public class ComparisonWindowController extends Controller {
         toolbarController.setWindowController(this);
         dataPaneController.setWindowController(this);
         menuBarController.setWindowController(this);
+        checkRootPaths();
     }
 
 
@@ -291,14 +296,110 @@ public class ComparisonWindowController extends Controller {
                 application.getStage().setHeight(height);
                 comparisonWindowController.setApplication(application);
                 comparisonWindowController.initFromXML(file.toPath());
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException e) {
+                Main.logger.log(Level.WARNING, "Could not open requested FSCX file", e);
             }
         }
     }
 
     public void saveFSC() {
         FSXmlHandler.saveToXML(comparison, getOutputFile());
+    }
+
+
+    /**
+     * Verify if the root paths for the reference file system and the compared one are still pointing to the correct
+     * directory. If not the user will be asked to rebase the faulty root.
+     */
+    public void checkRootPaths(){
+        Path referenceRootPath = comparison.getReferenceFS().getRootPath();
+        Path comparedRootPath = comparison.getComparedFS().getRootPath();
+        InputType referenceInputType = comparison.getReferenceFS().getInputType();
+        InputType comparedInputType = comparison.getComparedFS().getInputType();
+
+        //If the input type was a directory, check if that directory still exists and if we can find files in it
+        if(referenceInputType==InputType.LOGICAL_DIRECTORY)
+            checkDirectory(true);
+        if(comparedInputType==InputType.LOGICAL_DIRECTORY)
+            checkDirectory(false);
+    }
+
+    /**
+     * Verify if a directory and its files are still readable
+     * @param isReference   Indicate if we are performing the check for the reference file system
+     */
+    public void checkDirectory(boolean isReference){
+        //Indicate if we have to rebase the directory
+        boolean rebase = false;
+        //To check if the directory is still present we try to open some files
+        int length = comparison.getComparison().size();
+        ArrayList<PathComparison> list = new ArrayList<>(comparison.getComparison());
+        int randomFile;
+        Path filePath;
+        for(int i = 0; i<3; i++){
+            do {
+                randomFile = (int) Math.floor((Math.random() * length));
+                filePath = list.get(randomFile).getPath();
+            } while((isReference && list.get(randomFile).getStatus()==ComparisonStatus.CREATED)
+                || (!isReference && list.get(randomFile).getStatus()==ComparisonStatus.DELETED)
+                    );
+            try {
+                if(isReference){
+                    filePath = comparison.getReferenceFS().getRootPath().resolve(filePath);
+                } else {
+                    filePath = comparison.getComparedFS().getRootPath().resolve(filePath);
+                }
+                //FIXME it appears the user may be asked to rebase the directory even if
+                //FIXME it should not be the case. The error happens randomly (probably for restricted access files)
+                FileInputStream is = new FileInputStream(filePath.toString());
+                is.close();
+            } catch (FileNotFoundException e) {
+                rebase = true;
+            } catch (IOException e) {
+                Main.logger.log(Level.WARNING,"Error when closing the file : " + filePath.toString(),e);
+            }
+        }
+        //Now we ask the user if he wants to rebase the directory
+        if(rebase)
+            rebaseDirectory(isReference);
+    }
+
+    /**
+     * We prompt the user an interface to rebase the directory
+     * @param isReference   Indicate which file system we have to rebase
+     */
+    private void rebaseDirectory(boolean isReference) {
+        String fileSystem;
+        String fileSystemPath;
+        String message;
+        if(isReference){
+            fileSystem = "reference";
+            fileSystemPath = comparison.getReferenceFS().getRootPath().toString();
+
+        } else {
+            fileSystem = "compared";
+            fileSystemPath = comparison.getComparedFS().getRootPath().toString();
+        }
+        message ="The path to the " + fileSystem + " file system seems to be obsolete ("
+                        + fileSystemPath + ")";
+        message += "\nClick \"Rebase\" to rebase the root directory or \"Ignore\" to ignore.";
+        message += "\n\nNote that you will not be able to load the hex dumps if you do not rebase the directory.";
+        ButtonType rebase = new ButtonType("Rebase", ButtonBar.ButtonData.OK_DONE);
+        ButtonType ignore = new ButtonType("Ignore", ButtonBar.ButtonData.CANCEL_CLOSE);
+        Alert warningAlert = new Alert(Alert.AlertType.WARNING, message, ignore, rebase);
+        Optional<ButtonType> result = warningAlert.showAndWait();
+        if(result.get()==rebase){
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Rebase the path for the " + fileSystem + " file system" );
+            File file = directoryChooser.showDialog(application.getStage());
+            if(file!=null){
+                if(isReference){
+                    comparison.getReferenceFS().setRootPath(file.getAbsolutePath());
+                } else {
+                    comparison.getComparedFS().setRootPath(file.getAbsolutePath());
+                }
+            }
+        }
     }
 
 }

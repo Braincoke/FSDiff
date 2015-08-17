@@ -175,4 +175,12 @@ public class ComparisonTreeItem extends TreeItem<PathComparison> {
             item.setExpanded(false);
         }
     }
+
+    public void expandBranch(){
+        for(ComparisonTreeItem item : this.getChildrenList()){
+            if(item.getChildren().size() != 0)
+                item.collapseBranch();
+            item.setExpanded(true);
+        }
+    }
 }

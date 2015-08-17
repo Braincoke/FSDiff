@@ -3,7 +3,6 @@ package gui.comparison;
 import gui.Controller;
 import gui.NewComparisonProjectController;
 import gui.wizard.hash.HashWizard;
-import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -36,10 +35,10 @@ public class MenuBarController extends Controller {
     }
 
     public void about() {
-        //TODO
+        //TODO write things about FSDiff here, add hyperlink to github page
     }
 
-    public void open(ActionEvent actionEvent) {
+    public void open() {
         windowController.openFSC();
     }
 

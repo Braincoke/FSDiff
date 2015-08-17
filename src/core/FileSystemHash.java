@@ -4,15 +4,13 @@ import javafx.concurrent.WorkerStateEvent;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Records the metadata and hashes of a performed file system hash
- * The MD5, SHA1 and SHA256 hashes of each file in the file system are saved.
+ * The MD5  hashes of each file in the file system are saved.
  */
 public class FileSystemHash extends FileSystemHashMetadata {
 
-    private Logger log = Logger.getGlobal();
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -23,8 +21,8 @@ public class FileSystemHash extends FileSystemHashMetadata {
     /**
      * Init a file system hash from the given information
      *
-     * @param metadata
-     * @param hashes
+     * @param metadata  Metadata of the file system hash
+     * @param hashes    The list of digests
      */
     public FileSystemHash(HashMap<String, String> metadata, TreeMap<Path, HashedFile> hashes) {
         super(metadata);

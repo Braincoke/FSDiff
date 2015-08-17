@@ -2,29 +2,18 @@ package gui.comparison;
 
 import core.PathComparison;
 import gui.Controller;
-import gui.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import org.controlsfx.control.MasterDetailPane;
-import org.controlsfx.glyphfont.GlyphFont;
-import org.controlsfx.glyphfont.GlyphFontRegistry;
-
-import java.io.File;
 
 /**
  * Controls the left side bar
  */
 public class LeftMenuController extends Controller {
-    static {
-        // Register a custom default font
-        GlyphFontRegistry.register("FontAwesome", Main.class.getResourceAsStream("fontawesome.ttf"), 16);
-    }
 
-
-    private GlyphFont fontAwesome = GlyphFontRegistry.font("FontAwesome");
     //Parent splitPane
     private SplitPane splitPane;
 
@@ -43,8 +32,6 @@ public class LeftMenuController extends Controller {
     private double dividerPosition;
 
     //Left Menu - Project
-    private File referenceFSFile;
-    private File comparedFSFile;
     @FXML
     private TextField referenceFSTextField;
     @FXML
@@ -78,7 +65,7 @@ public class LeftMenuController extends Controller {
 
     /**
      * Handle tab selection and collapsing / showing the sidebar
-     * @param event
+     * @param event     The event associated with the button clicked
      */
     @FXML
     public void leftMenuTabSelection(ActionEvent event) {

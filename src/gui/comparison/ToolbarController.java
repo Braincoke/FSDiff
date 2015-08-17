@@ -4,7 +4,6 @@ import core.ComparisonStatus;
 import gui.Controller;
 import gui.Main;
 import gui.components.CheckBoxMenuItem;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
@@ -22,6 +21,9 @@ public class ToolbarController extends Controller {
     public static final double TOOLBAR_HEIGHT = 28;
     public static final double SEARCHFIELD_HEIGHT = TOOLBAR_HEIGHT-4;
 
+    /**
+     * Used for the filter icon next to the search field
+     */
     static {
         // Register a custom default font
         GlyphFontRegistry.register("FontAwesome", Main.class.getResourceAsStream("fontawesome.ttf"), 16);
@@ -56,7 +58,7 @@ public class ToolbarController extends Controller {
 
     /**
      * Search and filter files accordingly to the regex and the filter options
-     * @return
+     * @return      The list of items filtered
      */
     public List<ComparisonTreeItem> search(){
         ComparisonTreeItem root = windowController.getRootTreeItem();
@@ -74,15 +76,11 @@ public class ToolbarController extends Controller {
         filterDropDown.setGraphic(fontAwesome.create(FontAwesome.Glyph.FILTER.getChar()));
     }
 
-    public double getToolbarHeight(){
-        return TOOLBAR_HEIGHT;
-    }
 
     /**
      * Trigger a search event
-     * @param actionEvent
      */
-    public void triggerSearch(ActionEvent actionEvent) {
+    public void triggerSearch() {
         windowController.search();
     }
 
@@ -94,11 +92,17 @@ public class ToolbarController extends Controller {
      *
      ******************************************************************************************************************/
 
-    public void openFSC(ActionEvent actionEvent) {
+    /**
+     * Open a FSCX file
+     */
+    public void openFSC() {
         windowController.openFSC();
     }
 
-    public void saveFSC(ActionEvent actionEvent) {
+    /**
+     * Save the comparison in the FSCX file
+     */
+    public void saveFSC() {
         windowController.saveFSC();
     }
 

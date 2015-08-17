@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -21,13 +22,14 @@ public class Main extends Application {
     private final double MINIMUM_WINDOW_WIDTH = 700.0;
     private final double MINIMUM_WINDOW_HEIGHT = 600.0;
     private Stage stage;
+    public static Logger logger = Logger.getLogger("");
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         stage = primaryStage;
         stage.setTitle("FSDiff");
         stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
@@ -57,15 +59,7 @@ public class Main extends Application {
         return null;
     }
 
-    public void gotoHashWizard() {
-
-    }
-
-    public void gotoOpenProject() {
-
-    }
-
-    public Controller replaceSceneContent(String fxml) throws Exception {
+    public Controller replaceSceneContent(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource(fxml));
@@ -81,7 +75,7 @@ public class Main extends Application {
         return controller;
     }
 
-    public void replaceSceneContent(String fxml, Controller controller) throws Exception{
+    public void replaceSceneContent(String fxml, Controller controller) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource(fxml));
@@ -95,10 +89,10 @@ public class Main extends Application {
         stage.sizeToScene();
     }
 
-    public StageController openStage(String fxml) throws Exception {
+    public StageController openStage(String fxml) throws IOException {
         return openStage(fxml, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
     }
-    public StageController openStage(String fxml, double sceneWidth, double sceneHeight) throws Exception {
+    public StageController openStage(String fxml, double sceneWidth, double sceneHeight) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource(fxml));
@@ -117,7 +111,7 @@ public class Main extends Application {
         return controller;
     }
 
-    private Initializable switchStage(String fxml) throws Exception {
+    private Initializable switchStage(String fxml) throws IOException {
         Initializable initializable = openStage(fxml);
         stage.close();
         return initializable;

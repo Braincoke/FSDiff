@@ -1,11 +1,11 @@
 package core;
 
+import gui.Main;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.logging.Level;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.TERMINATE;
@@ -145,10 +146,6 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        /*VisitFileTask task = new VisitFileTask(file);
-        new Thread(task).start();
-        TODO is this the cause of the byteCount being off?
-        */
         fileCount++;
         byteCount = byteCount + file.toFile().length();
         if(fileCount%500==0) {
@@ -162,6 +159,7 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
 
     @Override
     public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        Main.logger.log(Level.WARNING, "Failed to visit file : " + file.toString(), exc);
         return CONTINUE;
     }
 
@@ -180,32 +178,11 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
         @Override
         protected Void call() throws Exception {
             try {
-                for(Path rootPath : rootList) {
-                    File rootFile = rootPath.toFile();
+                for (Path rootPath : rootList) {
                     Files.walkFileTree(rootPath, crawler);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
-    private class VisitFileTask extends Task<Void> {
-        private Path file;
-
-        public VisitFileTask(Path file){
-            this.file = file;
-        }
-        @Override
-        protected Void call() throws Exception {
-            fileCount++;
-            byteCount = byteCount + file.toFile().length();
-            if(fileCount%500==0) {
-                Platform.runLater(() -> {
-                    fileCountProperty.set(fileCount);
-                    byteCountProperty.set(byteCount);
-                });
+            } catch (IOException exc){
+                Main.logger.log(Level.WARNING, "Error when crawling the files", exc);
             }
             return null;
         }

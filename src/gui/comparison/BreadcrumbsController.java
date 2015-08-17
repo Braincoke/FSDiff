@@ -17,9 +17,6 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import org.controlsfx.control.BreadCrumbBar;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 /**
  * Breadcrumbs for the selected file or directory
  */
@@ -31,10 +28,6 @@ public class BreadcrumbsController extends Controller{
     @FXML
     private HBox breadcrumbs;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 
     //TODO scrollable breadcrumbs for long path name
     public void setWindowController(ComparisonWindowController windowController){
