@@ -9,7 +9,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TreeItem;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.HLineTo;
@@ -26,14 +29,32 @@ public class BreadcrumbsController extends Controller{
     private BreadCrumbBar<PathComparison> breadCrumbBar;
 
     @FXML
-    private HBox breadcrumbs;
+    private ScrollPane scrollPane;
 
 
     //TODO scrollable breadcrumbs for long path name
     public void setWindowController(ComparisonWindowController windowController){
         this.windowController = windowController;
         breadCrumbBar = new BreadCrumbBar<>(windowController.getRootTreeItem());
-        breadcrumbs.getChildren().add(breadCrumbBar);
+        AnchorPane anchorPane = new AnchorPane(breadCrumbBar);
+        /* Resize the anchorPane to the breadCrumbBar width */
+        double buttonPadding = 20;
+        double charWidth = 6;
+        breadCrumbBar.selectedCrumbProperty().addListener((observable, oldValue, newValue) -> {
+            int[] l = getBreadcrumbLength();
+            anchorPane.setPrefWidth(l[0]*2*buttonPadding + l[1]*charWidth);
+            System.out.println(anchorPane.widthProperty());
+            System.out.println(scrollPane.widthProperty());
+        });
+        scrollPane.setContent(anchorPane);
+        /* Allow mouse wheel scrolling to let the user see every breadCrumb */
+        double smoothFactor = 0.1;
+        scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (event.getDeltaY() != 0) {
+                scrollPane.setHvalue(scrollPane.getHvalue() - event.getDeltaY()*smoothFactor);
+                event.consume();
+            }
+        });
         //Display path name in breadcrumbs
         breadCrumbBar.setCrumbFactory(crumb ->
                 new CustomBreadCrumbButton(crumb.getValue() != null ? crumb.getValue().getName():""));
@@ -44,6 +65,27 @@ public class BreadcrumbsController extends Controller{
     public void updateBreadcrumbs(ComparisonTreeItem node){
         breadCrumbBar.setSelectedCrumb(node);
     }
+
+
+    /**
+     * Get the number of buttons in the breadcrumb bar, and the total number of chars
+     */
+    public int[] getBreadcrumbLength(){
+        TreeItem<PathComparison> selected = breadCrumbBar.getSelectedCrumb();
+        int nbItems = 1;
+        int nbChars = selected.getValue().getPath().getFileName().toString().length();
+        TreeItem<PathComparison> parent = selected;
+        while( (selected = selected.getParent()) != null){
+            nbItems++;
+            nbChars += selected.getValue().getPath().getFileName().toString().length();
+        }
+        int[] result = new int[2];
+        result[0] = nbItems;
+        result[1] = nbChars;
+        return result;
+    }
+
+
 
     private class BreadCrumbBarCustomSkin extends BreadCrumbBarSkin<PathComparison> {
         public BreadCrumbBarCustomSkin(BreadCrumbBar<PathComparison> control) {

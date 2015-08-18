@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import loaders.FSXmlHandler;
+import loaders.FscxLoader;
+import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
 
 import java.io.File;
@@ -148,6 +150,12 @@ public class ComparisonWindowController extends Controller {
     @FXML
     private BottomPaneController bottomPaneController;
 
+    private ProgressIndicator progressIndicator;
+
+    public void setProgressIndicator(ProgressIndicator progressIndicator){
+        this.progressIndicator = progressIndicator;
+    }
+
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -282,23 +290,24 @@ public class ComparisonWindowController extends Controller {
      ******************************************************************************************************************/
 
     public void openFSC() {
-        double width = application.getStage().getWidth();
-        double height = application.getStage().getHeight();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open file");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File system comparison", "*.fscx"));
         File file = fileChooser.showOpenDialog(application.getStage());
         if (file != null) {
-            ComparisonWindowController comparisonWindowController;
-            try {
-                comparisonWindowController = (ComparisonWindowController) application.replaceSceneContent("comparison/ComparisonWindow.fxml");
-                application.getStage().setWidth(width);
-                application.getStage().setHeight(height);
-                comparisonWindowController.setApplication(application);
-                comparisonWindowController.initFromXML(file.toPath());
-            } catch (IOException e) {
-                Main.logger.log(Level.WARNING, "Could not open requested FSCX file", e);
-            }
+            FscxLoader loader = new FscxLoader(file.getPath());
+            ProgressDialog progressDialog = new ProgressDialog(loader);
+            progressDialog.setTitle("Loading");
+            progressDialog.setContentText("Please wait while your file is loading");
+            progressIndicator.progressProperty().bind(loader.progressProperty());
+            loader.setOnSucceeded(event -> {
+                try {
+                    this.initWindow(loader.getValue(), file.getPath());
+                } catch (Exception e) {
+                    Main.logger.log(Level.WARNING, "Failed to load the .fscx file : " + file.getPath());
+                }
+            });
+            loader.start();
         }
     }
 

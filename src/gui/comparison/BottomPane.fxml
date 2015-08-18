@@ -40,7 +40,7 @@
         </HBox>
         <HBox id="logInfo" fx:id="logInfo" alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" HBox.hgrow="ALWAYS">
             <children>
-            <ProgressIndicator progress="0.0" />
+            <ProgressIndicator progress="0.0" fx:id="progressIndicator" />
                 <Label id="eventLogLabel" fx:id="eventLogLabel" text="Event Log" />
             </children>
         </HBox>

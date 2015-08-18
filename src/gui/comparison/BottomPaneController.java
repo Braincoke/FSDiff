@@ -4,6 +4,7 @@ import core.FileSystemComparison;
 import gui.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -34,6 +35,8 @@ public class BottomPaneController extends Controller{
     private Label createdCount;
     @FXML
     private Label deletedCount;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     private ComparisonWindowController windowController;
 
@@ -58,6 +61,7 @@ public class BottomPaneController extends Controller{
 
     public void setWindowController(ComparisonWindowController windowController) {
         this.windowController = windowController;
+        windowController.setProgressIndicator(progressIndicator);
         refreshComparisonMetadata(windowController.getFileSystemComparison());
     }
 }

@@ -21,7 +21,7 @@ public class LoadingFSCXController extends Controller {
 
     private FscxLoader loader;
 
-    public void start(String fscxPath){
+    public void load(String fscxPath){
         progressIndicator.setCache(true);
         loader = new FscxLoader(fscxPath);
         loadingLabel.textProperty().bind(loader.messageProperty());
@@ -39,7 +39,6 @@ public class LoadingFSCXController extends Controller {
             }
         });
         loader.start();
-
     }
 
     public void cancel(ActionEvent actionEvent) {

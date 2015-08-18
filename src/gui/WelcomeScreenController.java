@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.logging.Level;
 
 /**
  * Provides the user multiple choices to start using the software
@@ -40,9 +41,9 @@ public class WelcomeScreenController extends Controller {
             try {
                 loadingController = (LoadingFSCXController) application.replaceSceneContent("loaders/LoadingFSCX.fxml");
                 loadingController.setApplication(application);
-                loadingController.start(file.getPath());
+                loadingController.load(file.getPath());
             } catch (Exception e) {
-                e.printStackTrace();
+                Main.logger.log(Level.WARNING, "Could not load the file : " + file.toString(),e);
             }
         }
     }
