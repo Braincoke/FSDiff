@@ -48,6 +48,8 @@ public class DataPaneController extends Controller {
     private double[] dataDividerPositions;
     private double[] leftDividerPositions;
 
+    private HexDumpBrowser hexDumpBrowser;
+    private HexDiffBrowser hexDiffBrowser;
     /**
      * Loads the required hex view according to the item status
      * @param treeItem  The item holding the PathComparison
@@ -57,26 +59,26 @@ public class DataPaneController extends Controller {
         Path comPath = windowController.getFileSystemComparison().getComparedFS().getRootPath();
         Path itemPath = treeItem.getPath();
         Path filePath;
-        HexDumpBrowser dumpBrowser = new HexDumpBrowser();
-        HexDiffBrowser diffBrowser = new HexDiffBrowser();
         switch (treeItem.getStatus()){
             case MODIFIED:
                 Path refFile = refPath.resolve(itemPath);
                 Path comFile = comPath.resolve(itemPath);
-                diffBrowser.loadDiff(refFile.toFile(), comFile.toFile(), 0);
-                hexTab.setContent(diffBrowser);
+                hexDiffBrowser.loadDiff(refFile.toFile(), comFile.toFile(), 0);
+                hexTab.setContent(hexDiffBrowser);
                 break;
             case MATCHED:
             case DELETED:
+                hexDiffBrowser.cancel();
                 filePath = refPath.resolve(itemPath);
-                dumpBrowser.loadFile(filePath.toFile(), 0);
-                hexTab.setContent(dumpBrowser);
+                hexDumpBrowser.loadFile(filePath.toFile(), 0);
+                hexTab.setContent(hexDumpBrowser);
                 break;
             case CREATED:
+                hexDiffBrowser.cancel();
                 filePath = comPath.resolve(itemPath);
-                dumpBrowser = new HexDumpBrowser();
-                dumpBrowser.loadFile(filePath.toFile(), 0);
-                hexTab.setContent(dumpBrowser);
+                hexDumpBrowser = new HexDumpBrowser();
+                hexDumpBrowser.loadFile(filePath.toFile(), 0);
+                hexTab.setContent(hexDumpBrowser);
                 break;
         }
     }
@@ -147,6 +149,9 @@ public class DataPaneController extends Controller {
         });
         statusColumn.setVisible(false);
         resultsTable.setTableMenuButtonVisible(true);
+
+        hexDumpBrowser = new HexDumpBrowser();
+        hexDiffBrowser = new HexDiffBrowser();
     }
 
     public void updateResults(List<ComparisonTreeItem> list){

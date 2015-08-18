@@ -3,7 +3,6 @@ package gui.comparison;
 import core.PathComparison;
 import gui.Controller;
 import impl.org.controlsfx.skin.BreadCrumbBarSkin;
-import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -43,8 +42,6 @@ public class BreadcrumbsController extends Controller{
         breadCrumbBar.selectedCrumbProperty().addListener((observable, oldValue, newValue) -> {
             int[] l = getBreadcrumbLength();
             anchorPane.setPrefWidth(l[0]*2*buttonPadding + l[1]*charWidth);
-            System.out.println(anchorPane.widthProperty());
-            System.out.println(scrollPane.widthProperty());
         });
         scrollPane.setContent(anchorPane);
         /* Allow mouse wheel scrolling to let the user see every breadCrumb */
@@ -131,10 +128,8 @@ public class BreadcrumbsController extends Controller{
             super(text, gfx);
             first.set(false);
 
-            getStyleClass().addListener(new InvalidationListener() {
-                @Override public void invalidated(Observable arg0) {
-                    updateShape();
-                }
+            getStyleClass().addListener((Observable arg0) -> {
+                updateShape();
             });
 
             updateShape();

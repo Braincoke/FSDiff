@@ -1,5 +1,6 @@
 package utils;
 
+import gui.Main;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -8,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Generates a hex diff of two files
@@ -470,16 +472,23 @@ public class HexDiff {
             diffChunk = 100*KB;
             offsetMax = Math.max(reference.length(), compared.length());
             updateProgress(0, offsetMax);
-            for(long offset = 0; offset<offsetMax; offset+=(diffChunk/2)){
+            long currentOffset = 0;
+            System.out.println(isCancelled());
+            while(currentOffset < offsetMax && !isCancelled()){
                 chunkStart = offset;
                 chunkEnd = offset+diffChunk;
                 computeDiff(offset, diffChunk, offsetMax);
+                currentOffset += (diffChunk/2);
             }
+            if(!isCancelled()) {
             /* Remove redundancies */
-            cleanupMap(refDiff);
-            cleanupMap(comDiff);
-            cleanupSet();
-            diffComputed = true;
+                cleanupMap(refDiff);
+                cleanupMap(comDiff);
+                cleanupSet();
+                diffComputed = true;
+            } else {
+                Main.logger.log(Level.INFO, "Diff generation was cancelled");
+            }
         }
 
         /**

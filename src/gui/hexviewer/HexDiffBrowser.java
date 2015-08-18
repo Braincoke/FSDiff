@@ -1,5 +1,6 @@
 package gui.hexviewer;
 
+import gui.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
 
 /**
  * A simple interface to browse the hex dump of a file
@@ -126,10 +128,22 @@ public class HexDiffBrowser extends HexBrowser {
         this.comparedView = comparedView;
     }
 
+    /**
+     * Cancel loading a diff generation
+     */
+    public void cancel() {
+        if(hexDiff!=null){
+            hexDiff.getDiffGenerator().cancel();
+            hexDiff = null;
+        }
+    }
+
+
     public void loadDiff(File reference, File compared, long offset){
         setReferenceFile(reference);
         setComparedFile(compared);
         setOffset(offset);
+        cancel();
         hexDiff = new HexDiff(reference,compared);
         progressIndicator.progressProperty().bind(hexDiff.getDiffGenerator().progressProperty());
         progressIndicator.setVisible(true);
@@ -145,7 +159,10 @@ public class HexDiffBrowser extends HexBrowser {
         });
         try {
             hexDiff.loadDiff(offset, linesPerPage);
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            Main.logger.log(Level.WARNING,
+                    "Error when loading diff. \nFile 1: " + reference.toString() + "\nFile 2: " + compared.toString(),e);
+        }
     }
 
     /**
