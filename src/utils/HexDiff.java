@@ -473,11 +473,10 @@ public class HexDiff {
             offsetMax = Math.max(reference.length(), compared.length());
             updateProgress(0, offsetMax);
             long currentOffset = 0;
-            System.out.println(isCancelled());
             while(currentOffset < offsetMax && !isCancelled()){
-                chunkStart = offset;
-                chunkEnd = offset+diffChunk;
-                computeDiff(offset, diffChunk, offsetMax);
+                chunkStart = currentOffset;
+                chunkEnd = currentOffset+diffChunk;
+                computeDiff(currentOffset, diffChunk);
                 currentOffset += (diffChunk/2);
             }
             if(!isCancelled()) {
@@ -496,7 +495,7 @@ public class HexDiff {
          * @param offset        The starting point of the diff
          * @param byteNumber    The number of byte to read to generate the diff
          */
-        private void computeDiff(long offset, long byteNumber, long offsetMax) throws IOException {
+        private void computeDiff(long offset, long byteNumber) throws IOException {
         /* We need the hex dumps to generate the diff */
             String refDump = HexDump.getHexDump(reference, offset, byteNumber);
             String comDump = HexDump.getHexDump(compared, offset, byteNumber);

@@ -145,6 +145,7 @@ public class HexDiffBrowser extends HexBrowser {
         setOffset(offset);
         cancel();
         hexDiff = new HexDiff(reference,compared);
+        progressIndicator.progressProperty().unbind();
         progressIndicator.progressProperty().bind(hexDiff.getDiffGenerator().progressProperty());
         progressIndicator.setVisible(true);
         toolBar.setDisable(true);
@@ -182,7 +183,7 @@ public class HexDiffBrowser extends HexBrowser {
 
     /**
      * We have to override the parent method to take into account the modified pages
-     * @param linesPerPage
+     * @param linesPerPage  The number of lines per page
      */
     @Override
     public void setLinesPerPage(int linesPerPage) {
