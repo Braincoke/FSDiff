@@ -1,6 +1,6 @@
 package gui.hexviewer;
 
-import components.buttons.IconButton;
+import gui.components.buttons.IconButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
