@@ -11,6 +11,7 @@ public class ReferenceFSChoiceController extends ChoiceController {
     public void next() {
         FileSystemInput ref = new FileSystemInput(this.inputType, this.inputPath, true);
         wizard.setReferenceInput(ref);
+        wizard.setCurrentPath(this.inputPath.getParent());
         wizard.gotoComparedChoice();
     }
 

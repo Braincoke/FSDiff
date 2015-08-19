@@ -59,6 +59,7 @@ public abstract class ChoiceController extends  ComparisonWizardPane {
     protected void browseFSHX(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Saved hashes", "*.fshx"));
+        fileChooser.setInitialDirectory(wizard.getCurrentPath().toFile());
         File file = fileChooser.showOpenDialog(application.getStage());
         setInputPath(file);
 
@@ -66,6 +67,7 @@ public abstract class ChoiceController extends  ComparisonWizardPane {
 
     protected void browseLogical(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(wizard.getCurrentPath().toFile());
         File file = directoryChooser.showDialog(application.getStage());
         setInputPath(file);
     }

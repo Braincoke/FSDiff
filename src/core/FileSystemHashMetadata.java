@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -45,7 +46,11 @@ public class FileSystemHashMetadata {
         fileCount = Integer.parseInt(metadata.get("fileCount"));
         byteCount = Long.parseLong(metadata.get("byteCount"));
         errorCount = Integer.parseInt(metadata.get("errorCount"));
-        duration = Duration.parse(metadata.get("duration"));
+        try {
+            duration = Duration.parse(metadata.get("duration"));
+        } catch(DateTimeParseException e){
+            duration = Duration.ofSeconds(0);
+        }
     }
 
     /**

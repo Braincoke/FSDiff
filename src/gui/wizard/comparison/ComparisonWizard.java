@@ -41,6 +41,7 @@ public class ComparisonWizard extends Wizard{
         this.hashQueue = new LinkedList<>();
         this.fshxList = new ArrayList<>();
         this.fshxQueue = new LinkedList<>();
+        this.currentPath = outputDirectory;
         gotoReferenceChoice();
     }
 
@@ -196,6 +197,19 @@ public class ComparisonWizard extends Wizard{
      * GOTO NAVIGATION : First time navigating to the pane                                                            *
      *                                                                                                                *
      ******************************************************************************************************************/
+
+    /**
+     * The last path used by the user
+     */
+    private Path currentPath;
+
+    public Path getCurrentPath() {
+        return currentPath;
+    }
+
+    public void setCurrentPath(Path currentPath) {
+        this.currentPath = currentPath;
+    }
 
     public void gotoReferenceChoice(){
         if(referenceChoiceController==null){
