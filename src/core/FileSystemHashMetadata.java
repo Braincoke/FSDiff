@@ -105,6 +105,10 @@ public class FileSystemHashMetadata {
         return duration;
     }
 
+    public void setDuration(Duration duration){
+        this.duration = duration;
+    }
+
     /**
      * The file system
      */

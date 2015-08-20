@@ -159,7 +159,7 @@ public class FileCountCrawler extends Service<Void> implements FileVisitor<Path>
 
     @Override
     public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-        Main.logger.log(Level.WARNING, "Failed to visit file : " + file.toString(), exc);
+        Main.logger.log(Level.WARNING, "Failed to visit file : " + file.toString() + "\t" + exc.getMessage());
         return CONTINUE;
     }
 

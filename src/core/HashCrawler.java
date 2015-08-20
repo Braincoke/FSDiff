@@ -194,6 +194,7 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
             errorCountProperty.set(errorCount);
             visitedCountProperty.set(visitedCount);
         });
+        Main.logger.log(Level.WARNING,"Failed to visit file: " + file.toString() + "\t" + exc.getMessage());
         return CONTINUE;
     }
 
@@ -236,16 +237,19 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
 
         @Override
         protected Void call() throws Exception {
+            //Elapsed time
+            LocalTime startTime = LocalTime.now();
+            Main.logger.log(Level.INFO, "Hash generation started at " + startTime.toString() );
             try {
-                //Elapsed time
-                LocalTime startTime = LocalTime.now();
                 //Start crawling
                 Files.walkFileTree(rootPath, crawler);
-                LocalTime endTime = LocalTime.now();
-                duration = Duration.between(startTime, endTime);
             } catch (IOException e) {
-                Main.logger.log(Level.WARNING, "Error when hashing the files", e);
+                Main.logger.log(Level.SEVERE, "Error when hashing the files\t" + e.getMessage());
             }
+            LocalTime endTime = LocalTime.now();
+            Main.logger.log(Level.INFO, "Hash generation ended at " + startTime.toString() );
+            duration = Duration.between(startTime, endTime);
+            Main.logger.log(Level.INFO, "Duration of the hash generation is " + duration.toString());
             return null;
         }
     }

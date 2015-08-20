@@ -84,10 +84,10 @@ public class FileSystemHash extends FileSystemHashMetadata {
         datetime = new Date();
         //When all the files have been hashed update metadata
         hashCrawler.setOnSucceeded((WorkerStateEvent e) -> {
-            fileHashes = hashCrawler.getFileHashes();
-            byteCount = hashCrawler.getHashedByteCount();
-            fileCount = hashCrawler.getHashedFileCount();
-            duration = hashCrawler.getDuration();
+            this.fileHashes = hashCrawler.getFileHashes();
+            this.byteCount = hashCrawler.getHashedByteCount();
+            this.fileCount = hashCrawler.getHashedFileCount();
+            this.duration = hashCrawler.getDuration();
         });
         hashCrawler.start();
     }

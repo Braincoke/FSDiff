@@ -2,6 +2,7 @@ package gui.wizard.hash;
 
 import core.FileSystemHash;
 import core.HashCrawler;
+import gui.Main;
 import gui.components.TextProgressBar;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
@@ -146,10 +147,16 @@ public class HashGenerationController extends HashWizardPane {
                 hashCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
                     //When a crawler has finished, update total file count and byte count and start the new crawler
                     if (newValue == Worker.State.SUCCEEDED) {
+                        //Save the file system hash
                         FSXmlHandler.saveToXML(currentProject.getFileSystemHash(), currentProject.getOutputFilePath());
                         previousHashedFileCount += hashCrawler.getHashedFileCount();
                         previousHashedByteCount += hashCrawler.getHashedByteCount();
                         if (index < (listLength - 1)) {
+                            //Branch the new log file and remove the old one
+                            wizard.getFileHandlers().get(index).close();
+                            Main.logger.removeHandler(wizard.getFileHandlers().get(index));
+                            Main.logger.addHandler(wizard.getFileHandlers().get(index+1));
+                            //Branch the new hash project
                             HashProject nextProject = hashProjectList.get(index+1);
                             FileSystemHash nextFSH = nextProject.getFileSystemHash();
                             bindUI(nextFSH);
@@ -165,6 +172,9 @@ public class HashGenerationController extends HashWizardPane {
             lastCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue == Worker.State.SUCCEEDED) {
                     FSXmlHandler.saveToXML(lastProject.getFileSystemHash(), lastProject.getOutputFilePath());
+                    //Stop logging to the log file
+                    wizard.getFileHandlers().get(listLength-1).close();
+                    Main.logger.removeHandler(wizard.getFileHandlers().get(listLength-1));
                     timer.cancel();
                     wizard.gotoRecap();
                 }
@@ -175,11 +185,16 @@ public class HashGenerationController extends HashWizardPane {
             onlyCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
                 if(newValue == Worker.State.SUCCEEDED) {
                     FSXmlHandler.saveToXML(onlyProject.getFileSystemHash(), onlyProject.getOutputFilePath());
+                    //Stop logging to the log file
+                    wizard.getFileHandlers().get(0).close();
+                    Main.logger.removeHandler(wizard.getFileHandlers().get(0));
                     timer.cancel();
                     wizard.gotoRecap();
                 }
             });
         }
+        //Branch the log file
+        Main.logger.addHandler(wizard.getFileHandlers().get(0));
         //Init for the first hash generation
         previousHashedFileCount = 0;
         previousHashedByteCount = 0;

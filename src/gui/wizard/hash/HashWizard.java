@@ -3,8 +3,13 @@ package gui.wizard.hash;
 import gui.Main;
 import gui.wizard.Wizard;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
 
 public class HashWizard extends Wizard {
 
@@ -76,6 +81,30 @@ public class HashWizard extends Wizard {
         this.fileCount = fileCount;
     }
 
+    /**
+     * List of log files
+     */
+    private List<FileHandler> fileHandlers;
+
+    public List<FileHandler> getFileHandlers() {
+        return fileHandlers;
+    }
+
+    public void createFileHandlers(){
+        fileHandlers = new ArrayList<>();
+        try {
+            for (int i = 0; i < hashProjectList.size(); i++) {
+                HashProject currentProject = hashProjectList.get(i);
+                String log = currentProject.getOutputDirectory().resolve(currentProject.getName() + ".log").toString();
+                FileHandler fh = new FileHandler(log);
+                fh.setFormatter(new SimpleFormatter());
+                fileHandlers.add(i, fh);
+            }
+        } catch (IOException e) {
+            Main.logger.log(Level.WARNING, "Error creating the log files\t" + e.getMessage());
+        }
+    }
+
     /*******************************************************************************************************************
      *                                                                                                                 *
      * GOTO NAVIGATION : First time navigating to the pane                                                             *
@@ -117,6 +146,7 @@ public class HashWizard extends Wizard {
      */
     public void gotoHashGeneration(){
         try{
+            createFileHandlers();
             hashGenerationController =
                     (HashGenerationController) application.replaceSceneContent("wizard/hash/HashGeneration.fxml");
             hashGenerationController.setWizard(this);
