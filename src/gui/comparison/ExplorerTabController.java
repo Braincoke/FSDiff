@@ -6,11 +6,13 @@ import gui.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.HBox;
 import org.controlsfx.control.MasterDetailPane;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 /**
@@ -89,20 +91,32 @@ public class ExplorerTabController extends Controller {
      * values of the filter
      */
     public void filterDirectoryTree() {
-        if(showMatched.isSelected()
-                && showModified.isSelected()
-                && showCreated.isSelected()
-                && showDeleted.isSelected()){
-            comparisonTreeView.setRoot(rootTreeItem);
-        } else {
-            HashMap<ComparisonStatus, Boolean> filterOptions = new HashMap<>();
-            filterOptions.put(ComparisonStatus.MATCHED, showMatched.isSelected());
-            filterOptions.put(ComparisonStatus.MODIFIED, showModified.isSelected());
-            filterOptions.put(ComparisonStatus.CREATED, showCreated.isSelected());
-            filterOptions.put(ComparisonStatus.DELETED, showDeleted.isSelected());
-            filteredRootTreeItem = rootTreeItem.filter(filterOptions);
-            comparisonTreeView.setRoot(filteredRootTreeItem);
-        }
+        HashMap<ComparisonStatus, Boolean> filterOptions = new HashMap<>();
+        filterOptions.put(ComparisonStatus.MATCHED, showMatched.isSelected());
+        filterOptions.put(ComparisonStatus.MODIFIED, showModified.isSelected());
+        filterOptions.put(ComparisonStatus.CREATED, showCreated.isSelected());
+        filterOptions.put(ComparisonStatus.DELETED, showDeleted.isSelected());
+        filteredRootTreeItem = rootTreeItem.filter(filterOptions);
+        removeExcludedFiles(filteredRootTreeItem);
+        comparisonTreeView.setRoot(filteredRootTreeItem);
         toggleFilterPanel();
+    }
+
+    private void removeExcludedFiles(ComparisonTreeItem root){
+        if(root.getChildren().size()>0){
+            Iterator<TreeItem<PathComparison>> iterator = root.getChildren().iterator();
+            while(iterator.hasNext()){
+                TreeItem<PathComparison> treeItem = iterator.next();
+                ComparisonTreeItem item = (ComparisonTreeItem) treeItem;
+                if(item.isDirectory()){
+                    removeExcludedFiles(item);
+                } else {
+                    windowController.getExcludedFiles()
+                            .stream()
+                            .filter(excludedFile -> excludedFile.compareTo(item.getPath()) == 0)
+                            .forEach(excludedFile -> iterator.remove());
+                }
+            }
+        }
     }
 }

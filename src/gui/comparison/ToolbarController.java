@@ -12,9 +12,8 @@ import org.controlsfx.glyphfont.GlyphFont;
 import org.controlsfx.glyphfont.GlyphFontRegistry;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.nio.file.Path;
+import java.util.*;
 
 public class ToolbarController extends Controller {
 
@@ -67,7 +66,19 @@ public class ToolbarController extends Controller {
         filterOptions.put(ComparisonStatus.MODIFIED, filterModified.isSelected());
         filterOptions.put(ComparisonStatus.CREATED, filterCreated.isSelected());
         filterOptions.put(ComparisonStatus.DELETED, filterDeleted.isSelected());
-        return root.filterFiles(filterOptions, searchField.getText(), useRegex.isSelected());
+        List<ComparisonTreeItem> searchResult =  root.filterFiles(filterOptions, searchField.getText(), useRegex.isSelected());
+        //Remove excluded files
+        SortedSet<Path> excludedFiles =  windowController.getExcludedFiles();
+        Iterator<ComparisonTreeItem> iterator = searchResult.iterator();
+        while(iterator.hasNext()){
+            ComparisonTreeItem item = iterator.next();
+            excludedFiles.stream().forEach(path -> {
+                if(path.compareTo(item.getPath())==0){
+                    iterator.remove();
+                }
+            });
+        }
+        return searchResult;
     }
 
     @Override

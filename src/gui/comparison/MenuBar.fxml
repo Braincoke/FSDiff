@@ -16,6 +16,15 @@
                 <SeparatorMenuItem/>
                 <MenuItem mnemonicParsing="false" text="Save" onAction="#save"/>
                 <MenuItem mnemonicParsing="false" text="Save As" onAction="#saveAs"/>
+                <SeparatorMenuItem/>
+                <MenuItem mnemonicParsing="false" text="Import exclusion file" onAction="#importExclusion"/>
+                <MenuItem mnemonicParsing="false" text="Export exclusion file" onAction="#exportExclusion"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+            <items>
+                <MenuItem mnemonicParsing="false" text="Rebase root directories" onAction="#rebaseRootDir" />
+                <MenuItem mnemonicParsing="false" text="Remove exclusion file" onAction="#removeExclusionFile" />
             </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">

@@ -1,6 +1,9 @@
 package gui.comparison;
 
-import core.*;
+import core.ComparisonStatus;
+import core.FileSystemComparison;
+import core.InputType;
+import core.PathComparison;
 import gui.Controller;
 import gui.Main;
 import gui.wizard.comparison.ComparisonWizard;
@@ -15,16 +18,10 @@ import loaders.FscxLoader;
 import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Level;
 
 
@@ -32,6 +29,17 @@ public class ComparisonWindowController extends Controller {
 
     public static double INTERFACE_WIDTH = 1000;
     public static double INTERFACE_HEIGHT = 700;
+
+
+
+
+    /*******************************************************************************************************************
+     *                                                                                                                 *
+     * PARAMETERS                                                                                                      *
+     *                                                                                                                 *
+     ******************************************************************************************************************/
+
+
     /**
      * The output file to save the file system comparison
      */
@@ -54,24 +62,45 @@ public class ComparisonWindowController extends Controller {
         return comparison;
     }
 
-    /**
-     * The reference file system in the comparison
-     */
-    private FileSystemHash referenceFSH;
-    /**
-     * The compared file system in the comparison
-     */
-    private FileSystemHash comparedFSH;
-    /**
-     * The file selected by the user through the filter results or the file explorer
-     */
-    private PathComparison selectedPath;
 
-    public void setSelectedPath(ComparisonTreeItem item) {
-        if(item!=null) {
-            breadcrumbsController.updateBreadcrumbs(item);
-            if (!item.isDirectory())
-                dataPaneController.updateHexViewer(item);
+    /**
+     * The list of file to exclude from the display
+     */
+    private SortedSet<Path> excludedFiles;
+
+    public SortedSet<Path> getExcludedFiles() {
+        return excludedFiles;
+    }
+
+    /**
+     * Reset the list of excluded files according to the list of exclusion files
+     */
+    public void resetExcludedFiles() {
+        try {
+            for (Path exclusionFile : exclusionFiles) {
+                loadExclusionFile(exclusionFile);
+            }
+        } catch (IOException e){
+            Main.logger.log(Level.WARNING, "Error loading exclusion file. " + e.getMessage());
+        }
+    }
+
+    /**
+     * The list of .txt files containing lists of files to exclude
+     */
+    private List<Path> exclusionFiles;
+
+    public List<Path> getExclusionFiles() {
+        return exclusionFiles;
+    }
+
+    public void loadExclusionFile(Path exclusionFile) throws IOException {
+        File file = new File(exclusionFile.toUri());
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                excludedFiles.add(Paths.get(line));
+            }
         }
     }
 
@@ -84,6 +113,15 @@ public class ComparisonWindowController extends Controller {
     public SplitPane getSplitPane() {
         return splitPane;
     }
+
+    public void setSelectedPath(ComparisonTreeItem item) {
+        if(item!=null) {
+            breadcrumbsController.updateBreadcrumbs(item);
+            if (!item.isDirectory())
+                dataPaneController.updateHexViewer(item);
+        }
+    }
+
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -170,15 +208,8 @@ public class ComparisonWindowController extends Controller {
     public void initFromWizard(ComparisonWizard wizard){
         this.comparison = wizard.getComparison();
         this.outputFile = wizard.getOutputFilePath();
-        this.initDirectoryTree();
-        leftMenuController.setWindowController(this);
-        breadcrumbsController.setWindowController(this);
-        bottomPaneController.setWindowController(this);
-        toolbarController.setWindowController(this);
-        dataPaneController.setWindowController(this);
-        menuBarController.setWindowController(this);
+        endInit();
         saveFSC();
-        checkRootPaths();
     }
 
     /**
@@ -189,14 +220,7 @@ public class ComparisonWindowController extends Controller {
         try {
             this.comparison = FSXmlHandler.loadFileSystemComparison(fscx.toString());
             this.outputFile = fscx;
-            this.initDirectoryTree();
-            leftMenuController.setWindowController(this);
-            breadcrumbsController.setWindowController(this);
-            bottomPaneController.setWindowController(this);
-            toolbarController.setWindowController(this);
-            dataPaneController.setWindowController(this);
-            menuBarController.setWindowController(this);
-            checkRootPaths();
+            endInit();
         } catch (JDOMException | IOException e) {
             Main.logger.log(Level.WARNING, "Could not load FSCX file", e);
         }
@@ -210,6 +234,15 @@ public class ComparisonWindowController extends Controller {
     public void initWindow(FileSystemComparison comparison, String fscx){
         this.comparison = comparison;
         this.outputFile = Paths.get(fscx);
+        endInit();
+    }
+
+    /**
+     * End the window initialisation
+     */
+    public void endInit(){
+        this.exclusionFiles = new ArrayList<>();
+        this.excludedFiles = new TreeSet<>();
         this.initDirectoryTree();
         leftMenuController.setWindowController(this);
         breadcrumbsController.setWindowController(this);
@@ -217,6 +250,7 @@ public class ComparisonWindowController extends Controller {
         toolbarController.setWindowController(this);
         dataPaneController.setWindowController(this);
         menuBarController.setWindowController(this);
+        application.getStage().setTitle("FSDiff - " + outputFile.getFileName().toString());
         checkRootPaths();
     }
 
@@ -411,4 +445,11 @@ public class ComparisonWindowController extends Controller {
         }
     }
 
+    public void rebaseRootDirectory(boolean isReference, String newPath) {
+        if(isReference){
+            comparison.getReferenceFS().setRootPath(newPath);
+        } else {
+            comparison.getComparedFS().setRootPath(newPath);
+        }
+    }
 }
