@@ -6,6 +6,7 @@ import javafx.beans.property.*;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -168,20 +169,27 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        visitedCount++;
-        try {
-            fileHashes.put(stripRootPath(file), HashGenerator.generateHashedFile(file));
-            hashedFileCount++;
-            hashedByteCount += file.toFile().length();
-            Platform.runLater(() -> {
-                hashedByteCountProperty.set(hashedByteCount);
-                hashedFileCountProperty.set(hashedFileCount);
-                visitedCountProperty.set(visitedCount);
-                visitedFileProperty.setValue(file.toString());
-            });
+        File visitedFile = file.toFile();
+        long fileLength = visitedFile.length();
 
-        } catch (NoSuchAlgorithmException e) {
-            Main.logger.log(Level.WARNING, "Tried to use an unknown algorithm to generate digest", e);
+        if(!visitedFile.isDirectory() && fileLength!=0) {
+            visitedCount++;
+            try {
+                hashedFileCount++;
+                hashedByteCount += visitedFile.length();
+                Platform.runLater(() -> {
+                    hashedByteCountProperty.set(hashedByteCount);
+                    hashedFileCountProperty.set(hashedFileCount);
+                    visitedCountProperty.set(visitedCount);
+                    visitedFileProperty.setValue(file.toString());
+                });
+                fileHashes.put(stripRootPath(file), HashGenerator.generateHashedFile(file));
+
+            } catch (NoSuchAlgorithmException e) {
+                Main.logger.log(Level.WARNING, "Tried to use an unknown algorithm to generate digest", e);
+            } catch (IOException e) {
+                Main.logger.log(Level.WARNING, "Could not generate digest of the file:" + e.getMessage());
+            }
         }
         return CONTINUE;
     }
@@ -244,7 +252,7 @@ public class HashCrawler extends Service<Void> implements FileVisitor<Path>{
                 //Start crawling
                 Files.walkFileTree(rootPath, crawler);
             } catch (IOException e) {
-                Main.logger.log(Level.SEVERE, "Error when hashing the files\t" + e.getMessage());
+                Main.logger.log(Level.SEVERE, "Error when hashing the files\t",e);
             }
             LocalTime endTime = LocalTime.now();
             Main.logger.log(Level.INFO, "Hash generation ended at " + startTime.toString() );

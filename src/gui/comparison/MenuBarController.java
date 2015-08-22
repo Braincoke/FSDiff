@@ -102,6 +102,7 @@ public class MenuBarController extends Controller {
             Optional<Path> chosen = dialog.showAndWait();
             if (chosen.get() != null) {
                 windowController.getExclusionFiles().remove(chosen.get());
+                windowController.resetExcludedFiles();
             }
         } else {
             Alert info = new Alert(Alert.AlertType.INFORMATION);

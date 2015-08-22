@@ -1,5 +1,6 @@
 package core;
 
+import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 
 import java.nio.file.Path;
@@ -179,7 +180,7 @@ public class FileSystemHash extends FileSystemHashMetadata {
      */
     public FileSystemComparison compareTo(FileSystemHash referenceFS) {
         String referenceName = referenceFS.getName();
-        String comparisonName = "Comparison_of_" + name + "_to_" + referenceName;
+        String comparisonName = "<" + referenceName + " - " + name + ">" ;
         return this.compareTo(referenceFS, comparisonName);
     }
 

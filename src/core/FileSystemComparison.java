@@ -1,11 +1,11 @@
 package core;
 
 
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * The result of the comparison of two FileSystemHash objects
@@ -241,6 +241,117 @@ public class FileSystemComparison {
                     list.remove(lastIndex);
                 }
             }
+        }
+    }
+
+    /*******************************************************************************************************************
+     *                                                                                                                 *
+     *  GENERATION                                                                                                   *
+     *                                                                                                                 *
+     ******************************************************************************************************************/
+
+    public static class Generate extends Service<FileSystemComparison> {
+
+        private String comparisonName;
+        private FileSystemHash referenceFS;
+        private FileSystemHash comparedFS;
+
+        public Generate(String name, FileSystemHash referenceFS, FileSystemHash comparedFS){
+            this.comparisonName = name;
+            this.referenceFS = referenceFS;
+            this.comparedFS = comparedFS;
+        }
+
+        @Override
+        protected Task<FileSystemComparison> createTask() {
+            return new CompareTask(comparisonName, referenceFS, comparedFS);
+        }
+    }
+
+    public static class CompareTask extends Task<FileSystemComparison> {
+
+        private String comparisonName;
+        private FileSystemHash referenceFS;
+        private FileSystemHash comparedFS;
+
+        public CompareTask(String name, FileSystemHash referenceFS, FileSystemHash comparedFS){
+            this.comparisonName = name;
+            this.referenceFS = referenceFS;
+            this.comparedFS = comparedFS;
+        }
+
+        @Override
+        protected FileSystemComparison call() throws Exception {
+            TreeMap<Path, HashedFile> referenceHashes = this.referenceFS.getFileHashes();
+            TreeMap<Path, HashedFile> comparedHashes = this.comparedFS.getFileHashes();
+            TreeSet<PathComparison> comparisonSet = new TreeSet<>();
+
+            //FileSystemComparison metadata
+            int deletedCount = 0;
+            int matchedCount = 0;
+            int createdCount = 0;
+            int modifiedCount = 0;
+            int comparisonErrorCount = 0;
+
+            Path filePath;
+            HashedFile referenceHashedFile;
+            HashedFile comparedHashedFile;
+
+            int workMax = referenceHashes.size();
+            int workDone = 0;
+
+            //Loop through every file of the reference file system or directory
+            updateMessage("Comparing the digests");
+            for (Map.Entry<Path, HashedFile> referenceEntry : referenceHashes.entrySet()) {
+                updateProgress(workDone, workMax);
+                referenceHashedFile = referenceEntry.getValue();
+                filePath = referenceEntry.getKey();
+                comparedHashedFile = comparedHashes.get(filePath);
+                PathComparison pathComparison = new PathComparison(filePath);
+                //File does not exist in the compared file system
+                if (comparedHashedFile == null) {
+                    pathComparison.setStatus(PathComparison.DELETED);
+                    deletedCount++;
+                } else {
+                    //Check if file has been modified
+                    if (referenceHashedFile.isEqual(comparedHashedFile)) {
+                        pathComparison.setStatus(PathComparison.MATCHED);
+                        matchedCount++;
+                    } else {
+                        pathComparison.setStatus(PathComparison.MODIFIED);
+                        modifiedCount++;
+                    }
+                }
+                comparisonSet.add(pathComparison);
+                //Remove path from compared FS to find created files in the end
+                comparedHashes.remove(filePath);
+
+            }
+            updateMessage("Identifying created files");
+            //The remaining hashed files in the compared FS must be created (or moved)
+            for (Map.Entry<Path, HashedFile> comparedEntry : comparedHashes.entrySet()) {
+                filePath = comparedEntry.getKey();
+                PathComparison pathComparison = new PathComparison(filePath);
+                pathComparison.setStatus(PathComparison.CREATED);
+                comparisonSet.add(pathComparison);
+                createdCount++;
+            }
+
+            //Build args to create FileSystemComparison
+            FileSystemHashMetadata referenceFSMetadata = new FileSystemHashMetadata(this.referenceFS);
+            FileSystemHashMetadata comparedFSMetadata = new FileSystemHashMetadata(this.comparedFS);
+            List<Integer> comparisonMetadata = new Vector<>();
+            comparisonMetadata.add(ComparisonStatus.MATCHED.getIndex(), matchedCount);
+            comparisonMetadata.add(ComparisonStatus.MODIFIED.getIndex(), modifiedCount);
+            comparisonMetadata.add(ComparisonStatus.CREATED.getIndex(), createdCount);
+            comparisonMetadata.add(ComparisonStatus.DELETED.getIndex(), deletedCount);
+            comparisonMetadata.add(ComparisonStatus.ERROR.getIndex(), comparisonErrorCount);
+
+            return new FileSystemComparison(referenceFSMetadata,
+                    comparedFSMetadata,
+                    comparisonMetadata,
+                    comparisonSet,
+                    comparisonName);
         }
     }
 

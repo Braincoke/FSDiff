@@ -41,7 +41,7 @@ public class HashGenerator {
         }
 
         byte[] hashedBytes = digest.digest();
-
+        inputStream.close();
         return convertByteArrayToHexString(hashedBytes);
     }
 
