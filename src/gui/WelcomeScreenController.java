@@ -6,7 +6,7 @@ import gui.loaders.LoadingController;
 import gui.wizard.hash.HashWizard;
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
-import loaders.FscxLoader;
+import loaders.FSCXLoader;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -43,7 +43,7 @@ public class WelcomeScreenController extends Controller {
             try {
                 application.replaceSceneContent("loaders/Loading.fxml", loadingController);
                 loadingController.setApplication(application);
-                FscxLoader loader = loadingController.getFSCXLoader();
+                FSCXLoader loader = loadingController.getFSCXLoader();
                 //Go to comparison interface when loaded
                 loader.setOnSucceeded(event -> {
                     ComparisonWindowController comparisonWindowController;

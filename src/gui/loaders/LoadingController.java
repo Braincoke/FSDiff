@@ -4,9 +4,9 @@ import gui.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import loaders.FSCXLoader;
 import loaders.FSHXLoader;
 import loaders.FileLoader;
-import loaders.FscxLoader;
 
 /**
  * Controls the loading
@@ -19,9 +19,9 @@ public class LoadingController extends Controller {
     @FXML
     private Label loadingLabel;
 
-    private FscxLoader fscxLoader;
+    private FSCXLoader fscxLoader;
 
-    public FscxLoader getFSCXLoader() {
+    public FSCXLoader getFSCXLoader() {
         return fscxLoader;
     }
 
@@ -32,7 +32,7 @@ public class LoadingController extends Controller {
     }
 
     public LoadingController(){
-        this.fscxLoader = new FscxLoader();
+        this.fscxLoader = new FSCXLoader();
         this.fshxLoader = new FSHXLoader();
     }
 

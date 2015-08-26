@@ -6,11 +6,11 @@ import javafx.concurrent.Task;
 /**
  * Loads a FileSystemComparison from a .fscx file
  */
-public class FscxLoader extends FileLoader<FileSystemComparison>{
+public class FSCXLoader extends FileLoader<FileSystemComparison>{
 
-    public FscxLoader(){}
+    public FSCXLoader(){}
 
-    public FscxLoader(String fscxPath){
+    public FSCXLoader(String fscxPath){
         this.path = fscxPath;
     }
 

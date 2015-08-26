@@ -13,7 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import loaders.FscxLoader;
+import loaders.FSCXLoader;
 import loaders.XMLHandler;
 import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
@@ -329,7 +329,7 @@ public class ComparisonWindowController extends Controller {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File system comparison", "*.fscx"));
         File file = fileChooser.showOpenDialog(application.getStage());
         if (file != null) {
-            FscxLoader loader = new FscxLoader(file.getPath());
+            FSCXLoader loader = new FSCXLoader(file.getPath());
             ProgressDialog progressDialog = new ProgressDialog(loader);
             progressDialog.setTitle("Loading");
             progressDialog.setContentText("Please wait while your file is loading");
