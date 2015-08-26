@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
-import loaders.FSXmlHandler;
+import loaders.XMLHandler;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -148,7 +148,7 @@ public class HashGenerationController extends HashWizardPane {
                     //When a crawler has finished, update total file count and byte count and start the new crawler
                     if (newValue == Worker.State.SUCCEEDED) {
                         //Save the file system hash
-                        FSXmlHandler.saveToXML(currentProject.getFileSystemHash(), currentProject.getOutputFilePath());
+                        XMLHandler.saveToXML(currentProject.getFileSystemHash(), currentProject.getOutputFilePath());
                         previousHashedFileCount += hashCrawler.getHashedFileCount();
                         previousHashedByteCount += hashCrawler.getHashedByteCount();
                         if (index < (listLength - 1)) {
@@ -171,7 +171,7 @@ public class HashGenerationController extends HashWizardPane {
             HashCrawler lastCrawler = lastProject.getFileSystemHash().getHashCrawler();
             lastCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue == Worker.State.SUCCEEDED) {
-                    FSXmlHandler.saveToXML(lastProject.getFileSystemHash(), lastProject.getOutputFilePath());
+                    XMLHandler.saveToXML(lastProject.getFileSystemHash(), lastProject.getOutputFilePath());
                     //Stop logging to the log file
                     wizard.getFileHandlers().get(listLength-1).close();
                     Main.logger.removeHandler(wizard.getFileHandlers().get(listLength-1));
@@ -184,7 +184,7 @@ public class HashGenerationController extends HashWizardPane {
             HashCrawler onlyCrawler = onlyProject.getFileSystemHash().getHashCrawler();
             onlyCrawler.stateProperty().addListener((observable, oldValue, newValue) -> {
                 if(newValue == Worker.State.SUCCEEDED) {
-                    FSXmlHandler.saveToXML(onlyProject.getFileSystemHash(), onlyProject.getOutputFilePath());
+                    XMLHandler.saveToXML(onlyProject.getFileSystemHash(), onlyProject.getOutputFilePath());
                     //Stop logging to the log file
                     wizard.getFileHandlers().get(0).close();
                     Main.logger.removeHandler(wizard.getFileHandlers().get(0));

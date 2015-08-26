@@ -2,7 +2,6 @@ package gui.wizard.comparison;
 
 import core.FileSystemComparison;
 import core.FileSystemHash;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -17,24 +16,24 @@ public class ComparisonProgressController extends ComparisonWizardPane {
     @FXML
     private Label loadingLabel;
 
-    private FileSystemComparison.Generate task;
+    private FileSystemComparison.Generate service;
 
     public void compare(){
         FileSystemHash refFSH = wizard.getReferenceFSH();
         FileSystemHash comFSH = wizard.getComparedFSH();
-        task = new FileSystemComparison.Generate(wizard.getOutputFilePath().getFileName().toString(), refFSH, comFSH);
-        progressIndicator.progressProperty().bind(task.progressProperty());
-        loadingLabel.textProperty().bind(task.messageProperty());
-        task.setOnSucceeded(event -> {
-            wizard.setComparison(task.getValue());
+        service = new FileSystemComparison.Generate(wizard.getOutputFilePath().getFileName().toString(), refFSH, comFSH);
+        progressIndicator.setProgress(-1f);
+        loadingLabel.textProperty().bind(service.messageProperty());
+        service.setOnSucceeded(event -> {
+            wizard.setComparison(service.getValue());
             wizard.gotoComparisonInterface();
         });
-        task.start();
+        service.start();
     }
 
     public void cancel() {
-        if(task!=null){
-            if(task.cancel())
+        if(service !=null){
+            if(service.cancel())
                 wizard.gotoWelcomeScreen();
         }
     }

@@ -69,6 +69,18 @@ public class FileSystemHashMetadata {
         errorCount = fileSystemHash.getErrorCount();
     }
 
+    public FileSystemHashMetadata(FileSystemHashMetadata fshm){
+        this.name = fshm.name;
+        this.datetime = fshm.getDatetime();
+        this.fileSystem = fshm.getFileSystem();
+        this.duration = fshm.getDuration();
+        this.OS = fshm.getOS();
+        this.fileSystemInput = fshm.getFileSystemInput();
+        this.fileCount = fshm.getFileCount();
+        this.byteCount = fshm.getByteCount();
+        this.errorCount = fshm.getErrorCount();
+    }
+
     public FileSystemHashMetadata() {
     }
 

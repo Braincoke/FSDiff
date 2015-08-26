@@ -1,6 +1,5 @@
 package core;
 
-import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 
 import java.nio.file.Path;
@@ -40,6 +39,11 @@ public class FileSystemHash extends FileSystemHashMetadata {
         this.fileSystemInput = input;
         this.name = name;
         hashCrawler = new HashCrawler(fileSystemInput.getPath());
+    }
+
+    public FileSystemHash(FileSystemHashMetadata metadata, TreeMap<Path, HashedFile> hashes){
+        super(metadata);
+        this.fileHashes = hashes;
     }
 
     /*******************************************************************************************************************

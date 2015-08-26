@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * Save objects to XML and load from saved XML
  */
-public class FSXmlHandler {
+public class XMLHandler {
 
 
     /*******************************************************************************************************************
@@ -41,7 +41,7 @@ public class FSXmlHandler {
     }
 
     public static void saveToXML(FileSystemHash fsh, Path savePath) {
-        Element fshash = FSXmlHandler.toXMLElement(fsh);
+        Element fshash = XMLHandler.toXMLElement(fsh);
         org.jdom2.Document document = new Document(fshash);
         Path formattedSavePath = savePath;
         if (!(savePath.toString().endsWith(".fshx"))) {
@@ -56,7 +56,7 @@ public class FSXmlHandler {
     }
 
     public static void saveToXML(FileSystemComparison fsc, Path savePath) {
-        Element comparison = FSXmlHandler.toXMLElement(fsc);
+        Element comparison = XMLHandler.toXMLElement(fsc);
         org.jdom2.Document document = new Document(comparison);
         Path formattedSavePath = savePath;
         if (!(savePath.toString().endsWith(".fscx"))) {

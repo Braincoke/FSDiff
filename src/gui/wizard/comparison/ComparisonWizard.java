@@ -5,9 +5,9 @@ import core.FileSystemHash;
 import core.FileSystemInput;
 import gui.Main;
 import gui.comparison.ComparisonWindowController;
+import gui.loaders.LoadingController;
 import gui.wizard.Wizard;
-import loaders.FSXmlHandler;
-import org.jdom2.JDOMException;
+import loaders.FSHXLoader;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.logging.Level;
 
 /**
  * A Wizard to guide the user in the project configuration.
@@ -241,24 +242,41 @@ public class ComparisonWizard extends Wizard{
             gotoHashPreparation();
         } else if(fshxQueue.size() > 0) {
             loadFSHX();
-            chooseComparisonPreparation();
         } else {
             goToComparisonProgress();
         }
     }
 
     public void loadFSHX(){
-        for(FileSystemInput fsi : fshxQueue){
-            fshxQueue.poll();
-            try {
-                if (fsi.isReference()) {
-                    referenceFSH = FSXmlHandler.loadFileSystemHash(fsi.getPath().toString());
+        LoadingController loadingController = new LoadingController();
+        FSHXLoader loader = loadingController.getFSHXLoader();
+        FileSystemInput fsi = fshxQueue.poll();
+        try {
+            application.replaceSceneContent("loaders/Loading.fxml", loadingController);
+            loadingController.setApplication(application);
+            //Go to comparison interface when loaded
+            loader.setOnSucceeded(event -> {
+                if (fsi.isReference()){
+                    referenceFSH = loader.getValue();
                 } else {
-                    comparedFSH = FSXmlHandler.loadFileSystemHash(fsi.getPath().toString());
+                    comparedFSH = loader.getValue();
                 }
-            } catch (JDOMException | IOException e) {
-                e.printStackTrace();
-            }
+                if(fshxQueue.size()>0){
+                    loadFSHX();
+                } else {
+                    chooseComparisonPreparation();
+                }
+            });
+            loadingController.loadFSHX(fsi.getPath().toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadFileSystemHash(Path path, boolean isReference){
+        try {
+        } catch (Exception e) {
+            Main.logger.log(Level.WARNING, "Could not load the file : " + path.toString(),e);
         }
     }
 

@@ -78,6 +78,17 @@ public class PathComparison implements Comparable<PathComparison> {
      */
     private int directoryStatus[];
 
+
+    public PathComparison(){
+        int size = ComparisonStatus.SIZE;
+        this.path = null;
+        this.isDirectory = false;
+        directoryStatus = new int[size];
+        for(int i = 0; i<size; i++) {
+            directoryStatus[i] = 0;
+        }
+    }
+
     public PathComparison(Path path) {
         int size = ComparisonStatus.SIZE;
         this.path = path;

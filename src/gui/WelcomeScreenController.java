@@ -1,10 +1,12 @@
 package gui;
 
 
-import gui.loaders.LoadingFSCXController;
+import gui.comparison.ComparisonWindowController;
+import gui.loaders.LoadingController;
 import gui.wizard.hash.HashWizard;
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
+import loaders.FscxLoader;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -31,17 +33,31 @@ public class WelcomeScreenController extends Controller {
         new HashWizard(application);
     }
 
-    public void openComparison(ActionEvent actionEvent) {
+    public void openComparison() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open file");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File system comparison", "*.fscx"));
         File file = fileChooser.showOpenDialog(application.getStage());
         if(file!=null) {
-            LoadingFSCXController loadingController;
+            LoadingController loadingController = new LoadingController();
             try {
-                loadingController = (LoadingFSCXController) application.replaceSceneContent("loaders/LoadingFSCX.fxml");
+                application.replaceSceneContent("loaders/Loading.fxml", loadingController);
                 loadingController.setApplication(application);
-                loadingController.load(file.getPath());
+                FscxLoader loader = loadingController.getFSCXLoader();
+                //Go to comparison interface when loaded
+                loader.setOnSucceeded(event -> {
+                    ComparisonWindowController comparisonWindowController;
+                    try {
+                        comparisonWindowController = (ComparisonWindowController) application.replaceSceneContent("comparison/ComparisonWindow.fxml");
+                        application.getStage().setWidth(ComparisonWindowController.INTERFACE_WIDTH);
+                        application.getStage().setHeight(ComparisonWindowController.INTERFACE_HEIGHT);
+                        comparisonWindowController.setApplication(application);
+                        comparisonWindowController.initWindow(loader.getValue(), file.getPath());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+                loadingController.loadFSCX(file.getPath());
             } catch (Exception e) {
                 Main.logger.log(Level.WARNING, "Could not load the file : " + file.toString(),e);
             }

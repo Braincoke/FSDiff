@@ -7,8 +7,7 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="500.0" prefWidth="700.0"  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="gui.loaders.LoadingFSCXController">
+<AnchorPane prefHeight="500.0" prefWidth="700.0"  xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <BorderPane
             AnchorPane.topAnchor="0"
             AnchorPane.rightAnchor="0"

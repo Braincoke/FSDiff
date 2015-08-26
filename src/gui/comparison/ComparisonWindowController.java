@@ -13,8 +13,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import loaders.FSXmlHandler;
 import loaders.FscxLoader;
+import loaders.XMLHandler;
 import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
 
@@ -218,7 +218,7 @@ public class ComparisonWindowController extends Controller {
      */
     public void initFromXML(Path fscx){
         try {
-            this.comparison = FSXmlHandler.loadFileSystemComparison(fscx.toString());
+            this.comparison = XMLHandler.loadFileSystemComparison(fscx.toString());
             this.outputFile = fscx;
             endInit();
         } catch (JDOMException | IOException e) {
@@ -346,7 +346,7 @@ public class ComparisonWindowController extends Controller {
     }
 
     public void saveFSC() {
-        FSXmlHandler.saveToXML(comparison, getOutputFile());
+        XMLHandler.saveToXML(comparison, getOutputFile());
     }
 
 

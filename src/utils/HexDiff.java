@@ -439,6 +439,7 @@ public class HexDiff {
                                  LinkedList<ByteDiff> bytes,
                                  long offset,
                                  int nbLines) throws IOException {
+        InputStream is = new FileInputStream(file);
         //We start by determining the current operation
         Set<Long> keySet = map.keySet();
         Long[] keyOffsets = new Long[keySet.size()];
@@ -463,7 +464,6 @@ public class HexDiff {
         StringBuilder stringsBuilder = new StringBuilder();
         long currentOffset = offset;
         int remainingBytes = nbLines * HexDump.BYTES_PER_LINE;
-        InputStream is = new FileInputStream(file);
         long skipped = is.skip(offset);
         if(skipped!=offset)
             currentOffset = skipped;
