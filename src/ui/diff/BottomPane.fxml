@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<HBox xmlns:fx="http://javafx.com/fxml/1" id="statusPane" fx:id="statusPane" alignment="BOTTOM_LEFT" maxHeight="30.0" prefHeight="30.0" prefWidth="200.0" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/8" fx:controller="ui.diff.BottomPaneController">
+    <children>
+        <HBox id="comparisonMetadata" fx:id="comparisonMetadata" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" HBox.hgrow="ALWAYS">
+            <children>
+                <HBox id="matchedMetadata" fx:id="matchedMetadata" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                    <children>
+                        <Circle id="matchedColor" fx:id="matchedColor" fill="#eeeeee" radius="7.0" stroke="BLACK" strokeType="INSIDE" styleClass="colored-circle" translateY="3.0" />
+                        <Label id="matchedLabel" fx:id="matchedLabel" text="Matched: " />
+                        <Label id="matchedNumber" fx:id="matchedCount" text="0" />
+                    </children>
+                </HBox>
+                <HBox fx:id="modifiedMetadata" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                    <children>
+                        <Circle fx:id="modifiedColor" fill="#fce51d" radius="7.0" stroke="BLACK" strokeType="INSIDE" styleClass="colored-circle" translateY="3.0" />
+                        <Label id="modifiedLabel" fx:id="modifiedLabel" text="Modified:" />
+                        <Label id="modifiedNumber" fx:id="modifiedCount" text="0" />
+                    </children>
+                </HBox>
+                <HBox fx:id="createdMetadata" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                    <children>
+                        <Circle fx:id="createdColor" fill="#4ccd19" radius="7.0" stroke="BLACK" strokeType="INSIDE" styleClass="colored-circle" translateY="3.0" />
+                        <Label id="createdLabel" fx:id="createdLabel" text="Created:" />
+                        <Label id="createdNumber" fx:id="createdCount" text="0" />
+                    </children>
+                </HBox>
+                <HBox fx:id="deletedMetadata" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                    <children>
+                        <Circle fx:id="deletedColor" fill="#fc2323" radius="7.0" stroke="BLACK" strokeType="INSIDE" styleClass="colored-circle" translateY="3.0" />
+                        <Label id="deletedLabel" fx:id="deletedLabel" text="Deleted" />
+                        <Label id="deletedNumber" fx:id="deletedCount" text="0" />
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+        <HBox id="logInfo" fx:id="logInfo" alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" HBox.hgrow="ALWAYS">
+            <children>
+            <ProgressIndicator progress="0.0" fx:id="progressIndicator" />
+                <Label id="eventLogLabel" fx:id="eventLogLabel" text="Event Log" />
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+    </padding>
+</HBox>

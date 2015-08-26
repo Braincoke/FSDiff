@@ -98,29 +98,29 @@ public class FileSystemHash extends FileSystemHashMetadata {
     }
 
 
-    /*******************************************************************************************************************
-     *                                                                                                                 *
-     *  COMPARISON GENERATION                                                                                          *
-     *                                                                                                                 *
+    /******************************************************************************************************************
+     *                                                                                                                *
+     *  DIFFERENTIAL GENERATION                                                                                       *
+     *                                                                                                                *
      ******************************************************************************************************************/
 
     /**
      * Compare this file system hash to another one
      *
      * @param referenceFS The file system of reference
-     * @return a file system comparison held in a FileSystemComparison object
+     * @return a differential held in a FileSystemDiff object
      */
-    public FileSystemComparison compareTo(FileSystemHash referenceFS, String comparisonName) {
+    public FileSystemDiff compareTo(FileSystemHash referenceFS, String diffName) {
         TreeMap<Path, HashedFile> referenceHashes = referenceFS.getFileHashes();
         TreeMap<Path, HashedFile> comparedHashes = this.getFileHashes();
-        TreeSet<PathComparison> comparisonSet = new TreeSet<>();
+        TreeSet<PathDiff> diffs = new TreeSet<>();
 
-        //FileSystemComparison metadata
+        //FileSystemDiff metadata
         int deletedCount = 0;
         int matchedCount = 0;
         int createdCount = 0;
         int modifiedCount = 0;
-        int comparisonErrorCount = 0;
+        int errorCount = 0;
 
         Path filePath;
         HashedFile referenceHashedFile;
@@ -130,22 +130,22 @@ public class FileSystemHash extends FileSystemHashMetadata {
             referenceHashedFile = referenceEntry.getValue();
             filePath = referenceEntry.getKey();
             comparedHashedFile = comparedHashes.get(filePath);
-            PathComparison pathComparison = new PathComparison(filePath);
+            PathDiff pathDiff = new PathDiff(filePath);
             //File does not exist in the compared file system
             if (comparedHashedFile == null) {
-                pathComparison.setStatus(PathComparison.DELETED);
+                pathDiff.setStatus(PathDiff.DELETED);
                 deletedCount++;
             } else {
                 //Check if file has been modified
                 if (referenceHashedFile.isEqual(comparedHashedFile)) {
-                    pathComparison.setStatus(PathComparison.MATCHED);
+                    pathDiff.setStatus(PathDiff.MATCHED);
                     matchedCount++;
                 } else {
-                    pathComparison.setStatus(PathComparison.MODIFIED);
+                    pathDiff.setStatus(PathDiff.MODIFIED);
                     modifiedCount++;
                 }
             }
-            comparisonSet.add(pathComparison);
+            diffs.add(pathDiff);
             //Remove path from compared FS to find created files in the end
             comparedHashes.remove(filePath);
 
@@ -153,39 +153,39 @@ public class FileSystemHash extends FileSystemHashMetadata {
         //The remaining hashed files in the compared FS must be created (or moved)
         for (Map.Entry<Path, HashedFile> comparedEntry : comparedHashes.entrySet()) {
             filePath = comparedEntry.getKey();
-            PathComparison pathComparison = new PathComparison(filePath);
-            pathComparison.setStatus(PathComparison.CREATED);
-            comparisonSet.add(pathComparison);
+            PathDiff pathDiff = new PathDiff(filePath);
+            pathDiff.setStatus(PathDiff.CREATED);
+            diffs.add(pathDiff);
             createdCount++;
         }
 
-        //Build args to create FileSystemComparison
+        //Build args to create FileSystemDiff
         FileSystemHashMetadata referenceFSMetadata = new FileSystemHashMetadata(referenceFS);
         FileSystemHashMetadata comparedFSMetadata = new FileSystemHashMetadata(this);
-        List<Integer> comparisonMetadata = new Vector<>();
-        comparisonMetadata.add(ComparisonStatus.MATCHED.getIndex(), matchedCount);
-        comparisonMetadata.add(ComparisonStatus.MODIFIED.getIndex(), modifiedCount);
-        comparisonMetadata.add(ComparisonStatus.CREATED.getIndex(), createdCount);
-        comparisonMetadata.add(ComparisonStatus.DELETED.getIndex(), deletedCount);
-        comparisonMetadata.add(ComparisonStatus.ERROR.getIndex(), comparisonErrorCount);
+        List<Integer> diffMetadata = new Vector<>();
+        diffMetadata.add(DiffStatus.MATCHED.getIndex(), matchedCount);
+        diffMetadata.add(DiffStatus.MODIFIED.getIndex(), modifiedCount);
+        diffMetadata.add(DiffStatus.CREATED.getIndex(), createdCount);
+        diffMetadata.add(DiffStatus.DELETED.getIndex(), deletedCount);
+        diffMetadata.add(DiffStatus.ERROR.getIndex(), errorCount);
 
-        return new FileSystemComparison(referenceFSMetadata,
+        return new FileSystemDiff(referenceFSMetadata,
                 comparedFSMetadata,
-                comparisonMetadata,
-                comparisonSet,
-                comparisonName);
+                diffMetadata,
+                diffs,
+                diffName);
     }
 
     /**
-     * Generate a file system comparison with a default name
+     * Generate a FileSystemDiff with a default name
      *
-     * @param referenceFS The file system used as a reference in the comparison
-     * @return A FileSystemComparison object holding the results of the comparison
+     * @param referenceFS The file system used as a reference in the differential
+     * @return A FileSystemDiff object holding the results of the comparison
      */
-    public FileSystemComparison compareTo(FileSystemHash referenceFS) {
+    public FileSystemDiff compareTo(FileSystemHash referenceFS) {
         String referenceName = referenceFS.getName();
-        String comparisonName = "<" + referenceName + " - " + name + ">" ;
-        return this.compareTo(referenceFS, comparisonName);
+        String diffName = "<" + referenceName + " - " + name + ">" ;
+        return this.compareTo(referenceFS, diffName);
     }
 
 }

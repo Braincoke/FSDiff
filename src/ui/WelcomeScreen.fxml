@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import ui.components.buttons.StartButton?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"  prefHeight="600.0"
+            prefWidth="700.0"
+            xmlns="http://javafx.com/javafx/8"
+            stylesheets="@WelcomeScreen.css"
+            fx:controller="ui.WelcomeScreenController">
+   <children>
+       <VBox  alignment="TOP_CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <children>
+              <VBox  alignment="CENTER" prefHeight="150.0" prefWidth="100.0" VBox.vgrow="NEVER">
+                <children>
+                   <Text  strokeType="OUTSIDE" strokeWidth="0.0" text="FSDiff">
+                      <font>
+                         <Font size="56.0" />
+                      </font>
+                   </Text>
+                   <Text fx:id="VersionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Version 0.1.0" />
+                </children>
+             </VBox>
+             <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
+                <children>
+                    <GridPane alignment="CENTER" hgap="10.0" vgap="40.0" VBox.vgrow="NEVER">
+                     <columnConstraints>
+                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="200.0"/>
+                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="495.0" minWidth="10.0" prefWidth="485.0"/>
+                     </columnConstraints>
+                     <rowConstraints>
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                      <children>
+                          <StartButton icon="FILES_ALT" mnemonicParsing="false"
+                                       onAction="#newDiff" text="New diff project" GridPane.columnIndex="1"
+                                       GridPane.halignment="LEFT"/>
+                          <StartButton icon="SLACK" onAction="#newHash" mnemonicParsing="false"
+                                       text="New file system hash" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+                                       GridPane.rowIndex="1"/>
+                          <StartButton icon="FOLDER_OPEN" onAction="#openDiff" mnemonicParsing="false" text="Open"
+                                       GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2"/>
+                      </children>
+                   </GridPane>
+                </children>
+                <padding>
+                    <Insets top="50" bottom="30" />
+                </padding>
+             </VBox>
+          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+       </VBox>
+   </children>
+</AnchorPane>

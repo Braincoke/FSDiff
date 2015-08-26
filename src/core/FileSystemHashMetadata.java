@@ -1,6 +1,6 @@
 package core;
 
-import gui.Main;
+import ui.Main;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

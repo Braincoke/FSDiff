@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import ui.components.buttons.IconButton?>
+<?import ui.diff.DataPaneController?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="ui.diff.DataPaneController" id="dataPane" fx:id="dataPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0"
+            prefWidth="100.0" xmlns="http://javafx.com/javafx/8">
+    <children>
+        <SplitPane id="dataSplitPane" fx:id="dataSplitPane"
+                   dividerPositions="0.5"
+                   orientation="VERTICAL"
+                   prefHeight="598.0"
+                   prefWidth="556.0"
+                   AnchorPane.bottomAnchor="0.0"
+                   AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0"
+                   AnchorPane.topAnchor="0.0">
+            <items>
+                <AnchorPane id="dataListingPane"
+                            fx:id="dataListingPane"
+                            minHeight="0.0"
+                            minWidth="0.0"
+                            prefHeight="100.0"
+                            prefWidth="160.0">
+                    <children>
+                        <VBox layoutX="238.0"
+                              layoutY="7.0"
+                              prefHeight="238.0"
+                              prefWidth="592.0"
+                              AnchorPane.bottomAnchor="0.0"
+                              AnchorPane.leftAnchor="0.0"
+                              AnchorPane.rightAnchor="0.0"
+                              AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Label text="Listing" />
+                                <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" fx:id="resultsTable">
+                                    <columns>
+                                        <TableColumn minWidth="130" prefWidth="200.0" text="Path" fx:id="pathColumn"/>
+                                        <TableColumn text="Status" fx:id="statusColumn" >
+                                            <prefWidth><DataPaneController fx:constant="STATUS_WIDTH"/> </prefWidth>
+                                        </TableColumn>
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </children></AnchorPane>
+                <AnchorPane id="dataViewingPane" fx:id="dataViewingPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                    <StackPane
+                            AnchorPane.bottomAnchor="0.0"
+                            AnchorPane.leftAnchor="0.0"
+                            AnchorPane.rightAnchor="0.0"
+                            AnchorPane.topAnchor="0.0">
+                        <children>
+                            <TabPane id="dataViewingTabPane" fx:id="dataViewingTabPane"
+                                     layoutX="154.0" layoutY="80.0"
+                                     prefHeight="294.0" prefWidth="554.0"
+                                     tabClosingPolicy="UNAVAILABLE">
+                                <tabs>
+                                    <Tab id="hexTab" fx:id="hexTab" text="Hex">
+                                        <content>
+                                            <!-- HexDumpBrowser or HexDiffViewer will be added here -->
+                                        </content>
+                                    </Tab>
+                                    <!-- TODO
+                                    <Tab id="stringsTab" fx:id="stringsTab" text="Strings">
+                                        <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                        </content>
+                                    </Tab> -->
+                                </tabs>
+                            </TabPane>
+                            <HBox alignment="TOP_RIGHT" pickOnBounds="false" prefHeight="50.0" prefWidth="150.0" >
+                                <IconButton icon="EXPAND" size="16" onAction="#toggleExpand" fx:id="toggleExpandButton"/>
+                                <padding>
+                                    <Insets top="5"/>
+                                </padding>
+                            </HBox>
+                        </children>
+                    </StackPane>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>

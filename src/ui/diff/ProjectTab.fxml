@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import ui.components.*?>
+<Tab xmlns:fx="http://javafx.com/fxml/1" id="projectTab" closable="false"
+     fx:controller="ui.diff.ProjectTabController">
+    <content>
+        <AnchorPane>
+            <children>
+                <ScrollPane fx:id="scrollPane"
+                            prefHeight="200.0" prefWidth="100.0"
+                            AnchorPane.bottomAnchor="0"
+                            AnchorPane.leftAnchor="0"
+                            AnchorPane.rightAnchor="0"
+                            AnchorPane.topAnchor="0">
+                    <content>
+                        <VBox fx:id="vBox"
+                              prefHeight="200.0" prefWidth="100.0">
+                            <children>
+                                <TitledPane animated="true" text="Comparison">
+                                    <content>
+                                        <InfoView spacing="20" fx:id="diffView">
+                                            <InfoItem label="Matched files" fx:id="matchedItem"/>
+                                            <InfoItem label="Modified files" fx:id="modifiedItem"/>
+                                            <InfoItem label="Created files" fx:id="createdItem"/>
+                                            <InfoItem label="Deleted files" fx:id="deletedItem"/>
+                                            <InfoItem label="Output file" fx:id="outputItem"/>
+                                        </InfoView>
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="true" text="Reference FS">
+                                    <content>
+                                        <InfoView spacing="20" fx:id="referenceView">
+                                            <InfoItem label="Input type" fx:id="inputTypeRefItem"/>
+                                            <InfoItem label="Path" fx:id="pathRefItem"/>
+                                            <InfoItem label="Files count" fx:id="filesRefItem"/>
+                                            <InfoItem label="Elapsed time" fx:id="elapsedRefItem"/>
+                                            <InfoItem label="Total size" fx:id="sizeRefItem"/>
+                                        </InfoView>
+                                    </content>
+                                </TitledPane>
+                                <TitledPane animated="true" text="Compared FS">
+                                    <content>
+                                        <InfoView spacing="20" fx:id="comparedView">
+                                            <InfoItem label="Input type" fx:id="inputTypeComItem"/>
+                                            <InfoItem label="Path" fx:id="pathComItem"/>
+                                            <InfoItem label="Files count" fx:id="filesComItem"/>
+                                            <InfoItem label="Elapsed time" fx:id="elapsedComItem"/>
+                                            <InfoItem label="Total size" fx:id="sizeComItem"/>
+                                        </InfoView>
+                                    </content>
+                                </TitledPane>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </AnchorPane>
+    </content>
+</Tab>

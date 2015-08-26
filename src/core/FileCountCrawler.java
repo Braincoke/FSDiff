@@ -1,10 +1,10 @@
 package core;
 
-import gui.Main;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import ui.Main;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="ui.wizard.hash.FSChoiceController">
+   <children>
+      <BorderPane prefHeight="540.0" prefWidth="740.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <bottom>
+             <HBox alignment="BOTTOM_RIGHT" prefHeight="50.0" prefWidth="200.0" spacing="10" BorderPane.alignment="CENTER">
+                <children>
+                   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#toggleDetailPane" text="Cancel" />
+                    <Button fx:id="okButton" disable="true" mnemonicParsing="false" onAction="#applyChanges" text="OK" defaultButton="true" />
+                </children>
+             </HBox>
+         </bottom>
+         <center>
+            <VBox alignment="CENTER">
+               <children>
+                   <VBox spacing="10">
+                       <HBox alignment="BASELINE_CENTER">
+                           <Text fx:id="editionMode">
+                               <font>
+                                   <Font name="System Bold Italic" size="20.0" />
+                               </font>
+                           </Text>
+                       </HBox>
+                       <VBox spacing="5">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Input type"  />
+                           <ComboBox fx:id="inputTypeComboBox" maxWidth="-Infinity">
+
+                           </ComboBox>
+                       </VBox>
+                       <VBox spacing="5">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data Location"/>
+                           <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" >
+                               <children>
+                                   <TextField fx:id="inputPathTextField" promptText="Location of the data source" HBox.hgrow="ALWAYS" />
+                                   <Button fx:id="browseInputButton" mnemonicParsing="false" onAction="#browseInput" text="..." />
+                               </children>
+                           </HBox>
+                       </VBox>
+                       <VBox spacing="5">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Output file name" />
+                           <TextField fx:id="outputNameTextField" promptText="Name of the saved .fshx file"/>
+                       </VBox>
+                       <VBox spacing="5">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Output directory" />
+                           <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                               <children>
+                                   <TextField fx:id="outputDirectoryTextField" promptText="Directory where to save the output file" HBox.hgrow="ALWAYS" />
+                                   <Button fx:id="browseOutputButton" mnemonicParsing="false" onAction="#browseOutput" text="..." />
+                               </children>
+                           </HBox>
+                       </VBox>
+                   </VBox>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</AnchorPane>

@@ -1,12 +1,12 @@
 package loaders;
 
-import core.FileSystemComparison;
+import core.FileSystemDiff;
 import javafx.concurrent.Task;
 
 /**
- * Loads a FileSystemComparison from a .fscx file
+ * Loads a FileSystemDiff from a .fscx file
  */
-public class FSCXLoader extends FileLoader<FileSystemComparison>{
+public class FSCXLoader extends FileLoader<FileSystemDiff>{
 
     public FSCXLoader(){}
 
@@ -15,7 +15,7 @@ public class FSCXLoader extends FileLoader<FileSystemComparison>{
     }
 
     @Override
-    protected Task<FileSystemComparison> createTask() {
+    protected Task<FileSystemDiff> createTask() {
         return new FSCXLoadTask(path);
     }
 

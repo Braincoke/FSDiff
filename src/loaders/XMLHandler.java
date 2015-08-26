@@ -55,7 +55,7 @@ public class XMLHandler {
         }
     }
 
-    public static void saveToXML(FileSystemComparison fsc, Path savePath) {
+    public static void saveToXML(FileSystemDiff fsc, Path savePath) {
         Element comparison = XMLHandler.toXMLElement(fsc);
         org.jdom2.Document document = new Document(comparison);
         Path formattedSavePath = savePath;
@@ -214,7 +214,7 @@ public class XMLHandler {
      *                                                                                                                 *
      *******************************************************************************************************************/
 
-    public static Element toXMLElement(FileSystemComparison fsc) {
+    public static Element toXMLElement(FileSystemDiff fsc) {
 
 
         Element fscomparison = new Element("FSComparison");
@@ -263,7 +263,7 @@ public class XMLHandler {
         //***************** Comparison **************************************//
         Element comparisonElement = new Element("comparison");
         fscomparison.addContent(comparisonElement);
-        for(PathComparison p : fsc.getComparison()){
+        for(PathDiff p : fsc.getDiff()){
             Element pElement = toXMLElement(p);
             comparisonElement.addContent(pElement);
         }
@@ -273,9 +273,9 @@ public class XMLHandler {
 
 
     /**
-     * Load a FileSystemComparison object from a given XML file
+     * Load a FileSystemDiff object from a given XML file
      */
-    public static FileSystemComparison loadFileSystemComparison(String xmlFile) throws JDOMException, IOException {
+    public static FileSystemDiff loadFileSystemComparison(String xmlFile) throws JDOMException, IOException {
         //Load the XML file
         Document document;
         Element fscomparisonElement;
@@ -303,11 +303,11 @@ public class XMLHandler {
         } catch (ParseException e) {
             //TODO log
         }
-        metadata.add(ComparisonStatus.MATCHED.getIndex(), Integer.parseInt(matchedText));
-        metadata.add(ComparisonStatus.MODIFIED.getIndex(), Integer.parseInt(modifiedText));
-        metadata.add(ComparisonStatus.CREATED.getIndex(), Integer.parseInt(createdText));
-        metadata.add(ComparisonStatus.DELETED.getIndex(), Integer.parseInt(deletedText));
-        metadata.add(ComparisonStatus.ERROR.getIndex(), Integer.parseInt(errorText));
+        metadata.add(DiffStatus.MATCHED.getIndex(), Integer.parseInt(matchedText));
+        metadata.add(DiffStatus.MODIFIED.getIndex(), Integer.parseInt(modifiedText));
+        metadata.add(DiffStatus.CREATED.getIndex(), Integer.parseInt(createdText));
+        metadata.add(DiffStatus.DELETED.getIndex(), Integer.parseInt(deletedText));
+        metadata.add(DiffStatus.ERROR.getIndex(), Integer.parseInt(errorText));
 
         //******************* FSHMetadata **************************//
         Element refFSElement = metadataElement.getChild("referenceFS");
@@ -318,22 +318,22 @@ public class XMLHandler {
         //******************* Comparison ***************************//
         Element comparisonElement = fscomparisonElement.getChild("comparison");
         List<Element> pList = comparisonElement.getChildren();
-        TreeSet<PathComparison> comparisonSet = new TreeSet<>();
+        TreeSet<PathDiff> comparisonSet = new TreeSet<>();
         for(Element pElement : pList){
-            PathComparison p = loadPathComparison(pElement);
+            PathDiff p = loadPathComparison(pElement);
             comparisonSet.add(p);
         }
         //Update parent linking
-        for(PathComparison p : comparisonSet){
-            PathComparison parent = p.getParent();
-            for(PathComparison potentialParent : comparisonSet){
+        for(PathDiff p : comparisonSet){
+            PathDiff parent = p.getParent();
+            for(PathDiff potentialParent : comparisonSet){
                 if(parent.comparePath(potentialParent) == 0){
                     p.setParent(potentialParent);
                 }
             }
         }
 
-        return new FileSystemComparison(refFS,
+        return new FileSystemDiff(refFS,
                 comFS,
                 metadata,
                 datetime,
@@ -349,7 +349,7 @@ public class XMLHandler {
      *******************************************************************************************************************/
 
 
-    public static Element toXMLElement(PathComparison p){
+    public static Element toXMLElement(PathDiff p){
         Element pathComparisonElement = new Element("pathComparison");
         Element pathElement = new Element("path");
         Element parentElement = new Element("parent");
@@ -366,11 +366,11 @@ public class XMLHandler {
             Element createdElement = new Element("created");
             Element deletedElement = new Element("deleted");
             Element errorElement = new Element("error");
-            matchedElement.setText(String.valueOf(p.getDirectoryStatus(ComparisonStatus.MATCHED)));
-            modifiedElement.setText(String.valueOf(p.getDirectoryStatus(ComparisonStatus.MODIFIED)));
-            createdElement.setText(String.valueOf(p.getDirectoryStatus(ComparisonStatus.CREATED)));
-            deletedElement.setText(String.valueOf(p.getDirectoryStatus(ComparisonStatus.DELETED)));
-            errorElement.setText(String.valueOf(p.getDirectoryStatus(ComparisonStatus.ERROR)));
+            matchedElement.setText(String.valueOf(p.getDirectoryStatus(DiffStatus.MATCHED)));
+            modifiedElement.setText(String.valueOf(p.getDirectoryStatus(DiffStatus.MODIFIED)));
+            createdElement.setText(String.valueOf(p.getDirectoryStatus(DiffStatus.CREATED)));
+            deletedElement.setText(String.valueOf(p.getDirectoryStatus(DiffStatus.DELETED)));
+            errorElement.setText(String.valueOf(p.getDirectoryStatus(DiffStatus.ERROR)));
             directoryStatusElement.addContent(matchedElement)
                     .addContent(modifiedElement)
                     .addContent(createdElement)
@@ -392,11 +392,11 @@ public class XMLHandler {
      * @param pElement
      * @return
      */
-    public static PathComparison loadPathComparison(Element pElement){
+    public static PathDiff loadPathComparison(Element pElement){
         String pathText = pElement.getChildText("path");
-        PathComparison p = new PathComparison(Paths.get(pathText));
+        PathDiff p = new PathDiff(Paths.get(pathText));
         String parentText = pElement.getChildText("parent");
-        p.setParent(new PathComparison(Paths.get(parentText)));
+        p.setParent(new PathDiff(Paths.get(parentText)));
         String directoryAttribute = pElement.getAttributeValue("type");
         if(directoryAttribute.compareTo("directory")==0){
             p.setIsDirectory(true);
@@ -406,17 +406,17 @@ public class XMLHandler {
             int created = Integer.parseInt(directoryStatusElement.getChildText("created"));
             int deleted = Integer.parseInt(directoryStatusElement.getChildText("deleted"));
             int error = Integer.parseInt(directoryStatusElement.getChildText("error"));
-            int[] directoryStatus = new int[ComparisonStatus.SIZE];
-            directoryStatus[ComparisonStatus.MATCHED.getIndex()] = matched;
-            directoryStatus[ComparisonStatus.MODIFIED.getIndex()] = modified;
-            directoryStatus[ComparisonStatus.CREATED.getIndex()] = created;
-            directoryStatus[ComparisonStatus.DELETED.getIndex()] = deleted;
-            directoryStatus[ComparisonStatus.ERROR.getIndex()] = error;
+            int[] directoryStatus = new int[DiffStatus.SIZE];
+            directoryStatus[DiffStatus.MATCHED.getIndex()] = matched;
+            directoryStatus[DiffStatus.MODIFIED.getIndex()] = modified;
+            directoryStatus[DiffStatus.CREATED.getIndex()] = created;
+            directoryStatus[DiffStatus.DELETED.getIndex()] = deleted;
+            directoryStatus[DiffStatus.ERROR.getIndex()] = error;
             p.setDirectoryStatus(directoryStatus);
         } else if (directoryAttribute.compareTo("file")==0){
             p.setIsDirectory(false);
             String statusText = pElement.getChildText("status");
-            for(ComparisonStatus s : ComparisonStatus.values()){
+            for(DiffStatus s : DiffStatus.values()){
                 if(s.name().compareToIgnoreCase(statusText)==0){
                     p.setStatus(s);
                 }

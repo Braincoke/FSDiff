@@ -1,9 +1,9 @@
 package loaders;
 
-import core.ComparisonStatus;
-import core.FileSystemComparison;
+import core.DiffStatus;
+import core.FileSystemDiff;
 import core.FileSystemHashMetadata;
-import core.PathComparison;
+import core.PathDiff;
 import javafx.concurrent.Task;
 
 import javax.xml.stream.XMLInputFactory;
@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * Load a FSCX file
  */
-public class FSCXLoadTask extends Task<FileSystemComparison> {
+public class FSCXLoadTask extends Task<FileSystemDiff> {
 
     /**
      * Path to the fscx file
@@ -71,12 +71,12 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
     /**
      * The differentials
      */
-    private ArrayList<PathComparison> comparisonList;
+    private ArrayList<PathDiff> comparisonList;
 
     /**
      * The differentials
      */
-    private TreeSet<PathComparison> comparisonSet;
+    private TreeSet<PathDiff> comparisonSet;
 
 
     /**
@@ -89,7 +89,7 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
      * The indexes of the directories found
      * The key is the level of the directory
      * The value is the list of indexes for directory with that level
-     * The indexes refer to positions in the list of PathComparison
+     * The indexes refer to positions in the list of PathDiff
      */
     private HashMap<Integer, ArrayList<Integer>> directories;
 
@@ -104,13 +104,13 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
     }
 
     @Override
-    protected FileSystemComparison call() throws Exception {
+    protected FileSystemDiff call() throws Exception {
         if(initStream()){
             while(reader.hasNext()){
                 int type =  reader.next();
                 process(type);
             }
-            return new FileSystemComparison(
+            return new FileSystemDiff(
                     referenceFS,
                     comparedFS,
                     metadata,
@@ -191,29 +191,29 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
                         case "matchedCount":
                             int matchedCount = Integer.parseInt(reader.getText());
                             workMax += matchedCount;
-                            metadata.add(ComparisonStatus.MATCHED.getIndex(),
+                            metadata.add(DiffStatus.MATCHED.getIndex(),
                                     matchedCount);
                             break;
                         case "modifiedCount":
                             int modifiedCount = Integer.parseInt(reader.getText());
                             workMax += modifiedCount;
-                            metadata.add(ComparisonStatus.MODIFIED.getIndex(),
+                            metadata.add(DiffStatus.MODIFIED.getIndex(),
                                     modifiedCount);
                             break;
                         case "createdCount":
                             int createdCount = Integer.parseInt(reader.getText());
                             workMax += createdCount;
-                            metadata.add(ComparisonStatus.CREATED.getIndex(),
+                            metadata.add(DiffStatus.CREATED.getIndex(),
                                     createdCount);
                             break;
                         case "deletedCount":
                             int deletedCount = Integer.parseInt(reader.getText());
                             workMax += deletedCount;
-                            metadata.add(ComparisonStatus.DELETED.getIndex(),
+                            metadata.add(DiffStatus.DELETED.getIndex(),
                                     deletedCount);
                             break;
                         case "errorCount":
-                            metadata.add(ComparisonStatus.ERROR.getIndex(),
+                            metadata.add(DiffStatus.ERROR.getIndex(),
                                     Integer.parseInt(reader.getText()));
                             break;
                         case "referenceFS":
@@ -295,7 +295,7 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
         int type;
         int workDone = 0;
         updateProgress(workDone, workMax);
-        PathComparison p;
+        PathDiff p;
         while(!done && reader.hasNext()) {
             type = reader.nextTag();
             if(type == XMLStreamReader.START_ELEMENT){
@@ -319,10 +319,10 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
      * Extract a pathDiff from the XML
      * @return  The path differential
      */
-    private PathComparison loadPathDiff() throws XMLStreamException {
+    private PathDiff loadPathDiff() throws XMLStreamException {
         boolean done = false;
         int type;
-        PathComparison pathDiff = new PathComparison();
+        PathDiff pathDiff = new PathDiff();
         String currentElement;
         if(reader.getAttributeCount()>0){
             for(int i=0; i<reader.getAttributeCount(); i++){
@@ -364,7 +364,7 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
                                     ArrayList<Integer> indexes = directories.get(level);
                                     int i = indexes.size()-1;
                                     while(!found && i>0){
-                                        PathComparison p = comparisonList.get(indexes.get(i));
+                                        PathDiff p = comparisonList.get(indexes.get(i));
                                         if (p.getPath().toString().compareTo(parentPath) == 0) {
                                             pathDiff.setParent(p);
                                             found = true;
@@ -372,14 +372,14 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
                                         i--;
                                     }
                                 } else {
-                                    pathDiff.setParent(new PathComparison(
+                                    pathDiff.setParent(new PathDiff(
                                             Paths.get("")
                                     ));
                                 }
                                 break;
                             case "status":
                                 String statusText = reader.getText();
-                                for (ComparisonStatus s : ComparisonStatus.values()) {
+                                for (DiffStatus s : DiffStatus.values()) {
                                     if (s.name().compareToIgnoreCase(statusText) == 0) {
                                         pathDiff.setStatus(s);
                                     }
@@ -401,11 +401,11 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
         return pathDiff;
     }
 
-    private void loadDirectoryStatus(PathComparison pathDiff) throws XMLStreamException {
+    private void loadDirectoryStatus(PathDiff pathDiff) throws XMLStreamException {
         boolean done = false;
         String currentElement;
         int type;
-        int[] directoryStatus = new int[ComparisonStatus.SIZE];
+        int[] directoryStatus = new int[DiffStatus.SIZE];
         while(!done && reader.hasNext()){
             type = reader.nextTag();
             currentElement = reader.getLocalName();
@@ -420,19 +420,19 @@ public class FSCXLoadTask extends Task<FileSystemComparison> {
                     } catch( NumberFormatException ignore){}
                     switch (currentElement) {
                         case "matched":
-                            directoryStatus[ComparisonStatus.MATCHED.getIndex()] = value;
+                            directoryStatus[DiffStatus.MATCHED.getIndex()] = value;
                             break;
                         case "modified":
-                            directoryStatus[ComparisonStatus.MODIFIED.getIndex()] = value;
+                            directoryStatus[DiffStatus.MODIFIED.getIndex()] = value;
                             break;
                         case "created":
-                            directoryStatus[ComparisonStatus.CREATED.getIndex()] = value;
+                            directoryStatus[DiffStatus.CREATED.getIndex()] = value;
                             break;
                         case "deleted":
-                            directoryStatus[ComparisonStatus.DELETED.getIndex()] = value;
+                            directoryStatus[DiffStatus.DELETED.getIndex()] = value;
                             break;
                         case "error":
-                            directoryStatus[ComparisonStatus.ERROR.getIndex()] = value;
+                            directoryStatus[DiffStatus.ERROR.getIndex()] = value;
                             break;
                     }
                     do {
