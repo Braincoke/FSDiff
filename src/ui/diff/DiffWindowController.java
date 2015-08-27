@@ -4,14 +4,22 @@ import core.DiffStatus;
 import core.FileSystemDiff;
 import core.InputType;
 import core.PathDiff;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.geometry.Pos;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import loaders.FSCXLoader;
 import loaders.XMLHandler;
+import org.controlsfx.control.Notifications;
 import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
 import ui.Controller;
@@ -115,7 +123,7 @@ public class DiffWindowController extends Controller {
     }
 
     public void setSelectedPath(DiffTreeItem item) {
-        if(item!=null) {
+        if(item!=null && item!=rootTreeItem) {
             breadcrumbsController.updateBreadcrumbs(item);
             if (!item.isDirectory())
                 dataPaneController.updateHexViewer(item);
@@ -251,7 +259,18 @@ public class DiffWindowController extends Controller {
         dataPaneController.setWindowController(this);
         menuBarController.setWindowController(this);
         application.getStage().setTitle("FSDiff - " + outputFile.getFileName().toString());
-        //FIXME checkRootPaths(); Replace annoying pop up by discrete notification
+        Task<Void> checkRoots = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                Platform.runLater(DiffWindowController.this::checkRootPaths);
+                return null;
+            }
+        };
+        Thread thread = new Thread(checkRoots);
+        thread.setDaemon(true);
+        progressIndicator.setProgress(-1f);
+        checkRoots.setOnSucceeded(event -> progressIndicator.setProgress(0));
+        thread.start();
     }
 
 
@@ -266,7 +285,7 @@ public class DiffWindowController extends Controller {
         HashMap<Path, DiffTreeItem> branchNodes = new HashMap<>();
         //Build the Tree
         for(PathDiff pathDiff : treeSet) {
-            createNode(rootTreeItem, branchNodes, pathDiff);
+            createNode(branchNodes, pathDiff);
         }
     }
 
@@ -274,12 +293,10 @@ public class DiffWindowController extends Controller {
      * Create a TreeItem node from a PathDiff and connect it to its branch
      * If the branch does not exist, it will be created and added to the list of
      * branchNodes.
-     * @param root           The root node
      * @param branchNodes    The list of branch nodes
      * @param pathDiff The PathDiff object from which to create the node
      */
-    private void createNode(DiffTreeItem root,
-                            HashMap<Path, DiffTreeItem> branchNodes,
+    private void createNode(HashMap<Path, DiffTreeItem> branchNodes,
                             PathDiff pathDiff) {
         Path path = pathDiff.getPath();
         Path parentPath = pathDiff.getParentPath();
@@ -295,7 +312,7 @@ public class DiffWindowController extends Controller {
                     branchNodes.get(parentPath).getChildren().add(treeItem);
                 } else {
                     //The parent directory node does not exist yet, create it
-                    createNode(root, branchNodes, pathDiff.getParent());
+                    createNode(branchNodes, pathDiff.getParent());
                     //Now connect to the parent directory node
                     branchNodes.get(parentPath).getChildren().add(treeItem);
                 }
@@ -308,7 +325,7 @@ public class DiffWindowController extends Controller {
                 //Connect the leaf to the related branch
                 //If the parent node does not exist yet, create it
                 if(branchNodes.get(parentPath) == null) {
-                    createNode(root, branchNodes, pathDiff.getParent());
+                    createNode(branchNodes, pathDiff.getParent());
                 }
                 //Then connect the leaf to the newly created branch
                 branchNodes.get(parentPath).getChildren().add(treeItem);
@@ -355,8 +372,6 @@ public class DiffWindowController extends Controller {
      * directory. If not the user will be asked to rebase the faulty root.
      */
     public void checkRootPaths(){
-        Path referenceRootPath = diff.getReferenceFS().getRootPath();
-        Path comparedRootPath = diff.getComparedFS().getRootPath();
         InputType referenceInputType = diff.getReferenceFS().getInputType();
         InputType comparedInputType = diff.getComparedFS().getInputType();
 
@@ -379,7 +394,7 @@ public class DiffWindowController extends Controller {
         ArrayList<PathDiff> list = new ArrayList<>(diff.getDiff());
         int randomFile;
         Path filePath;
-        for(int i = 0; i<3; i++){
+        for(int i = 0; i<5; i++){
             do {
                 randomFile = (int) Math.floor((Math.random() * length));
                 filePath = list.get(randomFile).getPath();
@@ -392,10 +407,11 @@ public class DiffWindowController extends Controller {
                 } else {
                     filePath = diff.getComparedFS().getRootPath().resolve(filePath);
                 }
-                //FIXME it appears the user may be asked to rebase the directory even if
-                //FIXME it should not be the case. The error happens randomly (probably for restricted access files)
-                FileInputStream is = new FileInputStream(filePath.toString());
-                is.close();
+                File file = filePath.toFile();
+                if(!file.isDirectory()) {
+                    FileInputStream is = new FileInputStream(file);
+                    is.close();
+                }
             } catch (FileNotFoundException e) {
                 rebase = true;
             } catch (IOException e) {
@@ -424,25 +440,23 @@ public class DiffWindowController extends Controller {
             fileSystemPath = diff.getComparedFS().getRootPath().toString();
         }
         message ="The path to the " + fileSystem + " file system seems to be obsolete ("
-                        + fileSystemPath + ")";
-        message += "\nClick \"Rebase\" to rebase the root directory or \"Ignore\" to ignore.";
-        message += "\n\nNote that you will not be able to load the hex dumps if you do not rebase the directory.";
-        ButtonType rebase = new ButtonType("Rebase", ButtonBar.ButtonData.OK_DONE);
-        ButtonType ignore = new ButtonType("Ignore", ButtonBar.ButtonData.CANCEL_CLOSE);
-        Alert warningAlert = new Alert(Alert.AlertType.WARNING, message, ignore, rebase);
-        Optional<ButtonType> result = warningAlert.showAndWait();
-        if(result.get()==rebase){
+                        + fileSystemPath + ")."
+                        + "\nClick on the notification to rebase.";
+
+        Notifications notificationBuilder = Notifications.create()
+                .text(message)
+                .hideAfter(Duration.seconds(30))
+                .position(Pos.TOP_RIGHT)
+                .owner(application.getStage());
+        notificationBuilder.onAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle("Rebase the path for the " + fileSystem + " file system" );
             File file = directoryChooser.showDialog(application.getStage());
             if(file!=null){
-                if(isReference){
-                    diff.getReferenceFS().setRootPath(file.getAbsolutePath());
-                } else {
-                    diff.getComparedFS().setRootPath(file.getAbsolutePath());
-                }
+                rebaseRootDirectory(isReference, file.getAbsolutePath());
             }
-        }
+        });
+        notificationBuilder.showWarning();
     }
 
     public void rebaseRootDirectory(boolean isReference, String newPath) {

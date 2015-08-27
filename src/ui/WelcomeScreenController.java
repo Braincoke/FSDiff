@@ -47,7 +47,7 @@ public class WelcomeScreenController extends Controller {
                 loader.setOnSucceeded(event -> {
                     DiffWindowController diffWindowController;
                     try {
-                        diffWindowController = (DiffWindowController) application.replaceSceneContent("comparison/DiffWindow.fxml");
+                        diffWindowController = (DiffWindowController) application.replaceSceneContent("diff/DiffWindow.fxml");
                         application.getStage().setWidth(DiffWindowController.INTERFACE_WIDTH);
                         application.getStage().setHeight(DiffWindowController.INTERFACE_HEIGHT);
                         diffWindowController.setApplication(application);

@@ -7,7 +7,7 @@
     <children>
         <StackPane prefHeight="485.0" prefWidth="235.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <TabPane id="leftMenuTabPane" fx:id="leftMenuTabPane" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMinHeight="20.0" tabMinWidth="50.0">
+                <TabPane id="leftMenuTabPane" fx:id="leftMenuTabPane" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMinHeight="20.0" tabMinWidth="50.0" styleClass="no-focus">
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>

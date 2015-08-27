@@ -1,3 +1,19 @@
+/*********************** GENERAL ********************************/
+
+.no-focus {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-background-radius: 0, 0, 0, 0;
+}
+
+.no-focus:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-background-radius: 0, 0, 0, 0;
+}
+
 .tab{
    -fx-padding: 5;
 }
@@ -11,6 +27,7 @@
 }
 
 .toolbarButton {
+    -fx-focus-color: black;
     -fx-background-color: none;
 }
 

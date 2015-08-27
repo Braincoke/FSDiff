@@ -2,6 +2,7 @@ package ui.diff;
 
 import core.DiffStatus;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +34,7 @@ public class DataPaneController extends Controller {
     @FXML
     private SplitPane dataSplitPane;
 
+    private ChangeListener<Number> hexFullScreenListener;
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -85,7 +87,6 @@ public class DataPaneController extends Controller {
 
     /**
      * Expand the hex view to the total size of the window or reduce it to its original size
-     * //TODO Handle fullscreen event
      */
     public void toggleExpand() {
         if(toggleExpandButton.getIcon().compareTo("EXPAND")==0){
@@ -94,12 +95,18 @@ public class DataPaneController extends Controller {
             windowController.getSplitPane().setDividerPositions(0);
             dataSplitPane.setDividerPositions(0);
             toggleExpandButton.setIcon("COMPRESS");
+            application.getStage().widthProperty().addListener(hexFullScreenListener);
+            application.getStage().heightProperty().addListener(hexFullScreenListener);
         } else {
             toggleExpandButton.setIcon("EXPAND");
             dataSplitPane.setDividerPositions(dataDividerPositions);
             windowController.getSplitPane().setDividerPositions(leftDividerPositions);
+            application.getStage().widthProperty().removeListener(hexFullScreenListener);
+            application.getStage().heightProperty().removeListener(hexFullScreenListener);
         }
     }
+
+
 
     /*******************************************************************************************************************
      *                                                                                                                 *
@@ -116,7 +123,12 @@ public class DataPaneController extends Controller {
 
     public void setWindowController(DiffWindowController windowController){
         this.windowController = windowController;
+        this.application = windowController.getApplication();
         this.windowController.search();
+        this.hexFullScreenListener = (observable, oldValue, newValue) -> {
+            windowController.getSplitPane().setDividerPositions(0);
+            dataSplitPane.setDividerPositions(0);
+        };
     }
 
 

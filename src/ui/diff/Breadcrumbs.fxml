@@ -3,17 +3,27 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import java.lang.Double?>
 <HBox xmlns:fx="http://javafx.com/fxml"
             fx:controller="ui.diff.BreadcrumbsController"
-            maxHeight="28.0"
-            prefHeight="28.0"
+            maxHeight="$HEIGHT"
+            prefHeight="$HEIGHT"
+            minHeight="$HEIGHT"
             prefWidth="200.0"
             VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/8"
-            HBox.hgrow="ALWAYS">
+            HBox.hgrow="ALWAYS"
+            fx:id="hbox"
+            focusTraversable="false"
+            styleClass="no-focus">
+        <fx:define>
+            <Double fx:id="HEIGHT" fx:value="30"/>
+        </fx:define>
         <ScrollPane fx:id="scrollPane" id="breadcrumbs"
               hbarPolicy="NEVER" vbarPolicy="NEVER"
-              maxHeight="28.0"
-              prefHeight="28.0" prefWidth="200.0"
-                    HBox.hgrow="ALWAYS">
+              maxHeight="$HEIGHT"
+              prefHeight="$HEIGHT" prefWidth="200.0"
+              minHeight="$HEIGHT"
+              HBox.hgrow="ALWAYS"
+              styleClass="no-focus">
         </ScrollPane>
 </HBox>

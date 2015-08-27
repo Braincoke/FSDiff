@@ -40,8 +40,24 @@ public class PathDiffTreeCell extends TreeCell<PathDiff> {
             .color(Color.valueOf(CssColor.ERROR.getBackgroundHexColor()));
 
 
+    /**
+     * A filter display to choose which pills to display according to their DiffStatus
+     */
+    private boolean[] display;
+
+    /**
+     * Choose to display or not a pill with the given DiffStatus
+     * @param status    The DiffStatus
+     * @param display   true to display the pill and false to hide it
+     */
+    public void setDisplay(DiffStatus status, boolean display){
+        this.display[status.getIndex()] = display;
+    }
 
 
+    public PathDiffTreeCell(){
+        display = new boolean[DiffStatus.SIZE];
+    }
 
     /**
      *  Create the cell
@@ -113,11 +129,11 @@ public class PathDiffTreeCell extends TreeCell<PathDiff> {
             textHbox.getChildren().add(nameLabel);
 
             //Add pills
-            new Pill(infoHbox, item, DiffStatus.ERROR);
-            new Pill(infoHbox, item, DiffStatus.MATCHED);
-            new Pill(infoHbox, item, DiffStatus.MODIFIED);
-            new Pill(infoHbox, item, DiffStatus.CREATED);
-            new Pill(infoHbox, item, DiffStatus.DELETED);
+            for(DiffStatus diffStatus : DiffStatus.values()){
+                if(display[diffStatus.getIndex()]){
+                    new Pill(infoHbox, item, diffStatus);
+                }
+            }
 
             //Add all HBoxes to itemGraphics
             itemGraphics.getChildren().addAll(iconHbox, textHbox, infoHbox);

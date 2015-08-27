@@ -6,19 +6,25 @@
 <?import org.controlsfx.control.MasterDetailPane?>
 <?import ui.components.buttons.IconButton?>
 <?import ui.diff.ExplorerTabController?>
-<Tab xmlns:fx="http://javafx.com/fxml/1" id="explorerTab" closable="false" xmlns="http://javafx.com/javafx/8" fx:controller="ui.diff.ExplorerTabController">
+<Tab xmlns:fx="http://javafx.com/fxml/1"
+     id="explorerTab"
+     closable="false"
+     xmlns="http://javafx.com/javafx/8"
+     fx:controller="ui.diff.ExplorerTabController"
+     styleClass="no-focus">
 <content>
     <AnchorPane>
         <VBox prefHeight="200.0" prefWidth="100.0"
               AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0"
-              AnchorPane.topAnchor="0.0">
+              AnchorPane.topAnchor="0.0"
+              styleClass="no-focus">
             <children>
                 <HBox minHeight="25.0" maxHeight="25.0">
                     <children>
                         <Pane prefHeight="25.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                        <HBox fx:id="explorerTabToolbar" alignment="CENTER_RIGHT" minHeight="25.0" maxHeight="25.0" prefWidth="200.0">
+                        <HBox fx:id="explorerTabToolbar" alignment="CENTER_RIGHT" minHeight="25.0" maxHeight="25.0" prefWidth="200.0" styleClass="no-focus">
                             <children>
                                 <IconButton fx:id="filterButton" mnemonicParsing="false" onAction="#toggleFilterPanel" icon="FILTER">
                                     <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>

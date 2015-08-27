@@ -56,14 +56,15 @@
                             <TabPane id="dataViewingTabPane" fx:id="dataViewingTabPane"
                                      layoutX="154.0" layoutY="80.0"
                                      prefHeight="294.0" prefWidth="554.0"
-                                     tabClosingPolicy="UNAVAILABLE">
+                                     tabClosingPolicy="UNAVAILABLE"
+                                     styleClass="no-focus">
                                 <tabs>
-                                    <Tab id="hexTab" fx:id="hexTab" text="Hex">
+                                    <Tab id="hexTab" fx:id="hexTab" text="Hex" styleClass="no-focus">
                                         <content>
                                             <!-- HexDumpBrowser or HexDiffViewer will be added here -->
                                         </content>
                                     </Tab>
-                                    <!-- TODO
+                                    <!-- TODO Add strings tab
                                     <Tab id="stringsTab" fx:id="stringsTab" text="Strings">
                                         <content>
                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />

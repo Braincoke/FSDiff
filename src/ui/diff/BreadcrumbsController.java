@@ -11,6 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.HLineTo;
@@ -29,9 +30,9 @@ public class BreadcrumbsController extends Controller{
 
     @FXML
     private ScrollPane scrollPane;
+    @FXML
+    private HBox hbox;
 
-
-    //TODO scrollable breadcrumbs for long path name
     public void setWindowController(DiffWindowController windowController){
         this.windowController = windowController;
         breadCrumbBar = new BreadCrumbBar<>(windowController.getRootTreeItem());
@@ -57,12 +58,12 @@ public class BreadcrumbsController extends Controller{
                 new CustomBreadCrumbButton(crumb.getValue() != null ? crumb.getValue().getName():""));
         //Update windowController selectedPath on click
         breadCrumbBar.setOnCrumbAction(event -> windowController.setSelectedPath((DiffTreeItem) event.getSelectedCrumb()));
+        breadCrumbBar.setTranslateY(-1);
     }
 
     public void updateBreadcrumbs(DiffTreeItem node){
         breadCrumbBar.setSelectedCrumb(node);
     }
-
 
     /**
      * Get the number of buttons in the breadcrumb bar, and the total number of chars
@@ -71,7 +72,6 @@ public class BreadcrumbsController extends Controller{
         TreeItem<PathDiff> selected = breadCrumbBar.getSelectedCrumb();
         int nbItems = 1;
         int nbChars = selected.getValue().getPath().getFileName().toString().length();
-        TreeItem<PathDiff> parent = selected;
         while( (selected = selected.getParent()) != null){
             nbItems++;
             nbChars += selected.getValue().getPath().getFileName().toString().length();

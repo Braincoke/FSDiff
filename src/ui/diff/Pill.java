@@ -40,6 +40,12 @@ public class Pill extends StackPane {
     private double translateX = 5;
     private int pillWidth = 40;
 
+    /**
+     * Create the pill and add it to the parent pane
+     * @param parent        The parent container for the pill
+     * @param pathDiff      The path differential
+     * @param diffStatus    The status of the differential
+     */
     public Pill(Pane parent, PathDiff pathDiff, DiffStatus diffStatus){
         statusRectangle = generateRectangle(diffStatus);
         statusLabel = generatePillLabel(diffStatus);
@@ -72,6 +78,11 @@ public class Pill extends StackPane {
         }
     }
 
+    /**
+     * Return the number of characters that will be used to display the status count
+     * @param statusCount   The status count that will be displayed
+     * @return  The number of character used to display statusCount
+     */
     private int getCharNumber(int statusCount) {
         int charNumber = 1;
         int divisor = 1;
@@ -89,6 +100,11 @@ public class Pill extends StackPane {
         return charNumber;
     }
 
+    /**
+     * Create a compressed pill with the given color
+     * @param color The color of the pill
+     * @return  The compressed pill
+     */
     private Rectangle generateRectangle(CssColor color) {
         Rectangle result = new Rectangle(circleWidth, circleHeight, Paint.valueOf(color.getBackgroundHexColor()));
         result.setArcHeight(circleArcHeight);
@@ -97,6 +113,11 @@ public class Pill extends StackPane {
         return result;
     }
 
+    /**
+     * Create a compressed pill and initialise the color according to the given status
+     * @param status    The differential status
+     * @return          The compressed pill
+     */
     private Rectangle generateRectangle(DiffStatus status){
         Rectangle rectangle = new Rectangle(circleWidth, circleHeight);
         rectangle.setArcHeight(circleArcHeight);
@@ -131,6 +152,11 @@ public class Pill extends StackPane {
         return rectangle;
     }
 
+    /**
+     * Generate the label that will hold the status count
+     * @param color The color of the text
+     * @return  The label
+     */
     private Label generatePillLabel(CssColor color) {
         Label result = new Label();
         result.setTextFill(Paint.valueOf(color.getBackgroundHexColor()));
@@ -138,6 +164,11 @@ public class Pill extends StackPane {
         return result;
     }
 
+    /**
+     * Generate a label holding a status count given a DiffStatus
+     * @param status    The DiffStatus
+     * @return  The generated label
+     */
     private Label generatePillLabel(DiffStatus status){
         switch(status){
             case MATCHED:

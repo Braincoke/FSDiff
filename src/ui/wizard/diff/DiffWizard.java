@@ -217,7 +217,7 @@ public class DiffWizard extends Wizard{
             referenceChoiceController = new ReferenceFSChoiceController();
         }
         referenceChoiceController = (ReferenceFSChoiceController) gotoWizardPane(
-                "wizard/comparison/FSChoice.fxml",
+                "wizard/diff/FSChoice.fxml",
                             referenceChoiceController,
                             "Choose a reference FS");
     }
@@ -226,7 +226,7 @@ public class DiffWizard extends Wizard{
         if(comparedChoiceController==null)
             comparedChoiceController = new ComparedFSChoiceController();
         comparedChoiceController = (ComparedFSChoiceController) gotoWizardPane(
-                "wizard/comparison/FSChoice.fxml",
+                "wizard/diff/FSChoice.fxml",
                 comparedChoiceController,
                 "Choose a compared FS"
         );
@@ -305,7 +305,7 @@ public class DiffWizard extends Wizard{
 
     public void gotoHashPreparation(){
         hashPreparationController = (HashPreparationController) gotoWizardPane(
-                "wizard/comparison/HashPreparation.fxml",
+                "wizard/diff/HashPreparation.fxml",
                 "Preparing"
         );
         hashPreparationController.countFiles();
@@ -314,7 +314,7 @@ public class DiffWizard extends Wizard{
     public void gotoHashProgress(){
 
         hashGenerationController = (HashGenerationController) gotoWizardPane(
-                "wizard/comparison/HashGeneration.fxml",
+                "wizard/diff/HashGeneration.fxml",
                 "Generating hashes"
         );
         hashGenerationController.hash();
@@ -322,7 +322,7 @@ public class DiffWizard extends Wizard{
 
     public void goToDiffProgress(){
         diffProgressController = (DiffProgressController) gotoWizardPane(
-                "wizard/comparison/DiffProgress.fxml",
+                "wizard/diff/DiffProgress.fxml",
                 "Comparing the file systems"
                 );
         diffProgressController.compare();
@@ -339,7 +339,7 @@ public class DiffWizard extends Wizard{
     public void gotoDiffInterface() {
         try {
             diffWindowController =
-                    (DiffWindowController) application.replaceSceneContent("comparison/DiffWindow.fxml");
+                    (DiffWindowController) application.replaceSceneContent("diff/DiffWindow.fxml");
             application.getStage().setWidth(DiffWindowController.INTERFACE_WIDTH);
             application.getStage().setHeight(DiffWindowController.INTERFACE_HEIGHT);
             application.getStage().setTitle(projectName);
