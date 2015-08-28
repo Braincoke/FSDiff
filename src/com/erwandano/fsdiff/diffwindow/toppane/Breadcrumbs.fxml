@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.Double?>
+<HBox xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.erwandano.fsdiff.diffwindow.toppane.BreadcrumbsController"
+            maxHeight="$HEIGHT"
+            prefHeight="$HEIGHT"
+            minHeight="$HEIGHT"
+            prefWidth="200.0"
+            VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/8"
+            HBox.hgrow="ALWAYS"
+            fx:id="hbox"
+            focusTraversable="false"
+            styleClass="no-focus">
+        <fx:define>
+            <Double fx:id="HEIGHT" fx:value="30"/>
+        </fx:define>
+        <ScrollPane fx:id="scrollPane" id="breadcrumbs"
+              hbarPolicy="NEVER" vbarPolicy="NEVER"
+              maxHeight="$HEIGHT"
+              prefHeight="$HEIGHT" prefWidth="200.0"
+              minHeight="$HEIGHT"
+              HBox.hgrow="ALWAYS"
+              styleClass="no-focus">
+        </ScrollPane>
+</HBox>

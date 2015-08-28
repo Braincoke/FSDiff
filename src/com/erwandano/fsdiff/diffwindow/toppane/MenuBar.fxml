@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<MenuBar xmlns:fx="http://javafx.com/fxml" id="menuBar" fx:id="menuBar"
+         fx:controller="com.erwandano.fsdiff.diffwindow.toppane.MenuBarController" xmlns="http://javafx.com/javafx/8">
+    <menus>
+        <Menu mnemonicParsing="false" text="File">
+            <items>
+                <Menu mnemonicParsing="false" text="New">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Project" onAction="#newProject"/>
+                        <MenuItem mnemonicParsing="false" text="Hash" onAction="#newHash"/>
+                    </items>
+                </Menu>
+                <MenuItem mnemonicParsing="false" text="Open" onAction="#open"/>
+                <SeparatorMenuItem/>
+                <MenuItem mnemonicParsing="false" text="Save" onAction="#save"/>
+                <MenuItem mnemonicParsing="false" text="Save As" onAction="#saveAs"/>
+                <SeparatorMenuItem/>
+                <MenuItem mnemonicParsing="false" text="Import exclusion file" onAction="#importExclusion"/>
+                <MenuItem mnemonicParsing="false" text="Export exclusion file" onAction="#exportExclusion"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+            <items>
+                <MenuItem mnemonicParsing="false" text="Rebase root directories" onAction="#rebaseRootDir" />
+                <MenuItem mnemonicParsing="false" text="Remove exclusion file" onAction="#removeExclusionFile" />
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+            <items>
+                <MenuItem mnemonicParsing="false" text="About" onAction="#about"/>
+            </items>
+        </Menu>
+    </menus>
+</MenuBar>

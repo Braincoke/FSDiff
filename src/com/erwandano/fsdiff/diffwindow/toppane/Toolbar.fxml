@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.erwandano.fsdiff.components.buttons.ToolBarButton?>
+<?import com.erwandano.fsdiff.components.CheckBoxMenuItem?>
+<?import com.erwandano.fsdiff.diffwindow.toppane.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<ToolBar xmlns:fx="http://javafx.com/fxml" fx:controller="com.erwandano.fsdiff.diffwindow.toppane.ToolbarController" fx:id="toolbar"
+         id="toolbar"
+         prefWidth="200.0" xmlns="http://javafx.com/javafx/8">
+    <minHeight><ToolbarController fx:constant="TOOLBAR_HEIGHT"/></minHeight>
+    <maxHeight><ToolbarController fx:constant="TOOLBAR_HEIGHT"/></maxHeight>
+    <items>
+        <ToolBarButton fx:id="openButton" onAction="#openFSC" id="openButton" mnemonicParsing="false" icon="FOLDER_OPEN"
+                       size="16">
+            <tooltip>
+                <Tooltip text="Open"/>
+            </tooltip>
+        </ToolBarButton>
+        <ToolBarButton fx:id="saveButton" onAction="#saveFSC" id="saveButton" mnemonicParsing="false" icon="FLOPPY_ALT"
+                       size="16">
+            <tooltip>
+                <Tooltip text="Save"/>
+            </tooltip>
+        </ToolBarButton>
+        <Separator orientation="VERTICAL"  />
+        <Pane  prefWidth="10.0" HBox.hgrow="ALWAYS">
+            <minHeight><ToolbarController fx:constant="TOOLBAR_HEIGHT"/></minHeight>
+            <maxHeight><ToolbarController fx:constant="TOOLBAR_HEIGHT"/></maxHeight>
+        </Pane>
+        <HBox alignment="CENTER_RIGHT" >
+            <minHeight><ToolbarController fx:constant="TOOLBAR_HEIGHT"/></minHeight>
+            <maxHeight><ToolbarController fx:constant="TOOLBAR_HEIGHT"/></maxHeight>
+            <children>
+                <TextField fx:id="searchField"
+                            prefWidth="200.0"
+                           styleClass="left-pill"
+                           alignment="CENTER_LEFT"
+                           HBox.hgrow="ALWAYS"
+                           onAction="#triggerSearch">
+                    <minHeight><ToolbarController fx:constant="SEARCHFIELD_HEIGHT"/></minHeight>
+                    <maxHeight><ToolbarController fx:constant="SEARCHFIELD_HEIGHT"/></maxHeight>
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </TextField>
+                <MenuButton fx:id="filterDropDown" styleClass="right-pill" translateY="0.8">
+                    <minHeight><ToolbarController fx:constant="SEARCHFIELD_HEIGHT"/></minHeight>
+                    <maxHeight><ToolbarController fx:constant="SEARCHFIELD_HEIGHT"/></maxHeight>
+                    <items>
+                        <FilterDropDownMenuItem status="Matched" fx:id="filterMatched" checked="false"/>
+                        <FilterDropDownMenuItem status="Modified" fx:id="filterModified" checked="true"/>
+                        <FilterDropDownMenuItem status="Created" fx:id="filterCreated" checked="true"/>
+                        <FilterDropDownMenuItem status="Deleted" fx:id="filterDeleted" checked="true"/>
+                        <CheckBoxMenuItem fx:id="useRegex" checked="false" text="Use regex"/>
+                    </items>
+                </MenuButton>
+            </children>
+        </HBox>
+    </items>
+</ToolBar>

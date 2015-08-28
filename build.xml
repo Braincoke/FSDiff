@@ -53,7 +53,7 @@
 
         <fx:application id="app"
                         name="${name}"
-                        mainClass="ui.Main"/>
+                        mainClass="Main"/>
 
         <!-- Indicates to the final .jar where to find the external libraries -->
         <fx:resources id="appResources">

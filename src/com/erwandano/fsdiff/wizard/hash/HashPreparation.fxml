@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.erwandano.fsdiff.wizard.hash.HashPreparationController">
+   <children>
+      <VBox fx:id="preparationVbox" alignment="CENTER" prefHeight="500.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="paddingTopHbox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="100.0" spacing="10.0">
+               <children>
+                  <Label text="Preparation">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <ProgressIndicator VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Label fx:id="fileCountPreparationLabel" text="0" />
+                        <Label text="files to hash" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Label fx:id="byteCountPreparationLabel" text="0" />
+                        <Label fx:id="byteUnitPreparationLabel" text="GB" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="cancel" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</AnchorPane>
