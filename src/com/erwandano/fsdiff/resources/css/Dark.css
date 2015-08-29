@@ -2942,6 +2942,9 @@ is being used to size a border should also be in pixels.
  * BUTTONS                                                                    *
  *                                                                            *
  *****************************************************************************/
+.flat-button:hover {
+    -fx-background-color: -fd-inner-background;
+}
 
 
 .icon-button, .icon-button:focused {
@@ -3185,7 +3188,11 @@ is being used to size a border should also be in pixels.
  * BOTTOM PANE                                                                *
  *                                                                            *
  *****************************************************************************/
+#status-pane .flat-button {
+    -fx-padding: 0 0 0 8;
+    -fx-alignment: CENTER;
 
+}
 .color-indicator {
     -fx-opacity: 0.5;
 }

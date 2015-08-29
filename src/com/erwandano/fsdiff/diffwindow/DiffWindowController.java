@@ -208,6 +208,25 @@ public class DiffWindowController extends Controller {
         this.progressIndicator = progressIndicator;
     }
 
+    public void search(DiffStatus status) {
+        HashMap<DiffStatus, Boolean> filterOptions = new HashMap<>();
+        filterOptions.put(DiffStatus.MATCHED, status==DiffStatus.MATCHED);
+        filterOptions.put(DiffStatus.MODIFIED, status==DiffStatus.MODIFIED);
+        filterOptions.put(DiffStatus.CREATED, status==DiffStatus.CREATED);
+        filterOptions.put(DiffStatus.DELETED,status==DiffStatus.DELETED);
+        List<DiffTreeItem> searchResult =  rootTreeItem.filterFiles(filterOptions, "", false);
+        //Remove excluded files
+        Iterator<DiffTreeItem> iterator = searchResult.iterator();
+        while(iterator.hasNext()){
+            DiffTreeItem item = iterator.next();
+            excludedFiles.stream().forEach(path -> {
+                if(path.compareTo(item.getPath())==0){
+                    iterator.remove();
+                }
+            });
+        }
+        dataPaneController.updateResults(searchResult);
+    }
 
     /*******************************************************************************************************************
      *                                                                                                                 *

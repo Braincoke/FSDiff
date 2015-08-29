@@ -228,6 +228,9 @@ public class DataPaneController extends Controller {
                     if (item == null || empty) {
                         setText(null);
                         setStyle("");
+                        for(DiffStatus diffStatus : DiffStatus.values()){
+                            getStyleClass().remove(diffStatus.name().toLowerCase());
+                        }
                     } else {
                         // Set the path as the text
                         setText(item.getPath().toString());

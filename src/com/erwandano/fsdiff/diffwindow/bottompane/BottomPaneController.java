@@ -3,9 +3,11 @@ package com.erwandano.fsdiff.diffwindow.bottompane;
 import com.erwandano.fsdiff.components.Controller;
 import com.erwandano.fsdiff.core.FileSystemDiff;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
+import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
@@ -26,7 +28,7 @@ public class BottomPaneController extends Controller {
     private Circle createdColor;
     @FXML
     private Circle deletedColor;
-    //Bottom - Statuses
+    //Statuses
     @FXML
     private Label matchedCount;
     @FXML
@@ -35,6 +37,15 @@ public class BottomPaneController extends Controller {
     private Label createdCount;
     @FXML
     private Label deletedCount;
+    //HBox
+    @FXML
+    private HBox matchedMetadata;
+    @FXML
+    private HBox modifiedMetadata;
+    @FXML
+    private HBox createdMetadata;
+    @FXML
+    private HBox deletedMetadata;
     @FXML
     private ProgressIndicator progressIndicator;
 
@@ -63,6 +74,10 @@ public class BottomPaneController extends Controller {
     public void setWindowController(DiffWindowController windowController) {
         this.windowController = windowController;
         windowController.setProgressIndicator(progressIndicator);
+        matchedMetadata.setOnMouseClicked(event -> windowController.search(DiffStatus.MATCHED));
+        modifiedMetadata.setOnMouseClicked(event -> windowController.search(DiffStatus.MODIFIED));
+        createdMetadata.setOnMouseClicked(event -> windowController.search(DiffStatus.CREATED));
+        deletedMetadata.setOnMouseClicked(event -> windowController.search(DiffStatus.DELETED));
         refreshDiffMetadata(windowController.getFileSystemDiff());
     }
 }
