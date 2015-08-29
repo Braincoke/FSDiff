@@ -15,7 +15,7 @@ public class IconButton extends FAButton {
 
     public IconButton(){
         super();
-        this.getStyleClass().add("iconButton");
+        this.getStyleClass().add("icon-button");
     }
 
     @Override

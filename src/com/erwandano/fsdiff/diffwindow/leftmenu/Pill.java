@@ -1,7 +1,6 @@
 package com.erwandano.fsdiff.diffwindow.leftmenu;
 
 import com.erwandano.fsdiff.core.PathDiff;
-import com.erwandano.fsdiff.diffwindow.CssColor;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -11,7 +10,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -101,19 +99,6 @@ public class Pill extends StackPane {
     }
 
     /**
-     * Create a compressed pill with the given color
-     * @param color The color of the pill
-     * @return  The compressed pill
-     */
-    private Rectangle generateRectangle(CssColor color) {
-        Rectangle result = new Rectangle(circleWidth, circleHeight, Paint.valueOf(color.getBackgroundHexColor()));
-        result.setArcHeight(circleArcHeight);
-        result.setArcWidth(circleArcWidth);
-        result.setOpacity(color.getOpacity());
-        return result;
-    }
-
-    /**
      * Create a compressed pill and initialise the color according to the given status
      * @param status    The differential status
      * @return          The compressed pill
@@ -122,46 +107,9 @@ public class Pill extends StackPane {
         Rectangle rectangle = new Rectangle(circleWidth, circleHeight);
         rectangle.setArcHeight(circleArcHeight);
         rectangle.setArcWidth(circleArcWidth);
-        switch (status){
-            case MATCHED:
-                rectangle.setFill(Paint.valueOf(CssColor.MATCHED.getBackgroundHexColor()));
-                rectangle.setOpacity(CssColor.MATCHED.getOpacity());
-                break;
-            case CREATED:
-                rectangle.setFill(Paint.valueOf(CssColor.CREATED.getBackgroundHexColor()));
-                rectangle.setOpacity(CssColor.CREATED.getOpacity());
-                break;
-            case DELETED:
-                rectangle.setFill(Paint.valueOf(CssColor.DELETED.getBackgroundHexColor()));
-                rectangle.setOpacity(CssColor.DELETED.getOpacity());
-                break;
-            case ERROR:
-                rectangle.setFill(Paint.valueOf("white"));
-                rectangle.strokeProperty().setValue(Paint.valueOf(CssColor.ERROR.getBackgroundHexColor()));
-                rectangle.setOpacity(CssColor.ERROR.getOpacity());
-                break;
-            case MODIFIED:
-                rectangle.setFill(Paint.valueOf(CssColor.MODIFIED.getBackgroundHexColor()));
-                rectangle.setOpacity(CssColor.MODIFIED.getOpacity());
-                break;
-            default:
-                rectangle.setFill(Paint.valueOf(CssColor.MATCHED.getBackgroundHexColor()));
-                rectangle.setOpacity(CssColor.MATCHED.getOpacity());
-                break;
-        }
+        rectangle.getStyleClass().add("status-pill");
+        rectangle.getStyleClass().add(status.name().toLowerCase());
         return rectangle;
-    }
-
-    /**
-     * Generate the label that will hold the status count
-     * @param color The color of the text
-     * @return  The label
-     */
-    private Label generatePillLabel(CssColor color) {
-        Label result = new Label();
-        result.setTextFill(Paint.valueOf(color.getBackgroundHexColor()));
-        result.setOpacity(color.getOpacity());
-        return result;
     }
 
     /**
@@ -170,18 +118,11 @@ public class Pill extends StackPane {
      * @return  The generated label
      */
     private Label generatePillLabel(DiffStatus status){
-        switch(status){
-            case MATCHED:
-            case CREATED:
-            case DELETED:
-                return generatePillLabel(CssColor.LIGHT_PILL_LABEL);
-            case ERROR:
-                return generatePillLabel(CssColor.ERROR);
-            case MODIFIED:
-                return generatePillLabel(CssColor.DARK_PILL_LABEL);
-            default:
-                return generatePillLabel(CssColor.LIGHT_PILL_LABEL);
-        }
+        Label result = new Label();
+        result.getStyleClass().add("status-label");
+        result.getStyleClass().add(status.name().toLowerCase());
+        result.setOpacity(0);
+        return result;
     }
 
     /**

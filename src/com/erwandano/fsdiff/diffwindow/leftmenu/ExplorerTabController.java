@@ -120,4 +120,8 @@ public class ExplorerTabController extends Controller {
             }
         }
     }
+
+    public void leftMenuTabSelection() {
+        leftMenuController.leftMenuTabSelection("explorer-tab");
+    }
 }

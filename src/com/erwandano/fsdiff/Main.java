@@ -33,8 +33,24 @@ public class Main extends Application {
 
     private static String classpath = "com/erwandano/fsdiff/";
 
+    private static Theme DEFAULT_THEME = Theme.DARK;
+
+    /**
+     * The active theme
+     */
+    private Theme theme;
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+    }
+
     @Override
     public void start(Stage primaryStage) {
+        theme = DEFAULT_THEME;
         stage = primaryStage;
         stage.setTitle("FSDiff");
         stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
@@ -71,14 +87,15 @@ public class Main extends Application {
         AnchorPane page;
         InputStream in = getResourceAsStream(fxml);
         page = loader.load(in);
-
         Scene scene = new Scene(page, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
+        loadTheme(scene);
         stage.setScene(scene);
         stage.sizeToScene();
         Controller controller = loader.getController();
         controller.setApplication(this);
         return controller;
     }
+
 
     public void replaceSceneContent(String fxml, Controller controller) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -89,6 +106,7 @@ public class Main extends Application {
         loader.setController(controller);
         page = (AnchorPane) loader.load(in);
         Scene scene = new Scene(page, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
+        loadTheme(scene);
         stage.setScene(scene);
         stage.sizeToScene();
     }
@@ -105,6 +123,7 @@ public class Main extends Application {
         page = loader.load(in);
         Stage newStage = new Stage();
         Scene scene = new Scene(page, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
+        loadTheme(scene);
         newStage.setScene(scene);
         newStage.sizeToScene();
         StageController controller = loader.getController();
@@ -130,5 +149,9 @@ public class Main extends Application {
 
     public Stage getStage() {
         return stage;
+    }
+
+    private void loadTheme(Scene scene) {
+        scene.getStylesheets().add(classpath + "resources/css/" + theme.getFilename());
     }
 }

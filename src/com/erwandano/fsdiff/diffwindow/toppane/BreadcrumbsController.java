@@ -16,10 +16,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.HLineTo;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.*;
 import org.controlsfx.control.BreadCrumbBar;
 
 /**
@@ -60,7 +57,7 @@ public class BreadcrumbsController extends Controller {
                 new CustomBreadCrumbButton(crumb.getValue() != null ? crumb.getValue().getName():""));
         //Update windowController selectedPath on click
         breadCrumbBar.setOnCrumbAction(event -> windowController.setSelectedPath((DiffTreeItem) event.getSelectedCrumb()));
-        breadCrumbBar.setTranslateY(-1);
+//        breadCrumbBar.setTranslateY(-1);
     }
 
     public void updateBreadcrumbs(DiffTreeItem node){
@@ -150,6 +147,37 @@ public class BreadcrumbsController extends Controller {
             return arrowWidth;
         }
 
+
+
+        private javafx.scene.shape.Path createButtonShape1(){
+
+            javafx.scene.shape.Path path = new javafx.scene.shape.Path();
+            // begin in the upper right corner
+            MoveTo e1 = new MoveTo(0, 0);
+            // bind the width of the shape to the width of the button
+            //e1.xProperty().bind(this.widthProperty().subtract(arrowWidth));
+            path.getElements().add(e1);
+
+            VLineTo vLineTo = new VLineTo(arrowHeight);
+            path.getElements().add(vLineTo);
+
+            /*LineTo e2 = new LineTo();
+            // the x endpoint of this line depends on the x property of line e1
+            e2.setX(arrowWidth + 60);
+            e2.setY(arrowHeight / 2.0);
+            path.getElements().add(e2);
+
+            // draw lower part of right arrow
+            LineTo e3 = new LineTo();
+            // the x endpoint of this line depends on the x property of line e1
+            e3.setX(arrowWidth+60);
+            e3.setY(arrowHeight);
+            path.getElements().add(e3);*/
+
+            return path;
+        }
+
+
         /**
          * Create an arrow path
          *
@@ -164,7 +192,7 @@ public class BreadcrumbsController extends Controller {
             //  \         \
             //  /         /
             //   --------
-            javafx.scene.shape.Path path = new javafx.scene.shape.Path();
+            Path path = new Path();
 
             // begin in the upper left corner
             MoveTo e1 = new MoveTo(0, 0);

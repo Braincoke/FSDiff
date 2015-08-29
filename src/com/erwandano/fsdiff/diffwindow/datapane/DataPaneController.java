@@ -2,7 +2,6 @@ package com.erwandano.fsdiff.diffwindow.datapane;
 
 import com.erwandano.fsdiff.components.Controller;
 import com.erwandano.fsdiff.components.buttons.IconButton;
-import com.erwandano.fsdiff.diffwindow.CssColor;
 import com.erwandano.fsdiff.diffwindow.DiffTreeItem;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
 import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
@@ -234,23 +233,12 @@ public class DataPaneController extends Controller {
                         setText(item.getPath().toString());
 
                         // Style the path accordingly to its status
-                        switch (item.getStatus()){
-                            case MATCHED:
-                                setStyle("");
-                                break;
-                            case MODIFIED:
-                                setTextFill(CssColor.MODIFIED.getTextColor());
-                                setStyle("-fx-background-color:" + CssColor.MODIFIED.getBackgroundRgba());
-                                break;
-                            case CREATED:
-                                setTextFill(CssColor.CREATED.getTextColor());
-                                setStyle("-fx-background-color:" + CssColor.CREATED.getBackgroundRgba());
-                                break;
-                            case DELETED:
-                                setTextFill(CssColor.DELETED.getTextColor());
-                                setStyle("-fx-background-color:" + CssColor.DELETED.getBackgroundRgba());
-                                break;
+                        for(DiffStatus diffStatus : DiffStatus.values()){
+                            getStyleClass().remove(diffStatus.name().toLowerCase());
                         }
+                        getStyleClass().remove("status-cell");
+                        getStyleClass().add("status-cell");
+                        getStyleClass().add(item.getStatus().name().toLowerCase());
                     }
                 }
             };

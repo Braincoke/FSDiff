@@ -11,6 +11,6 @@ public class ToolBarButton extends FAButton {
         super();
         this.getStyleClass().add("toolbarButton");
         this.getStyleClass().add("no-focus");
-        this.setFont(Font.font(12));
+        this.setFont(Font.font(14));
     }
 }

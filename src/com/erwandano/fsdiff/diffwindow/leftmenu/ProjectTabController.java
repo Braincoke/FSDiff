@@ -69,6 +69,7 @@ public class ProjectTabController extends Controller {
     @FXML
     private InfoItem sizeComItem;
     private DiffWindowController windowController;
+    private LeftMenuController leftMenuController;
 
 
     @Override
@@ -76,8 +77,9 @@ public class ProjectTabController extends Controller {
         vBox.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
     }
 
-    public void setWindowController(DiffWindowController windowController) {
-        this.windowController = windowController;
+    public void setLeftMenuController(LeftMenuController leftMenuController) {
+        this.leftMenuController = leftMenuController;
+        this.windowController = leftMenuController.getWindowController();
         FileSystemDiff diff = windowController.getFileSystemDiff();
         matchedItem.setText(String.valueOf(diff.getMatchedCount()));
         modifiedItem.setText(String.valueOf(diff.getModifiedCount()));
@@ -99,5 +101,9 @@ public class ProjectTabController extends Controller {
         diffView.resize(scrollPane.widthProperty());
         referenceView.resize(scrollPane.widthProperty());
         comparedView.resize(scrollPane.widthProperty());
+    }
+
+    public void leftMenuTabSelection() {
+        leftMenuController.leftMenuTabSelection("project-tab");
     }
 }

@@ -63,4 +63,32 @@ public class WelcomeScreenController extends Controller {
             }
         }
     }
+
+    public void quickTest() {
+        File file = new File("test-resources/fscx/mix1.fscx");
+        if(file!=null) {
+            LoadingController loadingController = new LoadingController();
+            try {
+                application.replaceSceneContent("loaders/Loading.fxml", loadingController);
+                loadingController.setApplication(application);
+                FSCXLoader loader = loadingController.getFSCXLoader();
+                //Go to diff interface when loaded
+                loader.setOnSucceeded(event -> {
+                    DiffWindowController diffWindowController;
+                    try {
+                        diffWindowController = (DiffWindowController) application.replaceSceneContent("diffwindow/DiffWindow.fxml");
+                        application.getStage().setWidth(DiffWindowController.INTERFACE_WIDTH);
+                        application.getStage().setHeight(DiffWindowController.INTERFACE_HEIGHT);
+                        diffWindowController.setApplication(application);
+                        diffWindowController.initWindow(loader.getValue(), file.getPath());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+                loadingController.loadFSCX(file.getPath());
+            } catch (Exception e) {
+                Main.logger.log(Level.WARNING, "Could not load the file : " + file.toString(),e);
+            }
+        }
+    }
 }

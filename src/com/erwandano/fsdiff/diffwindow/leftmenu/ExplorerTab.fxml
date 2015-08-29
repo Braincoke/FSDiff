@@ -7,11 +7,18 @@
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.MasterDetailPane?>
 <Tab xmlns:fx="http://javafx.com/fxml/1"
-     id="explorerTab"
+     id="explorer-tab"
      closable="false"
      xmlns="http://javafx.com/javafx/8"
      fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.ExplorerTabController"
-     styleClass="no-focus">
+     styleClass="no-focus"
+     >
+<!-- Disgusting hack used to be able to listen to clicks on a tab -->
+<graphic>
+    <StackPane>
+        <Label text="Explorer" onMouseClicked="#leftMenuTabSelection" rotate="-90.0" />
+    </StackPane>
+</graphic>
 <content>
     <AnchorPane>
         <VBox prefHeight="200.0" prefWidth="100.0"

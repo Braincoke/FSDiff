@@ -3,8 +3,14 @@
 <?import com.erwandano.fsdiff.components.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<Tab xmlns:fx="http://javafx.com/fxml/1" id="projectTab" closable="false"
+<Tab xmlns:fx="http://javafx.com/fxml/1" id="project-tab" closable="false"
      fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.ProjectTabController">
+    <!-- Disgusting hack used to be able to listen to clicks on a tab -->
+    <graphic>
+        <StackPane>
+            <Label text="Project" onMouseClicked="#leftMenuTabSelection" rotate="-90.0" />
+        </StackPane>
+    </graphic>
     <content>
         <AnchorPane>
             <children>
@@ -18,7 +24,7 @@
                         <VBox fx:id="vBox"
                               prefHeight="200.0" prefWidth="100.0">
                             <children>
-                                <TitledPane animated="true" text="Comparison">
+                                <TitledPane animated="true" text="Comparison" collapsible="false">
                                     <content>
                                         <InfoView spacing="20" fx:id="diffView">
                                             <InfoItem label="Matched files" fx:id="matchedItem"/>
@@ -29,7 +35,7 @@
                                         </InfoView>
                                     </content>
                                 </TitledPane>
-                                <TitledPane animated="true" text="Reference FS">
+                                <TitledPane animated="true" text="Reference FS" collapsible="false">
                                     <content>
                                         <InfoView spacing="20" fx:id="referenceView">
                                             <InfoItem label="Input type" fx:id="inputTypeRefItem"/>
@@ -40,7 +46,7 @@
                                         </InfoView>
                                     </content>
                                 </TitledPane>
-                                <TitledPane animated="true" text="Compared FS">
+                                <TitledPane animated="true" text="Compared FS" collapsible="false">
                                     <content>
                                         <InfoView spacing="20" fx:id="comparedView">
                                             <InfoItem label="Input type" fx:id="inputTypeComItem"/>

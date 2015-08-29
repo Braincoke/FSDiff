@@ -17,12 +17,14 @@ public class InfoItem extends HBox{
         label = new SimpleStringProperty();
         labelNode = new Text();
         infoNode = new Text();
+        labelNode.getStyleClass().add("info-text");
+        infoNode.getStyleClass().add("info-text");
         this.getChildren().addAll(labelNode, infoNode);
         setHgrow(this, Priority.ALWAYS);
         setHgrow(labelNode, Priority.NEVER);
         setHgrow(infoNode, Priority.ALWAYS);
         setSpacing(10);
-        this.getStyleClass().add("infoItem");
+        this.getStyleClass().add("info-item");
     }
 
     public InfoItem(String label){

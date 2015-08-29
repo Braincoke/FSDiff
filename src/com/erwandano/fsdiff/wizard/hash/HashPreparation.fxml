@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.erwandano.fsdiff.wizard.hash.HashPreparationController">
    <children>
       <VBox fx:id="preparationVbox" alignment="CENTER" prefHeight="500.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -11,14 +11,8 @@
             <HBox fx:id="paddingTopHbox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
             <VBox alignment="CENTER" prefHeight="300.0" prefWidth="100.0" spacing="10.0">
                <children>
-                  <Label text="Preparation">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
+                  <Text text="Preparation" styleClass="wizard-title">
+                  </Text>
                   <ProgressIndicator VBox.vgrow="ALWAYS" />
                   <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
                      <children>

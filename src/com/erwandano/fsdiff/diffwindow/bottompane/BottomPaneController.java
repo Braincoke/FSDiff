@@ -2,12 +2,10 @@ package com.erwandano.fsdiff.diffwindow.bottompane;
 
 import com.erwandano.fsdiff.components.Controller;
 import com.erwandano.fsdiff.core.FileSystemDiff;
-import com.erwandano.fsdiff.diffwindow.CssColor;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
@@ -51,14 +49,15 @@ public class BottomPaneController extends Controller {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        matchedColor.setFill(Paint.valueOf(CssColor.MATCHED.getBackgroundHexColor()));
-        matchedColor.setOpacity(CssColor.MATCHED.getOpacity());
-        modifiedColor.setFill(Paint.valueOf(CssColor.MODIFIED.getBackgroundHexColor()));
-        modifiedColor.setOpacity(CssColor.MODIFIED.getOpacity());
-        createdColor.setFill(Paint.valueOf(CssColor.CREATED.getBackgroundHexColor()));
-        createdColor.setOpacity(CssColor.CREATED.getOpacity());
-        deletedColor.setFill(Paint.valueOf(CssColor.DELETED.getBackgroundHexColor()));
-        deletedColor.setOpacity(CssColor.DELETED.getOpacity());
+        matchedColor.getStyleClass().add("matched");
+        modifiedColor.getStyleClass().add("modified");
+        createdColor.getStyleClass().add("created");
+        deletedColor.getStyleClass().add("deleted");
+
+        matchedColor.getStyleClass().add("color-indicator");
+        modifiedColor.getStyleClass().add("color-indicator");
+        createdColor.getStyleClass().add("color-indicator");
+        deletedColor.getStyleClass().add("color-indicator");
     }
 
     public void setWindowController(DiffWindowController windowController) {

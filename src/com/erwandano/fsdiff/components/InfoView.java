@@ -1,7 +1,7 @@
 package com.erwandano.fsdiff.components;
+
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -32,26 +32,26 @@ public class InfoView extends VBox {
     private boolean initDone = false;
 
     public InfoView() {
-        initPadding();
+        init();
     }
 
     public InfoView(double spacing) {
         super(spacing);
-        initPadding();
+        init();
     }
 
     public InfoView(Node... children) {
         super(children);
-        initPadding();
+        init();
     }
 
     public InfoView(double spacing, Node... children) {
         super(spacing, children);
-        initPadding();
+        init();
     }
 
-    private void initPadding() {
-        setPadding(new Insets(0, 0, 0, 0));
+    private void init(){
+        this.getStyleClass().add("info-view");
     }
 
     /**
@@ -74,8 +74,8 @@ public class InfoView extends VBox {
         }
 
         if(getChildren().size() > 0 && !initDone) {
-            getChildren().get(0).getStyleClass().add("firstItem");
-            getChildren().get(getChildren().size() - 1).getStyleClass().add("lastItem");
+            getChildren().get(0).getStyleClass().add("first-item");
+            getChildren().get(getChildren().size() - 1).getStyleClass().add("last-item");
             for(int i=0; i<length; i++){
                 //children.get(i).getStyleClass().add("infoItem");
                 if(i%2==0){

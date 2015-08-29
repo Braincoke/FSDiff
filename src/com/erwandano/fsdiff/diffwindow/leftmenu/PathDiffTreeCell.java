@@ -2,14 +2,12 @@ package com.erwandano.fsdiff.diffwindow.leftmenu;
 
 import com.erwandano.fsdiff.Main;
 import com.erwandano.fsdiff.core.PathDiff;
-import com.erwandano.fsdiff.diffwindow.CssColor;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.GlyphFont;
 import org.controlsfx.glyphfont.GlyphFontRegistry;
@@ -29,18 +27,13 @@ public class PathDiffTreeCell extends TreeCell<PathDiff> {
         GlyphFontRegistry.register("FontAwesome", Main.class.getClassLoader().getResourceAsStream("com/erwandano/fsdiff/resources/fontawesome.ttf"), 16);
     }
     private GlyphFont fontAwesome = GlyphFontRegistry.font("FontAwesome");
-    private final Node folderIcon = fontAwesome.create(FontAwesome.Glyph.FOLDER.getChar());
-    private final Node openFolderIcon = fontAwesome.create(FontAwesome.Glyph.FOLDER_OPEN.getChar());
-    private final Node matchedFileIcon = fontAwesome.create(FontAwesome.Glyph.FILE.getChar())
-            .color(Color.valueOf(CssColor.MATCHED.getBackgroundHexColor()));
-    private final Node modifiedFileIcon = fontAwesome.create(FontAwesome.Glyph.FILE.getChar())
-            .color(Color.valueOf(CssColor.MODIFIED.getBackgroundHexColor()));
-    private final Node createdFileIcon = fontAwesome.create(FontAwesome.Glyph.FILE.getChar())
-            .color(Color.valueOf(CssColor.CREATED.getBackgroundHexColor()));
-    private final Node deletedFileIcon = fontAwesome.create(FontAwesome.Glyph.FILE.getChar())
-            .color(Color.valueOf(CssColor.DELETED.getBackgroundHexColor()));
-    private final Node errorFileIcon = fontAwesome.create(FontAwesome.Glyph.TIMES.getChar())
-            .color(Color.valueOf(CssColor.ERROR.getBackgroundHexColor()));
+    private final Node folderIcon ;
+    private final Node openFolderIcon;
+    private final Node matchedFileIcon ;
+    private final Node modifiedFileIcon ;
+    private final Node createdFileIcon ;
+    private final Node deletedFileIcon;
+    private final Node errorFileIcon;
 
 
     /**
@@ -60,6 +53,42 @@ public class PathDiffTreeCell extends TreeCell<PathDiff> {
 
     public PathDiffTreeCell(){
         display = new boolean[SIZE];
+        for(int i=1; i<SIZE; i++){
+            display[i] = true;
+        }
+        /* Create icons */
+        folderIcon = fontAwesome.create(FontAwesome.Glyph.FOLDER.getChar());
+        openFolderIcon = fontAwesome.create(FontAwesome.Glyph.FOLDER_OPEN.getChar());
+        matchedFileIcon = fontAwesome.create(FontAwesome.Glyph.FILE.getChar());
+        modifiedFileIcon = fontAwesome.create(FontAwesome.Glyph.FILE.getChar());
+        createdFileIcon = fontAwesome.create(FontAwesome.Glyph.FILE.getChar());
+        deletedFileIcon = fontAwesome.create(FontAwesome.Glyph.FILE.getChar());
+        errorFileIcon = fontAwesome.create(FontAwesome.Glyph.TIMES.getChar());
+
+        /* Add fa-icon class */
+        folderIcon.getStyleClass().add("fa-icon");
+        openFolderIcon.getStyleClass().add("fa-icon");
+        matchedFileIcon.getStyleClass().add("fa-icon");
+        modifiedFileIcon.getStyleClass().add("fa-icon");
+        createdFileIcon.getStyleClass().add("fa-icon");
+        deletedFileIcon.getStyleClass().add("fa-icon");
+        errorFileIcon.getStyleClass().add("fa-icon");
+
+        /* Add file class */
+        matchedFileIcon.getStyleClass().add("file");
+        modifiedFileIcon.getStyleClass().add("file");
+        createdFileIcon.getStyleClass().add("file");
+        deletedFileIcon.getStyleClass().add("file");
+        errorFileIcon.getStyleClass().add("file");
+
+        /* Add custom class */
+        folderIcon.getStyleClass().add("folder");
+        openFolderIcon.getStyleClass().add("open-folder");
+        matchedFileIcon.getStyleClass().add("matched");
+        modifiedFileIcon.getStyleClass().add("modified");
+        createdFileIcon.getStyleClass().add("created");
+        deletedFileIcon.getStyleClass().add("deleted");
+        errorFileIcon.getStyleClass().add("error");
     }
 
     /**

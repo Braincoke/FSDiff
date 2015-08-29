@@ -46,7 +46,7 @@
                         <Font size="13.0"/>
                     </font>
                 </TextField>
-                <MenuButton fx:id="filterDropDown" styleClass="right-pill" translateY="0.8">
+                <MenuButton fx:id="filterDropDown" styleClass="right-pill">
                     <minHeight><ToolbarController fx:constant="SEARCHFIELD_HEIGHT"/></minHeight>
                     <maxHeight><ToolbarController fx:constant="SEARCHFIELD_HEIGHT"/></maxHeight>
                     <items>

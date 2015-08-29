@@ -9,7 +9,6 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.MasterDetailPane?>
 <AnchorPane
-        stylesheets="@HashWizard.css"
         maxHeight="Infinity"
         maxWidth="Infinity"
         minHeight="-Infinity"
@@ -31,7 +30,7 @@
             <children>
                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="File System Selection">
+                        <Text styleClass="wizard-title" text="File System Selection">
                             <font>
                                 <Font size="36.0" />
                             </font>

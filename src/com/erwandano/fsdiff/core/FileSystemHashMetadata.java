@@ -203,13 +203,13 @@ public class FileSystemHashMetadata {
         if(days>0)
             output += days + " days ";
         if(hours>0 || days >0)
-            output += hours + " h";
+            output += hours + "h ";
         if(minutes>0 || days>0 || hours >0)
-            output += minutes + " min";
+            output += minutes + "min ";
         if(seconds>0 || days>0 || hours>0 || minutes>0)
-            output += seconds + " s";
+            output += seconds + "s ";
         if(millis>0 || days>0 || hours>0 || minutes>0 || seconds>0)
-            output += millis + " ms";
+            output += millis + "ms ";
         return output;
     }
 

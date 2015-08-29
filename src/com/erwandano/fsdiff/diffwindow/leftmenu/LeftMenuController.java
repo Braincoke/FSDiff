@@ -3,7 +3,6 @@ package com.erwandano.fsdiff.diffwindow.leftmenu;
 import com.erwandano.fsdiff.components.Controller;
 import com.erwandano.fsdiff.core.PathDiff;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -66,29 +65,30 @@ public class LeftMenuController extends Controller {
 
     /**
      * Handle tab selection and collapsing / showing the sidebar
-     * @param event     The event associated with the button clicked
      */
     @FXML
-    public void leftMenuTabSelection(ActionEvent event) {
-        Button btn = (Button) event.getSource();
-        String selectedTab = leftMenuTabPane.getSelectionModel().getSelectedItem().getId();
-        String selectedBtn = btn.getId();
-        int end = selectedBtn.length() - "Button".length();
-        selectedBtn = selectedBtn.substring(0, end);
-        //The user clicked on an already selected tab
-        if(selectedBtn.compareTo(selectedTab) == 0) {
-            if(leftMenuHidden)
+    public void leftMenuTabSelection(String tab) {
+        //The user clicked on an already selected tab to hide or show the left menu
+        if(selectedTab.getId().compareTo(tab)==0){
+            if(leftMenuHidden) {
+                leftMenuTabPane.getSelectionModel().getSelectedItem().getStyleClass().remove("hidden");
                 showLeftMenuTab();
-            else
+            } else {
                 collapseLeftMenuTab();
-            //The user clicked to change tabs
+                leftMenuTabPane.getSelectionModel().getSelectedItem().getStyleClass().add("hidden");
+            }
         } else {
-            switch(selectedBtn) {
-                case "projectTab":
-                    leftMenuTabPane.getSelectionModel().select(projectTab);
-                    break;
-                case "explorerTab":
+            //The user wants to change tabs
+            switch (tab){
+                case "explorer-tab":
+                    leftMenuTabPane.getSelectionModel().getSelectedItem().getStyleClass().remove("hidden");
                     leftMenuTabPane.getSelectionModel().select(explorerTab);
+                    selectedTab = explorerTab;
+                    break;
+                case "project-tab":
+                    leftMenuTabPane.getSelectionModel().getSelectedItem().getStyleClass().remove("hidden");
+                    leftMenuTabPane.getSelectionModel().select(projectTab);
+                    selectedTab = projectTab;
                     break;
             }
             showLeftMenuTab();
@@ -116,6 +116,8 @@ public class LeftMenuController extends Controller {
     }
 
     public void setWindowController(DiffWindowController windowController) {
+        this.selectedTab = this.explorerTab;
+        this.leftMenuHidden = false;
         this.windowController = windowController;
         this.explorerTabController.setLeftMenuController(this);
         this.splitPane = windowController.getSplitPane();
@@ -125,11 +127,8 @@ public class LeftMenuController extends Controller {
         this.savedDividerPositions = splitPane.getDividerPositions();
         splitPane.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
                 this.dividerPosition = newValue.doubleValue();
-                if(this.dividerPosition<hiddenThreshold)
-                    leftMenuHidden = true;
-                else
-                    leftMenuHidden = false;
+            leftMenuHidden = this.dividerPosition < hiddenThreshold;
         });
-        this.projectTabController.setWindowController(this.windowController);
+        this.projectTabController.setLeftMenuController(this);
     }
 }
