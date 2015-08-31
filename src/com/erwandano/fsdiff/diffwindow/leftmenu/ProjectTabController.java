@@ -1,11 +1,11 @@
 package com.erwandano.fsdiff.diffwindow.leftmenu;
 
 import com.erwandano.fsdiff.components.Controller;
-import com.erwandano.fsdiff.components.InfoItem;
-import com.erwandano.fsdiff.components.InfoView;
 import com.erwandano.fsdiff.core.FileSystemDiff;
 import com.erwandano.fsdiff.core.FileSystemHashMetadata;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
+import com.erwandano.fxcomponents.InfoItem;
+import com.erwandano.fxcomponents.InfoView;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.erwandano.fsdiff.components.buttons.StartButton?>
+<?import com.erwandano.fxcomponents.buttons.StartButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>

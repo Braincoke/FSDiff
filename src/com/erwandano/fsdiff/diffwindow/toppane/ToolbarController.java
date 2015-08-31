@@ -1,11 +1,11 @@
 package com.erwandano.fsdiff.diffwindow.toppane;
 
 import com.erwandano.fsdiff.Main;
-import com.erwandano.fsdiff.components.CheckBoxMenuItem;
 import com.erwandano.fsdiff.components.Controller;
 import com.erwandano.fsdiff.diffwindow.DiffTreeItem;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
 import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
+import com.erwandano.fxcomponents.CheckBoxMenuItem;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;

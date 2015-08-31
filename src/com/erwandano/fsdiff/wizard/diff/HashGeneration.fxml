@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.erwandano.fsdiff.components.TextProgressBar?>
+<?import com.erwandano.fxcomponents.TextProgressBar?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>

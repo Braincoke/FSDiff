@@ -1,12 +1,12 @@
 package com.erwandano.fsdiff.diffwindow.datapane;
 
 import com.erwandano.fsdiff.components.Controller;
-import com.erwandano.fsdiff.components.buttons.IconButton;
 import com.erwandano.fsdiff.diffwindow.DiffTreeItem;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
 import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
-import com.erwandano.fsdiff.hexviewer.HexDiffBrowser;
-import com.erwandano.fsdiff.hexviewer.HexDumpBrowser;
+import com.erwandano.fxcomponents.buttons.IconButton;
+import com.erwandano.hexviewer.viewer.diffviewer.HexDiffBrowser;
+import com.erwandano.hexviewer.viewer.dumpviewer.HexDumpBrowser;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

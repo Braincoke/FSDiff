@@ -16,16 +16,6 @@
                         <fx:include source="ProjectTab.fxml" fx:id="projectTab"/>
                     </tabs>
                 </TabPane>
-                <!--<VBox fillWidth="false" focusTraversable="true" maxWidth="28.0" minWidth="28.0" prefWidth="28.0" StackPane.alignment="TOP_LEFT">
-                    <children>
-                        <AnchorPane maxWidth="28.0" minWidth="28.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="28.0">
-                            <children>
-                                <Button fx:id="explorerTabButton" alignment="CENTER" contentDisplay="CENTER" layoutY="65.0" mnemonicParsing="false" onAction="#leftMenuTabSelection" rotate="-90.0" snapToPixel="false" styleClass="left-menu" text="Explorer" textAlignment="CENTER" translateX="-24.0" translateY="-44.0" />
-                                <Button fx:id="projectTabButton" alignment="TOP_LEFT" layoutY="130.0" mnemonicParsing="false" onAction="#leftMenuTabSelection" rotate="-90.0" styleClass="left-menu" text="Project" translateX="-20.0" translateY="-40.0" />
-                            </children>
-                        </AnchorPane>
-                    </children>
-                </VBox>-->
             </children>
         </StackPane>
     </children>

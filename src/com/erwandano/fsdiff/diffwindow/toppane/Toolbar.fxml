@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.erwandano.fsdiff.components.buttons.ToolBarButton?>
-<?import com.erwandano.fsdiff.components.CheckBoxMenuItem?>
 <?import com.erwandano.fsdiff.diffwindow.toppane.*?>
+<?import com.erwandano.fxcomponents.buttons.ToolBarButton?>
+<?import com.erwandano.fxcomponents.CheckBoxMenuItem?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>

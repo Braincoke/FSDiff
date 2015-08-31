@@ -1,8 +1,9 @@
 package com.erwandano.fsdiff.wizard.hash;
 
-import com.erwandano.fsdiff.components.InfoItem;
-import com.erwandano.fsdiff.components.InfoView;
+
 import com.erwandano.fsdiff.core.FileSystemHash;
+import com.erwandano.fxcomponents.InfoItem;
+import com.erwandano.fxcomponents.InfoView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;

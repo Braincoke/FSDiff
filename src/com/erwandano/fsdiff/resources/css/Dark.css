@@ -1603,14 +1603,14 @@ is being used to size a border should also be in pixels.
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:top {
-    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-color: -fd-outer-background;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:right {
-    -fx-background-color: -fx-outer-border, -fx-inner-border-bottomup, -fx-body-color-bottomup;
+    -fx-background-color: -fd-outer-background;
 }
 .tab-pane > .tab-header-area > .headers-region > .tab:bottom {
-    -fx-background-color: -fx-outer-border, -fx-inner-border-bottomup, -fx-body-color-bottomup;
+    -fx-background-color: -fd-outer-background;
 }
 .tab-pane > .tab-header-area > .headers-region > .tab:left {
     -fx-background-color: -fd-outer-background;
@@ -3211,4 +3211,41 @@ is being used to size a border should also be in pixels.
 
 .color-indicator.deleted {
     -fx-fill: -fd-deleted;
+}
+
+
+/******************************************************************************
+ *                                                                            *
+ * HEX VIEWER                                                                 *
+ *                                                                            *
+ *****************************************************************************/
+
+.modal-background {
+    -fx-background-color: derive(-fd-inner-background, 20%);
+}
+
+#bottom-tab-pane.tab-pane .tab-header-background{
+    -fx-background-color: -fd-light-background, -fd-inner-background, -fd-outer-background;
+}
+
+#bookmarks-tab-content {
+    -fx-padding: 10 5 5 5;
+    -fx-alignment: CENTER;
+    -fx-spacing: 30;
+}
+
+#bookmarks-tab-content VBox{
+    -fx-spacing: 10;
+    -fx-alignment: CENTER;
+}
+
+#parameters-tab-content {
+    -fx-padding: 10 10 10 5;
+    -fx-spacing: 10;
+    -fx-alignment: CENTER;
+}
+
+
+#parameters-tab-content HBox{
+    -fx-alignment: CENTER;
 }

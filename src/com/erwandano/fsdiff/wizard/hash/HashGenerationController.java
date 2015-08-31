@@ -1,10 +1,10 @@
 package com.erwandano.fsdiff.wizard.hash;
 
 import com.erwandano.fsdiff.Main;
-import com.erwandano.fsdiff.components.TextProgressBar;
 import com.erwandano.fsdiff.core.FileSystemHash;
 import com.erwandano.fsdiff.core.HashCrawler;
 import com.erwandano.fsdiff.loaders.XMLHandler;
+import com.erwandano.fxcomponents.TextProgressBar;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
-<?import com.erwandano.fsdiff.components.buttons.ToolBarButton?>
+<?import com.erwandano.fxcomponents.buttons.ToolBarButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
