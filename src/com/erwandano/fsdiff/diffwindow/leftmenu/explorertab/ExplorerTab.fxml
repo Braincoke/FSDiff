@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.erwandano.fsdiff.diffwindow.leftmenu.ExplorerTabController?>
+<?import com.erwandano.fsdiff.diffwindow.leftmenu.explorertab.ExplorerTabController?>
 <?import com.erwandano.fxcomponents.buttons.IconButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
@@ -10,7 +10,7 @@
      id="explorer-tab"
      closable="false"
      xmlns="http://javafx.com/javafx/8"
-     fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.ExplorerTabController"
+     fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.explorertab.ExplorerTabController"
      styleClass="no-focus"
      >
 <!-- Disgusting hack used to be able to listen to clicks on a tab -->

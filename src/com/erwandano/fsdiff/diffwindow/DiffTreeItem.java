@@ -1,7 +1,7 @@
 package com.erwandano.fsdiff.diffwindow;
 
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.core.PathDiff;
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;

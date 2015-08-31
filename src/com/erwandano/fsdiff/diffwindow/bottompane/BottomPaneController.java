@@ -1,9 +1,9 @@
 package com.erwandano.fsdiff.diffwindow.bottompane;
 
 import com.erwandano.fsdiff.components.Controller;
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.core.FileSystemDiff;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;

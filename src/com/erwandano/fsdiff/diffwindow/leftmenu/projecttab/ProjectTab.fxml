@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <Tab xmlns:fx="http://javafx.com/fxml/1" id="project-tab" closable="false"
-     fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.ProjectTabController">
+     fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.projecttab.ProjectTabController">
     <!-- Disgusting hack used to be able to listen to clicks on a tab -->
     <graphic>
         <StackPane>

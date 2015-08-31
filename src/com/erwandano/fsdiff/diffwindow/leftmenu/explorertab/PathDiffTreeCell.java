@@ -1,6 +1,7 @@
-package com.erwandano.fsdiff.diffwindow.leftmenu;
+package com.erwandano.fsdiff.diffwindow.leftmenu.explorertab;
 
 import com.erwandano.fsdiff.Main;
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.core.PathDiff;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -12,8 +13,8 @@ import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.GlyphFont;
 import org.controlsfx.glyphfont.GlyphFontRegistry;
 
-import static com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus.SIZE;
-import static com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus.values;
+import static com.erwandano.fsdiff.core.DiffStatus.SIZE;
+import static com.erwandano.fsdiff.core.DiffStatus.values;
 
 /**
  * TreeCells for the explorer in the left sidebar.

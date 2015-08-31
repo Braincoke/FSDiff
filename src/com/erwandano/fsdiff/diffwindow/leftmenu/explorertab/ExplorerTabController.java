@@ -1,9 +1,11 @@
-package com.erwandano.fsdiff.diffwindow.leftmenu;
+package com.erwandano.fsdiff.diffwindow.leftmenu.explorertab;
 
 import com.erwandano.fsdiff.components.Controller;
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.core.PathDiff;
 import com.erwandano.fsdiff.diffwindow.DiffTreeItem;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
+import com.erwandano.fsdiff.diffwindow.leftmenu.LeftMenuController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;

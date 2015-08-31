@@ -12,8 +12,8 @@
                         <Insets />
                     </opaqueInsets>
                     <tabs>
-                        <fx:include source="ExplorerTab.fxml" fx:id="explorerTab"/>
-                        <fx:include source="ProjectTab.fxml" fx:id="projectTab"/>
+                        <fx:include source="explorertab/ExplorerTab.fxml" fx:id="explorerTab"/>
+                        <fx:include source="projecttab/ProjectTab.fxml" fx:id="projectTab"/>
                     </tabs>
                 </TabPane>
             </children>

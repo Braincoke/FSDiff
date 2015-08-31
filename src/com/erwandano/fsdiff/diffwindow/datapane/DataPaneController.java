@@ -1,9 +1,9 @@
 package com.erwandano.fsdiff.diffwindow.datapane;
 
 import com.erwandano.fsdiff.components.Controller;
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.diffwindow.DiffTreeItem;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import com.erwandano.fxcomponents.buttons.IconButton;
 import com.erwandano.hexviewer.viewer.diffviewer.HexDiffBrowser;
 import com.erwandano.hexviewer.viewer.dumpviewer.HexDumpBrowser;

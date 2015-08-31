@@ -1,6 +1,6 @@
 package com.erwandano.fsdiff.diffwindow.toppane;
 
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
+import com.erwandano.fsdiff.core.DiffStatus;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;

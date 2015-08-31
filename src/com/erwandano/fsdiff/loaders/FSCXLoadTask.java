@@ -1,9 +1,9 @@
 package com.erwandano.fsdiff.loaders;
 
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.core.FileSystemDiff;
 import com.erwandano.fsdiff.core.FileSystemHashMetadata;
 import com.erwandano.fsdiff.core.PathDiff;
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import javafx.concurrent.Task;
 
 import javax.xml.stream.XMLInputFactory;

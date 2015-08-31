@@ -1,4 +1,4 @@
-package com.erwandano.fsdiff.diffwindow.leftmenu;
+package com.erwandano.fsdiff.core;
 
 /**
  * Status of a compared file or directory

@@ -1,5 +1,6 @@
-package com.erwandano.fsdiff.diffwindow.leftmenu;
+package com.erwandano.fsdiff.diffwindow.leftmenu.explorertab;
 
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.core.PathDiff;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;

@@ -1,7 +1,5 @@
 package com.erwandano.fsdiff.core;
 
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
-
 import java.nio.file.Path;
 /**
  * Stores the differential of to files or directories

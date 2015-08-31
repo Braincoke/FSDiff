@@ -1,9 +1,10 @@
-package com.erwandano.fsdiff.diffwindow.leftmenu;
+package com.erwandano.fsdiff.diffwindow.leftmenu.projecttab;
 
 import com.erwandano.fsdiff.components.Controller;
 import com.erwandano.fsdiff.core.FileSystemDiff;
 import com.erwandano.fsdiff.core.FileSystemHashMetadata;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
+import com.erwandano.fsdiff.diffwindow.leftmenu.LeftMenuController;
 import com.erwandano.fxcomponents.InfoItem;
 import com.erwandano.fxcomponents.InfoView;
 import javafx.fxml.FXML;

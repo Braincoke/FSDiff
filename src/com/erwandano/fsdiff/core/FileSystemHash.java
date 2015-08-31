@@ -1,6 +1,5 @@
 package com.erwandano.fsdiff.core;
 
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import javafx.concurrent.WorkerStateEvent;
 
 import java.nio.file.Path;

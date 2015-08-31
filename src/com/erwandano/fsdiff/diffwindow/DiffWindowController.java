@@ -2,12 +2,12 @@ package com.erwandano.fsdiff.diffwindow;
 
 import com.erwandano.fsdiff.Main;
 import com.erwandano.fsdiff.components.Controller;
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.core.FileSystemDiff;
 import com.erwandano.fsdiff.core.InputType;
 import com.erwandano.fsdiff.core.PathDiff;
 import com.erwandano.fsdiff.diffwindow.bottompane.BottomPaneController;
 import com.erwandano.fsdiff.diffwindow.datapane.DataPaneController;
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import com.erwandano.fsdiff.diffwindow.leftmenu.LeftMenuController;
 import com.erwandano.fsdiff.diffwindow.toppane.BreadcrumbsController;
 import com.erwandano.fsdiff.diffwindow.toppane.MenuBarController;
@@ -33,6 +33,7 @@ import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -233,6 +234,10 @@ public class DiffWindowController extends Controller {
      * INITIALIZATION                                                                                                  *
      *                                                                                                                 *
      ******************************************************************************************************************/
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
+
 
     /**
      * Initialize the comparison window from the data collected from the wizard

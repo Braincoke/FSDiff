@@ -1,7 +1,6 @@
 package com.erwandano.fsdiff.core;
 
 
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 

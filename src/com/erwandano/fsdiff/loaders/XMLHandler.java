@@ -1,7 +1,6 @@
 package com.erwandano.fsdiff.loaders;
 
 import com.erwandano.fsdiff.core.*;
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;

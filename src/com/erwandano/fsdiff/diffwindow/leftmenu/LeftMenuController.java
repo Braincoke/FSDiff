@@ -3,6 +3,8 @@ package com.erwandano.fsdiff.diffwindow.leftmenu;
 import com.erwandano.fsdiff.components.Controller;
 import com.erwandano.fsdiff.core.PathDiff;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
+import com.erwandano.fsdiff.diffwindow.leftmenu.explorertab.ExplorerTabController;
+import com.erwandano.fsdiff.diffwindow.leftmenu.projecttab.ProjectTabController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;

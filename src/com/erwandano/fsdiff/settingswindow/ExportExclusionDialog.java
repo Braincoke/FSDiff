@@ -1,9 +1,9 @@
 package com.erwandano.fsdiff.settingswindow;
 
 import com.erwandano.fsdiff.components.Controller;
+import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.diffwindow.DiffTreeItem;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
-import com.erwandano.fsdiff.diffwindow.leftmenu.DiffStatus;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
