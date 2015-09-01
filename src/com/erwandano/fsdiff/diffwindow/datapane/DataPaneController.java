@@ -93,8 +93,8 @@ public class DataPaneController extends Controller {
     public void toggleExpand() {
         if(toggleExpandButton.getIcon().compareTo("EXPAND")==0){
             dataDividerPositions = dataSplitPane.getDividerPositions();
-            leftDividerPositions = windowController.getSplitPane().getDividerPositions();
-            windowController.getSplitPane().setDividerPositions(0);
+            leftDividerPositions = windowController.getSplitTabPane().getSplitPane().getDividerPositions();
+            windowController.getSplitTabPane().getSplitPane().setDividerPositions(0);
             dataSplitPane.setDividerPositions(0);
             toggleExpandButton.setIcon("COMPRESS");
             application.getStage().widthProperty().addListener(hexFullScreenListener);
@@ -102,7 +102,7 @@ public class DataPaneController extends Controller {
         } else {
             toggleExpandButton.setIcon("EXPAND");
             dataSplitPane.setDividerPositions(dataDividerPositions);
-            windowController.getSplitPane().setDividerPositions(leftDividerPositions);
+            windowController.getSplitTabPane().getSplitPane().setDividerPositions(leftDividerPositions);
             application.getStage().widthProperty().removeListener(hexFullScreenListener);
             application.getStage().heightProperty().removeListener(hexFullScreenListener);
         }
@@ -128,7 +128,7 @@ public class DataPaneController extends Controller {
         this.application = windowController.getApplication();
         this.windowController.search();
         this.hexFullScreenListener = (observable, oldValue, newValue) -> {
-            windowController.getSplitPane().setDividerPositions(0);
+            windowController.getSplitTabPane().getSplitPane().setDividerPositions(0);
             dataSplitPane.setDividerPositions(0);
         };
     }

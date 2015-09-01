@@ -2,23 +2,19 @@
 
 <?import com.erwandano.fsdiff.diffwindow.leftmenu.explorertab.ExplorerTabController?>
 <?import com.erwandano.fxcomponents.buttons.IconButton?>
+<?import com.erwandano.fxcomponents.control.SplitTab?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.MasterDetailPane?>
-<Tab xmlns:fx="http://javafx.com/fxml/1"
+<SplitTab xmlns:fx="http://javafx.com/fxml/1"
      id="explorer-tab"
      closable="false"
      xmlns="http://javafx.com/javafx/8"
      fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.explorertab.ExplorerTabController"
      styleClass="no-focus"
+     text="Explorer"
      >
-<!-- Disgusting hack used to be able to listen to clicks on a tab -->
-<graphic>
-    <StackPane>
-        <Label text="Explorer" onMouseClicked="#leftMenuTabSelection" rotate="-90.0" />
-    </StackPane>
-</graphic>
 <content>
     <AnchorPane>
         <VBox prefHeight="200.0" prefWidth="100.0"
@@ -41,7 +37,7 @@
                                     <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>
                                     <tooltip><Tooltip text="Collapse all" /></tooltip>
                                 </IconButton>
-                                <IconButton fx:id="collapseLeftMenuButton" mnemonicParsing="false" onAction="#collapseLeftMenuTab" minWidth="20" icon="CARET_LEFT">
+                                <IconButton fx:id="collapseLeftMenuButton" mnemonicParsing="false" onAction="#collapseTab" minWidth="20" icon="CARET_LEFT">
                                     <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>
                                     <tooltip><Tooltip text="Hide" /></tooltip>
                                 </IconButton>
@@ -131,4 +127,4 @@
         </VBox>
     </AnchorPane>
 </content>
-</Tab>
+</SplitTab>

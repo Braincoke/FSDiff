@@ -2,7 +2,7 @@
 
 <!-- This is the main Window of FSDiff where the user can compare 2 file systems (or logical directories) -->
 
-<?import javafx.scene.control.SplitPane?>
+<?import com.erwandano.fxcomponents.control.SplitTabPane?>
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
             fx:controller="com.erwandano.fsdiff.diffwindow.DiffWindowController">
@@ -12,12 +12,21 @@
             <fx:include fx:id="menuBar" source="toppane/MenuBar.fxml" />
             <fx:include fx:id="toolbar" source="toppane/Toolbar.fxml" />
             <fx:include fx:id="breadcrumbs" source="toppane/Breadcrumbs.fxml" />
-            <SplitPane id="mainPane" fx:id="splitPane" dividerPositions="0.3" prefHeight="600.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
-               <items>
-                     <fx:include fx:id="leftMenu" source="leftmenu/LeftMenu.fxml" />
-                     <fx:include fx:id="dataPane" source="datapane/DataPane.fxml" />
-               </items>
-            </SplitPane>
+            <SplitTabPane id="main-pane"
+                          fx:id="splitTabPane"
+                          prefHeight="600.0"
+                          prefWidth="800.0"
+                          VBox.vgrow="ALWAYS"
+                          side="LEFT"
+                          tabPaneMinWidth="25">
+               <tabs>
+                     <fx:include fx:id="explorerTab" source="leftmenu/explorertab/ExplorerTab.fxml" />
+                     <fx:include fx:id="projectTab" source="leftmenu/projecttab/ProjectTab.fxml" />
+               </tabs>
+               <content>
+                  <fx:include fx:id="dataPane" source="datapane/DataPane.fxml" />
+               </content>
+            </SplitTabPane>
             <fx:include fx:id="bottomPane" source="bottompane/BottomPane.fxml" />
          </children>
       </VBox>

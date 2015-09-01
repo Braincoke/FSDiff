@@ -8,20 +8,22 @@ import com.erwandano.fsdiff.core.InputType;
 import com.erwandano.fsdiff.core.PathDiff;
 import com.erwandano.fsdiff.diffwindow.bottompane.BottomPaneController;
 import com.erwandano.fsdiff.diffwindow.datapane.DataPaneController;
-import com.erwandano.fsdiff.diffwindow.leftmenu.LeftMenuController;
+import com.erwandano.fsdiff.diffwindow.leftmenu.explorertab.ExplorerTabController;
+import com.erwandano.fsdiff.diffwindow.leftmenu.projecttab.ProjectTabController;
 import com.erwandano.fsdiff.diffwindow.toppane.BreadcrumbsController;
 import com.erwandano.fsdiff.diffwindow.toppane.MenuBarController;
 import com.erwandano.fsdiff.diffwindow.toppane.ToolbarController;
 import com.erwandano.fsdiff.loaders.FSCXLoader;
 import com.erwandano.fsdiff.loaders.XMLHandler;
 import com.erwandano.fsdiff.wizard.diff.DiffWizard;
+import com.erwandano.fxcomponents.control.SplitTab;
+import com.erwandano.fxcomponents.control.SplitTabPane;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -119,16 +121,6 @@ public class DiffWindowController extends Controller {
         }
     }
 
-    /**
-     * The split pane separating the dataPane from the left menu
-     */
-    @FXML
-    private SplitPane splitPane;
-
-    public SplitPane getSplitPane() {
-        return splitPane;
-    }
-
     public void setSelectedPath(DiffTreeItem item) {
         if(item!=null && item!=rootTreeItem) {
             breadcrumbsController.updateBreadcrumbs(item);
@@ -161,26 +153,34 @@ public class DiffWindowController extends Controller {
     private HBox breadcrumbs;
     /*******************************************************************************************************************
      *                                                                                                                 *
-     * LEFT PANE                                                                                                       *
+     * SplitTabPane                                                                                                    *
      *                                                                                                                 *
      ******************************************************************************************************************/
 
-    //Left Menu
     @FXML
-    private LeftMenuController leftMenuController;
+    private SplitTabPane splitTabPane;
+
+    public SplitTabPane getSplitTabPane(){
+        return this.splitTabPane;
+    }
+
+    /* Left menu */
     @FXML
-    private AnchorPane leftMenu;
+    private SplitTab explorerTab;
+    @FXML
+    private ExplorerTabController explorerTabController;
+
+    @FXML
+    private SplitTab projectTab;
+    @FXML
+    private ProjectTabController projectTabController;
+
     private DiffTreeItem rootTreeItem;
 
     public DiffTreeItem getRootTreeItem() {
         return rootTreeItem;
     }
 
-    /*******************************************************************************************************************
-     *                                                                                                                 *
-     * CENTER PANE                                                                                                     *
-     *                                                                                                                 *
-     ******************************************************************************************************************/
 
     //Data pane
     @FXML
@@ -236,6 +236,7 @@ public class DiffWindowController extends Controller {
      ******************************************************************************************************************/
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        splitTabPane.showTabPane();
     }
 
 
@@ -282,7 +283,8 @@ public class DiffWindowController extends Controller {
         this.exclusionFiles = new ArrayList<>();
         this.excludedFiles = new TreeSet<>();
         this.initDirectoryTree();
-        leftMenuController.setWindowController(this);
+        projectTabController.setWindowController(this);
+        explorerTabController.setWindowController(this);
         breadcrumbsController.setWindowController(this);
         bottomPaneController.setWindowController(this);
         toolbarController.setWindowController(this);
@@ -495,5 +497,9 @@ public class DiffWindowController extends Controller {
         } else {
             diff.getComparedFS().setRootPath(newPath);
         }
+    }
+
+    public void collapseLeftTab() {
+        splitTabPane.collapseTabPane();
     }
 }

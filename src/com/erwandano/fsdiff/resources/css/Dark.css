@@ -3084,22 +3084,13 @@ is being used to size a border should also be in pixels.
  *                                                                            *
  *****************************************************************************/
 
-.button.left-menu {
+.split-tab {
     -fx-background-color: -fd-outer-background;
     -fx-background-radius: 0px;
+    -fx-padding: 2px 5px 2px 5px;
 }
 
-.button.left-menu:hover {
-    -fx-background-color: derive(-fd-inner-background, 10%);
-}
-
-
-.button.left-menu:focused {
-    -fx-background-color: -fd-inner-background;
-    -fx-background-radius: 0px;
-}
-
-#left-menu.tab-pane .tab-header-background{
+#main-pane .tab-pane .tab-header-background{
     -fx-background-color: -fd-light-background, -fd-inner-background, -fd-outer-background;
 }
 

@@ -4,7 +4,6 @@ import com.erwandano.fsdiff.components.Controller;
 import com.erwandano.fsdiff.core.FileSystemDiff;
 import com.erwandano.fsdiff.core.FileSystemHashMetadata;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
-import com.erwandano.fsdiff.diffwindow.leftmenu.LeftMenuController;
 import com.erwandano.fxcomponents.InfoItem;
 import com.erwandano.fxcomponents.InfoView;
 import javafx.fxml.FXML;
@@ -70,7 +69,6 @@ public class ProjectTabController extends Controller {
     @FXML
     private InfoItem sizeComItem;
     private DiffWindowController windowController;
-    private LeftMenuController leftMenuController;
 
 
     @Override
@@ -78,9 +76,8 @@ public class ProjectTabController extends Controller {
         vBox.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
     }
 
-    public void setLeftMenuController(LeftMenuController leftMenuController) {
-        this.leftMenuController = leftMenuController;
-        this.windowController = leftMenuController.getWindowController();
+    public void setWindowController(DiffWindowController diffWindowController) {
+        this.windowController = diffWindowController;
         FileSystemDiff diff = windowController.getFileSystemDiff();
         matchedItem.setText(String.valueOf(diff.getMatchedCount()));
         modifiedItem.setText(String.valueOf(diff.getModifiedCount()));
@@ -104,7 +101,4 @@ public class ProjectTabController extends Controller {
         comparedView.resize(scrollPane.widthProperty());
     }
 
-    public void leftMenuTabSelection() {
-        leftMenuController.leftMenuTabSelection("project-tab");
-    }
 }

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
+<?import com.erwandano.fxcomponents.control.SplitTab?>
 <?import com.erwandano.fxcomponents.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.*?>
-<Tab xmlns:fx="http://javafx.com/fxml/1" id="project-tab" closable="false"
-     fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.projecttab.ProjectTabController">
-    <!-- Disgusting hack used to be able to listen to clicks on a tab -->
-    <graphic>
-        <StackPane>
-            <Label text="Project" onMouseClicked="#leftMenuTabSelection" rotate="-90.0" />
-        </StackPane>
-    </graphic>
+<SplitTab xmlns:fx="http://javafx.com/fxml/1" id="project-tab" closable="false"
+     fx:controller="com.erwandano.fsdiff.diffwindow.leftmenu.projecttab.ProjectTabController"
+     text="Project">
+
     <content>
         <AnchorPane>
             <children>
@@ -65,4 +63,4 @@
             </children>
         </AnchorPane>
     </content>
-</Tab>
+</SplitTab>

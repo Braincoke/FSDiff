@@ -5,7 +5,6 @@ import com.erwandano.fsdiff.core.DiffStatus;
 import com.erwandano.fsdiff.core.PathDiff;
 import com.erwandano.fsdiff.diffwindow.DiffTreeItem;
 import com.erwandano.fsdiff.diffwindow.DiffWindowController;
-import com.erwandano.fsdiff.diffwindow.leftmenu.LeftMenuController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -49,18 +48,17 @@ public class ExplorerTabController extends Controller {
     private DiffTreeItem rootTreeItem;
     private DiffTreeItem filteredRootTreeItem;
     private DiffWindowController windowController;
-    private LeftMenuController leftMenuController;
     private boolean filterPaneHidden = true;
 
 
     @FXML
-    public void collapseLeftMenuTab() {
-        leftMenuController.collapseLeftMenuTab();
+    public void collapseTab() {
+        windowController.collapseLeftTab();
     }
 
-    public void setLeftMenuController(LeftMenuController leftMenuController) {
-        this.leftMenuController = leftMenuController;
-        this.windowController = leftMenuController.getWindowController();
+
+    public void setWindowController(DiffWindowController windowController) {
+        this.windowController = windowController;
         this.rootTreeItem = windowController.getRootTreeItem();
         this.diffTreeView.setRoot(rootTreeItem);
         this.diffTreeView.setShowRoot(false);
@@ -73,6 +71,7 @@ public class ExplorerTabController extends Controller {
         //Use the custom cell factory
         diffTreeView.setCellFactory(p -> new PathDiffTreeCell());
     }
+
 
     public void collapseDirectoryTree() {
         DiffTreeItem root = (DiffTreeItem) diffTreeView.getRoot();
@@ -123,7 +122,4 @@ public class ExplorerTabController extends Controller {
         }
     }
 
-    public void leftMenuTabSelection() {
-        leftMenuController.leftMenuTabSelection("explorer-tab");
-    }
 }
