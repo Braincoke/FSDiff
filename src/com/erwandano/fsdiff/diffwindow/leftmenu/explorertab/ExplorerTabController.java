@@ -78,6 +78,13 @@ public class ExplorerTabController extends Controller {
         root.collapseBranch();
     }
 
+
+    public void expandDirectoryTree() {
+        DiffTreeItem root = (DiffTreeItem) diffTreeView.getRoot();
+        root.expandBranch();
+    }
+
+
     public void toggleFilterPanel() {
         if (filterPaneHidden) {
             filterPaneHidden = false;

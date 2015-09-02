@@ -151,7 +151,7 @@ public class Main extends Application {
         return stage;
     }
 
-    private void loadTheme(Scene scene) {
+    public void loadTheme(Scene scene) {
         scene.getStylesheets().add(classpath + "resources/css/" + theme.getFilename());
     }
 }

@@ -179,7 +179,7 @@ public class DiffTreeItem extends TreeItem<PathDiff> {
     public void expandBranch(){
         for(DiffTreeItem item : this.getChildrenList()){
             if(item.getChildren().size() != 0)
-                item.collapseBranch();
+                item.expandBranch();
             item.setExpanded(true);
         }
     }

@@ -35,7 +35,12 @@
                               AnchorPane.rightAnchor="0.0"
                               AnchorPane.topAnchor="0.0">
                             <children>
-                                <Label text="Listing" />
+                                <HBox alignment="CENTER_RIGHT" styleClass="listing-count">
+                                    <Label fx:id="matchedCount" visible="false" text="0" styleClass="matched"/>
+                                    <Label fx:id="modifiedCount" visible="false" text="0" styleClass="modified"/>
+                                    <Label fx:id="createdCount" visible="false" text="0" styleClass="created"/>
+                                    <Label fx:id="deletedCount" visible="false" text="0" styleClass="deleted"/>
+                                </HBox>
                                 <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" fx:id="resultsTable">
                                     <columns>
                                         <TableColumn minWidth="130" prefWidth="200.0" text="Path" fx:id="pathColumn"/>

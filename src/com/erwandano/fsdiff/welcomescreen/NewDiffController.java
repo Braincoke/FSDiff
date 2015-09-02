@@ -58,6 +58,7 @@ public class NewDiffController extends StageController {
             page = loader.load(in);
             Stage stage = new Stage();
             Scene scene = new Scene(page, WIDTH, HEIGHT);
+            application.loadTheme(scene);
             stage.setScene(scene);
             stage.setMinWidth(WIDTH);
             stage.setMinHeight(HEIGHT);

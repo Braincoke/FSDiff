@@ -14,7 +14,7 @@
               <VBox  alignment="CENTER" prefHeight="150.0" prefWidth="100.0" VBox.vgrow="NEVER">
                 <children>
                    <Text text="FSDiff" id="fsdiff-logo"/>
-                   <Text fx:id="VersionText"  text="Version 0.1.0" id="fsdiff-version"/>
+                   <!--<Text fx:id="VersionText"  text="Version 0.1.0" id="fsdiff-version"/>-->
                 </children>
              </VBox>
              <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
@@ -38,8 +38,8 @@
                                        GridPane.rowIndex="1"/>
                           <StartButton icon="FOLDER_OPEN" onAction="#openDiff" mnemonicParsing="false" text="Open"
                                        GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2"/>
-                          <StartButton  icon="COG" onAction="#quickTest" GridPane.columnIndex="1" GridPane.rowIndex="3"
-                                  text="Quick Test"/>
+                          <!--<StartButton  icon="COG" onAction="#quickTest" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                  text="Quick Test"/>-->
                       </children>
                    </GridPane>
                 </children>

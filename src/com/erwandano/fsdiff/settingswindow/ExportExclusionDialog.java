@@ -65,7 +65,9 @@ public class ExportExclusionDialog extends Controller {
             }
             controller.setWindowController(windowController);
             controller.setStage(stage);
-            stage.setScene(new Scene(page, 300, 300));
+            Scene scene = new Scene(page, 300, 350);
+            windowController.getApplication().loadTheme(scene);
+            stage.setScene(scene);
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,6 +78,7 @@ public class ExportExclusionDialog extends Controller {
 
     public void setWindowController(DiffWindowController windowController){
         this.windowController = windowController;
+        this.application = windowController.getApplication();
     }
 
 

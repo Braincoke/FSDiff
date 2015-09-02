@@ -2936,6 +2936,16 @@ is being used to size a border should also be in pixels.
     -fx-padding: 0 1 0 0;
 }
 
+#fsdiff-logo {
+    -fx-font-size: 80px;
+    -fx-fill:  derive(-fx-text-background-color, 80%);
+    -fx-stroke-type: outside;
+    -fx-stroke: -fd-inner-background;
+    -fx-stroke-width: 1;
+}
+
+
+
 
 /******************************************************************************
  *                                                                            *
@@ -3146,6 +3156,35 @@ is being used to size a border should also be in pixels.
     -fx-text-fill: -fd-error;
   }
 
+/******************************************************************************
+ *                                                                            *
+ * DATA PANE                                                                  *
+ *                                                                            *
+ *****************************************************************************/
+.listing-count > .label {
+    -fx-padding: 0 5 0 5;
+}
+.listing-count > .matched {
+    -fx-background-color: -fd-matched;
+}
+
+.listing-count > .modified {
+    -fx-background-color: -fd-modified;
+}
+
+.listing-count > .created {
+    -fx-background-color: -fd-created;
+}
+
+.listing-count > .deleted {
+    -fx-background-color: -fd-deleted;
+}
+
+.listing-count > .label.hidden {
+    -fx-max-width: 0px;
+    -fx-pref-width: 0px;
+    -fx-min-width: 0px;
+}
 
 /******************************************************************************
  *                                                                            *
@@ -3239,4 +3278,9 @@ is being used to size a border should also be in pixels.
 
 #parameters-tab-content HBox{
     -fx-alignment: CENTER;
+}
+
+
+.web-view {
+    -fx-background-color: -fd-inner-background;
 }

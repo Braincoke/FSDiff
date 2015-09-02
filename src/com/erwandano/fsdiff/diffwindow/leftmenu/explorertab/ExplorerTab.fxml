@@ -29,13 +29,17 @@
                         <Pane prefHeight="25.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
                         <HBox fx:id="explorerTabToolbar" alignment="CENTER_RIGHT" minHeight="25.0" maxHeight="25.0" prefWidth="200.0" styleClass="no-focus">
                             <children>
-                                <IconButton fx:id="filterButton" mnemonicParsing="false" onAction="#toggleFilterPanel" icon="FILTER">
+                                <IconButton  mnemonicParsing="false" onAction="#toggleFilterPanel" icon="FILTER">
                                     <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>
                                     <tooltip><Tooltip text="Filter results" /></tooltip>
                                 </IconButton>
-                                <IconButton fx:id="collapseExplorerTreeButton" mnemonicParsing="false" onMouseClicked="#collapseDirectoryTree" icon="COMPRESS">
+                                <IconButton  mnemonicParsing="false" onMouseClicked="#collapseDirectoryTree" icon="COMPRESS">
                                     <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>
                                     <tooltip><Tooltip text="Collapse all" /></tooltip>
+                                </IconButton>
+                                <IconButton  mnemonicParsing="false" onMouseClicked="#expandDirectoryTree" icon="EXPAND">
+                                    <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>
+                                    <tooltip><Tooltip text="Expand all" /></tooltip>
                                 </IconButton>
                                 <IconButton fx:id="collapseLeftMenuButton" mnemonicParsing="false" onAction="#collapseTab" minWidth="20" icon="CARET_LEFT">
                                     <size><ExplorerTabController fx:constant="TOOLBAR_ICON_SIZE"/></size>

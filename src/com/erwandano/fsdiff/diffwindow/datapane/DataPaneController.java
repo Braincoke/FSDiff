@@ -116,6 +116,14 @@ public class DataPaneController extends Controller {
      *                                                                                                                 *
      ******************************************************************************************************************/
     @FXML
+    private Label matchedCount;
+    @FXML
+    private Label modifiedCount;
+    @FXML
+    private Label createdCount;
+    @FXML
+    private Label deletedCount;
+    @FXML
     private TableView<DiffTreeItem> resultsTable;
     @FXML
     private TableColumn pathColumn;
@@ -171,6 +179,59 @@ public class DataPaneController extends Controller {
     public void updateResults(List<DiffTreeItem> list){
         searchResults = FXCollections.observableList(list);
         resultsTable.setItems(searchResults);
+        int matched = 0;
+        int modified = 0;
+        int created = 0;
+        int deleted = 0;
+        for(DiffTreeItem item: list){
+            switch (item.getStatus()){
+                case MATCHED:
+                    matched++;
+                    break;
+                case MODIFIED:
+                    modified++;
+                    break;
+                case CREATED:
+                    created++;
+                    break;
+                case DELETED:
+                    deleted++;
+                    break;
+            }
+        }
+
+        matchedCount.getStyleClass().remove("hidden");
+        modifiedCount.getStyleClass().remove("hidden");
+        createdCount.getStyleClass().remove("hidden");
+        deletedCount.getStyleClass().remove("hidden");
+        if(matched>0){
+            matchedCount.setVisible(true);
+        } else {
+            matchedCount.setVisible(false);
+            matchedCount.getStyleClass().add("hidden");
+        }
+        if(modified>0){
+            modifiedCount.setVisible(true);
+        } else {
+            modifiedCount.setVisible(false);
+            modifiedCount.getStyleClass().add("hidden");
+        }
+        if(created>0){
+            createdCount.setVisible(true);
+        } else {
+            createdCount.setVisible(false);
+            createdCount.getStyleClass().add("hidden");
+        }
+        if(deleted>0){
+            deletedCount.setVisible(true);
+        } else {
+            deletedCount.setVisible(false);
+            deletedCount.getStyleClass().add("hidden");
+        }
+        matchedCount.setText(String.valueOf(matched));
+        modifiedCount.setText(String.valueOf(modified));
+        createdCount.setText(String.valueOf(created));
+        deletedCount.setText(String.valueOf(deleted));
 
     }
 
